@@ -4,3 +4,5 @@ export * from "./schemas/user.schema"
 export * from "./schemas/collaboration.schema"
 export * from "./schemas/snapshot-job.schema"
 export * from "./schemas/export-job.schema"
+
+export * as worker from "./schemas/worker"
