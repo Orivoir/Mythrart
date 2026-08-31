@@ -10,7 +10,7 @@ export class TxtExporter implements EbookExporter {
 
   async export(ebook: NormalizedEbook): Promise<ExportedFile> {
 
-    const html = renderEbookAsHTML(ebook, this.htmlExtensions)
+    const html = await renderEbookAsHTML(ebook, { extensions: this.htmlExtensions })
 
     const text = htmlToText(html)
 

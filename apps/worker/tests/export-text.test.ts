@@ -24,6 +24,7 @@ function createNormalizedEbookFixture(): NormalizedEbook {
     shortDescription: null,
     createdAt: fixtureDate,
     coverImage: null,
+    assets: [],
     chapters: tipTapEbookFixture.chapters.map((chapter) => ({
       ...chapter,
       content: chapter.content as NormalizedEbook["chapters"][number]["content"],
