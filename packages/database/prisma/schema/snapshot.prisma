@@ -1,0 +1,36 @@
+model Snapshot {
+  id        String   @id @default(cuid())
+
+  ebookId   String
+  ebook     Ebook    @relation("EbookSnapshots", fields: [ebookId], references: [id])
+
+  version   Int
+
+  file      SnapshotFile?
+
+  createdAt DateTime @default(now())
+
+  currentForEbook Ebook? @relation("EbookCurrentSnapshot")
+
+  // status using for Worker job queue
+  // to know if the snapshot is ready to be used or not
+  status SnapshotStatus @default(PENDING)
+
+  @@unique([ebookId, version])
+  @@index([ebookId])
+}
+
+model SnapshotFile {
+  id          String   @id @default(cuid())
+
+  snapshotId  String   @unique
+  snapshot    Snapshot @relation(fields: [snapshotId], references: [id])
+
+  key         String   @unique
+  bucket      String
+
+  sizeBytes   Int
+  mimeType    String
+
+  createdAt   DateTime @default(now())
+}

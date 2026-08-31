@@ -1,0 +1,23 @@
+{
+  "name": "@mythrart/redis",
+  "version": "1.0.0",
+  "description": "Shared redis dependencies between Mythrart apps",
+  "type": "module",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": {
+      "types": "./index.ts",
+      "import": "./index.ts",
+      "default": "./index.ts"
+    }
+  },
+  "dependencies": {
+    "bullmq": "^6.0.5",
+    "ioredis": "^6.0.0"
+  },
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

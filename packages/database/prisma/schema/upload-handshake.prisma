@@ -1,0 +1,18 @@
+model UploadHandshake {
+  id                String                @id @default(cuid())
+  ownerId           String
+  owner             User                  @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  context           AssetReferenceType
+  key               String                @unique
+  fileName          String
+  expectedMimeType  String
+  expectedSizeBytes Int
+  status            UploadHandshakeStatus @default(PENDING)
+  expiresAt         DateTime
+  createdAt         DateTime              @default(now())
+  updatedAt         DateTime              @updatedAt
+
+  @@index([ownerId])
+  @@index([status])
+  @@index([expiresAt])
+}

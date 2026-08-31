@@ -1,0 +1,24 @@
+{
+  "name": "@mythrart/s3",
+  "version": "1.0.0",
+  "description": "Shared S3 dependencies between Mythrart apps",
+  "type": "module",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": {
+      "types": "./index.ts",
+      "import": "./index.ts",
+      "default": "./index.ts"
+    }
+  },
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1121.0",
+    "@aws-sdk/s3-request-presigner": "^3.1121.0",
+    "@mythrart/database": "workspace:*"
+  }
+}

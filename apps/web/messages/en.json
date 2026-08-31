@@ -1,0 +1,109 @@
+{
+    "Brand": {
+        "Name": "MythRart",
+        "Slogan": "Document engine thinking with the art of Mythology"
+    },
+    "CTA": {
+        "TitleHome": {
+            "BeforeAccent": "The Document Engine designed",
+            "Accent": "for authors",
+            "AfterAccent": "and their stories."
+        },
+        "SubtitleHome": "Write more freely. Structure your ideas. Collaborate in real time. Translate without rewriting. And don't lose a line.",
+        "NoInstallChip": "No-install, 100% web. Synchronized everywhere.",
+        "NoInstallChipShort": "No-Install 100% web.",
+        "MarketingList": {
+            "FreePlanTitle": "Free plan for life",
+            "FreePlanDescription": "Start for free with no time limit.",
+
+            "NoInstallTitle": "No installation",
+            "NoInstallDescription": "Access from any device.",
+
+            "TrialPeriodTitle": "14 days Premium Trial",
+            "TrialPeriodDescription": "No limits, no commitment."
+        },
+        "ActionButton": {
+            "StartWriting": "Start writing",
+            "ViewDemo": "View demo"
+        },
+        "FeaturesList": {
+            "EditorTitle": "Enriched writing",
+            "EditorDescribe": "Text, entities and relations. Everything is linked, everything makes sense",
+
+            "CollaborationTitle": "Native collaboration",
+            "CollaborationDescribe": "Work together in real time or at your own pace. Fine-grained permissions included.",
+
+            "VersionningTitle": "Smart versioning",
+            "VersionningDescribe": "Automatic saving, full history and easy restoration. Go back at any time.",
+
+            "OfflineTitle": "Offline & PWA",
+            "OfflineDescribe": "Plane, train, subway, bus, boat. Write everywhere, even without internet connection. Mythrart automatically synchronizes when you are back online.",
+
+            "TranslationTitle": "Easy translation",
+            "TranslationDescribe": "Translate without rewriting, keep the original intact, collaborate with translators.",
+
+            "SilentAITitle": "Silent AI",
+            "SilentAIDescribe": "The AI is here to help you, not to replace you. It does not make decisions for you."
+        },
+        "RankingUsers": {
+            "Describe": "Already adopted by authors worldwide.",
+            "Label": "{rank}/5 based on {count}+ reviews"
+        },
+        "ReassuringsList": {
+            "OwnDataTitle": "Your stories belong to you",
+            "OwnDataDescribe": "Manage your data in a secure and private way, data is transferred in an encrypted manner",
+
+            "EasyExportTitle": "Export with one click",
+            "EasyExportDescribe": "Export your documents in EPUB, PDF, DOCX, Markdown, and more.",
+
+            "LongTimeStabilityTitle": "Built to last",
+            "LongTimeStabilityDescribe": "Evolves with your project, from the first word to publication."
+        },
+        "FooterText": {
+            "Title": "Write. Structure. Collaborate. Publish. Everywhere.",
+            "Subtitle": "A single platform for your entire creative process."
+        }
+    },
+    "Auth": {
+        "Login": {
+            "Title": {
+                "BeforeAccent": "Start writing.",
+                "Accent": "Without friction."
+            },
+            "Subtitle": "Create your account in seconds and access to your writing space.",
+            "LeftSideCTA": {
+                "CreditCardTitle": "No credit card required",
+                "CreditCardDescription": "Free plan is available forever, no time limit.",
+                
+                "AccessAnywhereTitle": "Accessible anywhere",
+                "AccessAnywhereDescription": "100% web, synchronized across all your devices.",
+
+                "CrownTitle": "Your data belongs to you",
+                "CrownDescription": "Confidential, encrypted, and exportable at any time.",
+
+                "CreateInSecondsTitle": "Start in seconds",
+                "CreateInSecondsDescription": "No installation, no complexity. Start writing immediately."
+            },
+            "Form": {
+                "Title": "Choose your favorite authentication method",
+                "EmailPlaceholder": "Enter your email address",
+                "EmailSubmitButton": "Send link",
+                "EmailHelperText": "We will send you a link to access your account. No password required.",
+                "SeparatorText": "OR",
+                "EmailLabelTitle": "Receive authentication link",
+                "EmailSubLabel": "We will send you a secure link to your email.",
+                "EmailLabelChip": "Recommended",
+
+                "PhoneLabelTitle": "Use my phone",
+                "PhoneSubLabel": "We will send you a code to access your account.",
+                "PhoneSubmitButton": "Send SMS code",
+
+                "PreTextLegalPolicies": "By continuing, you agree to our",
+                "UsageTerms": "Terms of Use",
+                "SubTextLegalPolicies": "and our",
+                "PrivacyPolicy": "Privacy Policy"
+
+            }
+        }
+    }
+}

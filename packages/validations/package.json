@@ -1,0 +1,23 @@
+{
+  "name": "@mythrart/validations",
+  "version": "1.0.0",
+  "description": "Shared validations zod schemas between Mythrart apps",
+  "type": "module",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": {
+      "types": "./index.ts",
+      "import": "./index.ts",
+      "default": "./index.ts"
+    }
+  },
+  "dependencies": {
+    "@mythrart/constants": "workspace:*",
+    "zod": "^4.5.2"
+  },
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

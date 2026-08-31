@@ -1,0 +1,26 @@
+model Ebook {
+  id                String  @id @default(cuid())
+
+  title             String
+  subtitle          String?
+  shortDescription  String?
+
+  ownerId           String
+  owner             User    @relation(fields: [ownerId], references: [id])
+
+  currentSnapshotId String? @unique
+  currentSnapshot   Snapshot? @relation("EbookCurrentSnapshot", fields: [currentSnapshotId], references: [id])
+
+  coverAssetId      String?
+  coverAsset        Asset? @relation(fields: [coverAssetId], references: [id])
+
+  snapshots         Snapshot[] @relation("EbookSnapshots")
+  chapters          Chapter[]
+  collaborators     EbookCollaborator[]
+  customRoles       EbookCustomRole[]
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([ownerId])
+}

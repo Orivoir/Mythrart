@@ -1,0 +1,110 @@
+{
+    "Brand": {
+        "Name": "MythRart",
+        "Slogan": "Moteur de documents numérique qui pense avec l'art de la mythologie"
+    },
+    "CTA": {
+        "TitleHome": {
+            "BeforeAccent": "Le moteur de documents pensé",
+            "Accent": "pour les auteurs",
+            "AfterAccent": "et leurs histoires."
+        },
+        "SubtitleHome": "Ecrivez plus librement. Structurez vos idées. Collaborez en temps réel. Traduisez sans réécrire. Et ne perdez pas une ligne.",
+        "NoInstallChip": "Pas d'installation, 100% web. Synchronisé partout.",
+        "NoInstallChipShort": "No-Install 100% web.",
+        "MarketingList": {
+            "FreePlanTitle": "Plan gratuit a vie",
+            "FreePlanDescription": "Commencez gratuitement sans limite de temps.",
+
+            "NoInstallTitle": "Aucune installation",
+            "NoInstallDescription": "Accéssible depuis n'importe quel appareil.",
+
+            "TrialPeriodTitle": "Essai Premium 14 jours",
+            "TrialPeriodDescription": "Sans limites, sans engagement."
+        },
+        "ActionButton": {
+            "StartWriting": "Commencez gratuitement",
+            "ViewDemo": "Voir la démo"
+        },
+        "FeaturesList": {
+            "EditorTitle": "Ecriture enrichie",
+            "EditorDescribe": "Texte, entités et relations. Tout est lié, tout fait sens.",
+
+            "CollaborationTitle": "Collaboration native",
+            "CollaborationDescribe": "Travaillez a plusieurs",
+
+            "VersionningTitle": "Versionning intelligent",
+            "VersionningDescribe": "Sauvegarde automatique, historique complet et restauration facile. Revenez en arrière a tout moment.",
+
+            "OfflineTitle": "Hors ligne & PWA",
+            "OfflineDescribe": "Avion, train, métro, bus, bateau. Ecrivez partout, même sans connexion internet. Mythrart synchronise automatiquement quand vous serez de nouveau en ligne.",
+
+            "TranslationTitle": "Traduction facilitées",
+            "TranslationDescribe": "Traduisez sans réécrire gardez l'original intact, collaborer avec des traducteurs.",
+
+            "SilentAITitle": "IA Silencieuse",
+            "SilentAIDescribe": "L'IA est là pour vous aider, pas pour vous remplacer. Elle ne prend pas de décisions à votre place."
+        },
+        "RankingUsers": {
+            "Describe": "Déjà adopté par des auteurs du monde entier.",
+            "Label": "{rank}/5 sur {count}+ avis"
+
+        },
+        "ReassuringsList": {
+            "OwnDataTitle": "Vos histoires vous appartiennent",
+            "OwnDataDescribe": "Pilotez vos données de manières sécurisée et privée, les données sont transférées de manières chiffrées",
+
+            "EasyExportTitle": "Exportez en un click",
+            "EasyExportDescribe": "Exportez vos documents en EPUB, PDF, DOCX, Markdown, et plus.",
+
+            "LongTimeStabilityTitle": "Conçu pour durer",
+            "LongTimeStabilityDescribe": "Evolue avec votre projet, du premier mot à la publication. "
+        },
+        "FooterText": {
+            "Title": "Écrivez. Structurez. Collaborez. Publiez. Partout.",
+            "Subtitle": "Une seule plateforme pour tout votre processus créatif."
+        }
+    },
+    "Auth": {
+        "Login": {
+            "Title": {
+                "BeforeAccent": "Commencez à écrire.",
+                "Accent": "Sans friction."
+            },
+            "Subtitle": "Créez votre compte gratuitement en quelques secondes et accedez à votre espace d'écriture.",
+            "LeftSideCTA": {
+                "CreditCardTitle": "Pas de carte bancaire requise",
+                "CreditCardDescription": "Le plan gratuit est disponible pour toujours, sans limite de temps.",
+
+                "AccessAnywhereTitle": "Accessible partout",
+                "AccessAnywhereDescription": "100% web synchronisé sur tous vos appareils.",
+
+                "CrownTitle": "Vos données vous appartiennent",
+                "CrownDescription": "Confidentielles, chiffrées et exportables à tout moment.",
+
+                "CreateInSecondsTitle": "Commencez en quelques secondes",
+                "CreateInSecondsDescription": "Pas d'installation, pas de complexité. Commencez à écrire immédiatement."
+            },
+            "Form": {
+                "Title": "Choisissez la méthode qui vous convient",
+                "SeparatorText": "OU",
+                
+                "EmailPlaceholder": "Entrez votre email",
+                "EmailSubmitButton": "Envoyez le lien",
+                "EmailHelperText": "Lien valide 15 minutes. Sécurisé et unique.",
+                "EmailLabelTitle": "Recevoir un lien magique",
+                "EmailSubLabel": "Nous vous enverrons un lien sécurisé par email.",
+                "EmailLabelChip": "Recommandé",
+
+                "PhoneLabelTitle": "Utiliser mon téléphone",
+                "PhoneSubLabel": "Nous envoyons un code par SMS.",
+                "PhoneSubmitButton": "Envoyez le code SMS",
+
+                "PreTextLegalPolicies": "En continuant, vous acceptez nos",
+                "UsageTerms": "Conditions d'utilisation",
+                "SubTextLegalPolicies": "et notre",
+                "PrivacyPolicy": "Politique de confidentialité"
+            }
+        }
+    }
+}

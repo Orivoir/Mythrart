@@ -1,0 +1,19 @@
+{
+  "name": "@mythrart/constants",
+  "version": "1.0.0",
+  "description": "Shared constants between Mythrart apps",
+  "type": "module",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": {
+      "types": "./index.ts",
+      "import": "./index.ts",
+      "default": "./index.ts"
+    }
+  },
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

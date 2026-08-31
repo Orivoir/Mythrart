@@ -1,0 +1,72 @@
+model EbookCollaborator {
+  id String @id @default(cuid())
+
+  ebookId String
+  ebook Ebook @relation(fields: [ebookId], references: [id], onDelete: Cascade)
+
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Built-in role assignment. Null when using a custom role.
+  role CollaborationRole?
+
+  // When true, this collaborator can act on all chapters in the ebook.
+  // When false, access is limited to chapterAccess entries.
+  allChaptersAccess Boolean @default(true)
+
+  customRoleId String?
+  // Invariant expected by app logic:
+  // - built-in role: role != null and customRoleId == null
+  // - custom role: role == null and customRoleId != null
+  customRole EbookCustomRole? @relation(fields: [customRoleId, ebookId], references: [id, ebookId], onDelete: SetNull)
+
+  chapterAccess EbookCollaboratorChapterAccess[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([ebookId, userId])
+  @@index([ebookId])
+  @@index([userId])
+  @@index([customRoleId])
+}
+
+model EbookCollaboratorChapterAccess {
+  id String @id @default(cuid())
+
+  collaboratorId String
+  collaborator EbookCollaborator @relation(fields: [collaboratorId], references: [id], onDelete: Cascade)
+
+  chapterId String
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([collaboratorId, chapterId])
+  @@index([collaboratorId])
+  @@index([chapterId])
+}
+
+model EbookCustomRole {
+  id String @id @default(cuid())
+
+  ebookId String
+  ebook Ebook @relation(fields: [ebookId], references: [id], onDelete: Cascade)
+
+  // Pro users can create custom collaboration roles per ebook.
+  name String
+  permissions CollaborationPermission[]
+
+  createdByUserId String
+  createdBy User @relation("CustomRoleCreatedBy", fields: [createdByUserId], references: [id], onDelete: Cascade)
+
+  collaborators EbookCollaborator[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([id, ebookId])
+  @@unique([ebookId, name])
+  @@index([ebookId])
+  @@index([createdByUserId])
+}

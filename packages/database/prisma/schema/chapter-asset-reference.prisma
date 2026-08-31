@@ -1,0 +1,20 @@
+model ChapterAssetReference {
+  id String @id @default(cuid())
+
+  assetId String
+  asset   Asset @relation(fields: [assetId], references: [id], onDelete: Cascade)
+
+  chapterId String
+  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  type AssetReferenceType
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([assetId])
+  @@index([chapterId])
+  @@index([type])
+  @@index([assetId, type])
+  @@index([chapterId, type])
+}
