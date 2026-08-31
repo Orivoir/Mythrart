@@ -1,35 +1,7 @@
 import type {SnapshotJobData, SnapshotJobResult} from "./../../validations/snapshot.job.js"
 import { prisma } from "@mythrart/database"
 import { s3, PutObjectCommand } from "@mythrart/s3"
-
-export type RequirementGenerateSnapshot = typeof loadSnapshotData extends (...args: any) => Promise<infer R> ? R : never
-
-export async function loadSnapshotData(ebookId: string) {
-  const requirements = await prisma.ebook.findUnique({
-    where: {id: ebookId},
-    include: {
-      chapters: {
-        orderBy: {position: "asc"},
-        include: {
-          locales: {
-            where: {
-              locale: "en",
-            },
-            take: 1,
-          },
-        },
-      },
-      currentSnapshot: true,
-      coverAsset: true
-    }
-  })
-
-  if(!requirements) {
-    throw new Error(`Ebook with id ${ebookId} not found`)
-  }
-
-  return requirements
-}
+import { loadRequirements, type Requirements } from "../utils.js"
 
 export async function generate({ebookId}: SnapshotJobData): Promise<SnapshotJobResult
 > {
@@ -50,7 +22,7 @@ export async function generate({ebookId}: SnapshotJobData): Promise<SnapshotJobR
    * file snapshot-v{version}.json from s3 bucket. 
    */
 
-  const ebook = await loadSnapshotData(ebookId)
+  const ebook = await loadRequirements(ebookId)
 
   const nextVersion = (ebook.currentSnapshot?.version ?? 0) + 1
 
@@ -150,7 +122,7 @@ export async function generate({ebookId}: SnapshotJobData): Promise<SnapshotJobR
   // block and throw error to retry the job
 }
 
-function getChapterData(chapter: RequirementGenerateSnapshot["chapters"][number]) {
+function getChapterData(chapter: Requirements["chapters"][number]) {
   const localized = chapter.locales[0]
 
   return {
@@ -162,7 +134,7 @@ function getChapterData(chapter: RequirementGenerateSnapshot["chapters"][number]
   }
 }
 
-function getSnapshotEbookData(ebook: RequirementGenerateSnapshot) {
+function getSnapshotEbookData(ebook: Requirements) {
 
   const {id, title, subtitle, shortDescription, createdAt} = ebook
 

@@ -1,0 +1,22 @@
+{
+  "name": "@mythrart/editor-extensions",
+  "version": "1.0.0",
+  "description": "Shared editor-extensions between Mythrart apps",
+  "type": "module",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": {
+      "types": "./index.ts",
+      "import": "./index.ts",
+      "default": "./index.ts"
+    }
+  },
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@tiptap/core": "^3.30.5"
+  }
+}

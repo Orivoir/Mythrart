@@ -13,10 +13,16 @@
   "dependencies": {
     "@mythrart/constants": "workspace:*",
     "@mythrart/database": "workspace:*",
+    "@mythrart/editor-extensions": "workspace:*",
     "@mythrart/env": "workspace:*",
     "@mythrart/redis": "workspace:*",
     "@mythrart/s3": "workspace:*",
+    "@tiptap/html": "^3.30.5",
+    "@tiptap/markdown": "^3.30.5",
+    "@types/html-to-text": "^9.0.4",
+    "html-to-text": "^10.0.1",
     "pino": "^10.3.1",
+    "slugify": "^1.6.9",
     "stripe": "^22.6.0",
     "zod": "^4.5.2"
   },
