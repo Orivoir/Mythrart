@@ -7,8 +7,7 @@ import slugify from "slugify"
 import { renderEbookAsHTML } from "../render-ebook-as-html.js"
 import type { EbookExporter, ExportedFile } from "./types.js"
 import type { NormalizedEbook } from "../normalize.js"
-
-const imageUrlExpirySeconds = 60 * 60 * 24 * 7 // 7 days
+import { createImageUrlResolver } from "../image-url-resolver.js"
 
 export class WebviewExporter implements EbookExporter {
 	constructor(private readonly htmlExtensions?: Extensions) {}
@@ -37,39 +36,6 @@ export class WebviewExporter implements EbookExporter {
 	}
 }
 
-function createImageUrlResolver(ebook: NormalizedEbook) {
-	const assetsById = new Map(ebook.assets.map((asset) => [asset.id, asset]))
-	const urlsByAssetId = new Map<string, Promise<string>>()
-
-	if (ebook.coverImage) {
-		assetsById.set(ebook.coverImage.assetId, {
-			id: ebook.coverImage.assetId,
-			key: ebook.coverImage.key,
-			bucket: ebook.coverImage.bucket,
-		})
-	}
-
-	return async (assetId: string): Promise<string | undefined> => {
-		const asset = assetsById.get(assetId)
-
-		if (!asset) {
-			return undefined
-		}
-
-		let url = urlsByAssetId.get(assetId)
-
-		if (!url) {
-			url = getSignedUrl(
-				s3,
-				new GetObjectCommand({ Bucket: asset.bucket, Key: asset.key }),
-				{ expiresIn: imageUrlExpirySeconds },
-			)
-			urlsByAssetId.set(assetId, url)
-		}
-
-		return await url
-	}
-}
 
 function createHtmlDocument(title: string, content: string): string {
 	return `<!DOCTYPE html>
