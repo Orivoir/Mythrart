@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "services:up": "docker compose up -d",
-    "services:down": "docker compose down"
+    "services:down": "docker compose down",
+    "test:worker": "pnpm --filter worker test"
   },
   "keywords": [],
   "author": "",

@@ -2,12 +2,17 @@ import { generateHTML } from "@tiptap/html"
 import { extensions } from "@mythrart/editor-extensions"
 import type { NormalizedEbook } from "./normalize.js"
 import type { JSONContent } from "@mythrart/editor-extensions"
+import type { Extensions } from "@tiptap/core"
+import escapeHTML from "escape-html"
 
-export function renderEbookAsHTML(ebook: NormalizedEbook): string {
+export function renderEbookAsHTML(
+  ebook: NormalizedEbook,
+  htmlExtensions: Extensions = extensions,
+): string {
   const chapters = ebook.chapters
     .map((chapter) => {
 
-      const content = generateHTML(chapter.content as JSONContent, extensions)
+      const content = generateHTML(chapter.content as JSONContent, htmlExtensions)
 
       return `
         <article>
@@ -28,13 +33,4 @@ export function renderEbookAsHTML(ebook: NormalizedEbook): string {
       ${chapters}
     </article>
   `.trim()
-}
-
-function escapeHTML(value: string): string {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#39;")
 }
