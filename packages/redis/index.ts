@@ -1,4 +1,4 @@
-import IORedis, { type Redis } from "ioredis"
+import { Redis } from "ioredis"
 
 let redisConnection: Redis | null = null
 
@@ -10,7 +10,7 @@ export function getRedisConnection(): Redis {
   }
 
   if (!redisConnection || redisConnection.status === "end") {
-    redisConnection = new IORedis(redisUrl, {
+    redisConnection = new Redis(redisUrl, {
       maxRetriesPerRequest: null,
       lazyConnect: true,
     })
@@ -20,4 +20,4 @@ export function getRedisConnection(): Redis {
 }
 
 export * from "ioredis"
-export {Queue} from "bullmq"
+export {Queue, Worker, Job} from "bullmq"

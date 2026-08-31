@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "node index.js"
+    "start": "node index.js",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@mythrart/constants": "workspace:*",
@@ -14,7 +17,8 @@
     "@mythrart/redis": "workspace:*",
     "@mythrart/s3": "workspace:*",
     "pino": "^10.3.1",
-    "stripe": "^22.6.0"
+    "stripe": "^22.6.0",
+    "zod": "^4.5.2"
   },
   "devDependencies": {
     "@faker-js/faker": "^10.6.0",

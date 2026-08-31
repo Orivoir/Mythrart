@@ -339,6 +339,9 @@ importers:
       stripe:
         specifier: ^22.6.0
         version: 22.6.0(@types/node@20.19.43)
+      zod:
+        specifier: ^4.5.2
+        version: 4.5.2
     devDependencies:
       '@faker-js/faker':
         specifier: ^10.6.0
@@ -409,6 +412,9 @@ importers:
       '@mythrart/database':
         specifier: workspace:*
         version: link:../database
+      '@mythrart/env':
+        specifier: workspace:*
+        version: link:../env
 
   packages/validations:
     dependencies:

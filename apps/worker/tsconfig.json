@@ -3,10 +3,15 @@
     "target": "ES2022",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "esModuleInterop": true,
+    "rootDir": "..",
+    "outDir": "dist",
     "strict": true,
+    "esModuleInterop": true,
     "skipLibCheck": true,
-    "noEmit": true
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node"]
   },
-  "include": ["**/*.ts"]
+  "include": ["src/**/*.ts", "../shared/**/*.ts"],
+  "exclude": ["dist", "node_modules", "prisma/app"]
 }

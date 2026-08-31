@@ -59,7 +59,10 @@ export type {
   Chapter,
   EbookCollaborator,
   EbookCustomRole,
+  PrismaClient
 } from "./app/generated/prisma/index.js"
 
 // expose type Prisma
 export type {JsonValue} from "./app/generated/prisma/runtime/client.js"
+
+export { Prisma } from "./app/generated/prisma/index.js"

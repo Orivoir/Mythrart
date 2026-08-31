@@ -4,6 +4,9 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import path from "path"
 import { randomUUID } from "crypto"
 import type { AssetReferenceType } from "@mythrart/database"
+import { loadEnv } from "@mythrart/env"
+
+loadEnv()
 
 export const s3 = new S3Client({
   endpoint: process.env.S3_ENDPOINT,
