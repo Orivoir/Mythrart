@@ -27,6 +27,11 @@ services:
     volumes:
       - minio_data:/data
 
+  gotenberg:
+    image: gotenberg/gotenberg:8
+    ports:
+      - "127.0.0.1:3000:3000"
+
 volumes:
   pg_data:
   minio_data:
