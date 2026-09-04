@@ -1,25 +1,32 @@
 "use client"
 
-import { useRef, useState } from "react"
-import { Search, Command, X } from "lucide-react"
-import { ButtonWithIcon } from "@/components/ui/button-with-icon"
-import ShortcutIcon from "./shortcut-icon"
+import { useRef } from "react"
+import { Search } from "lucide-react"
+import type { FocusEventHandler, RefObject } from "react"
 
-import type { AppUsageMode } from "@/components/hooks/useAppMode"
+import ShortcutIcon from "./shortcut-icon"
 import EntryText from "./entry-text"
 import RemoveButton from "./remove-button"
 
 export type SearcharProps = {
-  mode: AppUsageMode
+  isCompanion?: boolean
+  onFocus?: FocusEventHandler<HTMLDivElement>
+  inputRef?: RefObject<HTMLInputElement | null>
 }
 
-export function SearchBar({mode}: SearcharProps) {
-
-  const isCompanion = mode === "companion"
-  const refInput = useRef<HTMLInputElement | null>(null)
+export function SearchBar({
+  isCompanion = false,
+  onFocus,
+  inputRef,
+}: SearcharProps) {
+  const internalRef = useRef<HTMLInputElement | null>(null)
+  const refInput = inputRef ?? internalRef
 
   return (
-    <div className="relative w-full">
+    <div
+      className="relative w-full"
+      onFocus={onFocus}
+    >
       <Search
         className="
           pointer-events-none
@@ -38,10 +45,9 @@ export function SearchBar({mode}: SearcharProps) {
 
       {isCompanion ? (
         <RemoveButton refInput={refInput} />
-      ): (
+      ) : (
         <ShortcutIcon />
       )}
-
     </div>
   )
 }
