@@ -17,6 +17,7 @@ type ButtonSize =
   | "sm"
   | "lg"
   | "full"
+  | "icon"
 
 
 interface ButtonProps
@@ -89,6 +90,9 @@ const sizeStyles: Record<ButtonSize, string> = {
 
   full:
     "h-12 w-full rounded-sm px-8 text-base",
+
+  icon:
+    "size-10 rounded full"
 }
 
 
