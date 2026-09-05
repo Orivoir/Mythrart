@@ -48,6 +48,7 @@ if (process.env.NODE_ENV !== "production") {
 // expose runtime enums (avoid `export *` from a CJS module, which breaks edge/middleware bundling)
 export {
   PlanType,
+  SubscriptionStatus,
   AssetReferenceType,
   CollaborationRole,
   CollaborationPermission,
