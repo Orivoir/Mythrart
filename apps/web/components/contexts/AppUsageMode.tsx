@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, ReactNode, useState, useMemo } from "react"
+import { createContext, ReactNode, useState, useMemo, useEffect } from "react"
 import { useMediaQuery } from "usehooks-ts"
 
 export type AppUsageMode =
@@ -112,58 +112,57 @@ function createGetInitialAppUsageMode(capabilities: AppUsageCapabilities) {
 export function AppUsageProvider({
   children,
 }: AppUsageProviderProps) {
-  
   const isPortrait = useMediaQuery("(orientation: portrait)")
   const isLandscape = useMediaQuery("(orientation: landscape)")
 
-  // have a fine pointer (e.g., mouse) connected
   const hasFinePointer = useMediaQuery("(pointer: fine)")
-  // have not fine pointer (e.g., touch screen)
   const hasCoarsePointer = useMediaQuery("(pointer: coarse)")
 
   const isDesktop = useMediaQuery("(min-width: 1024px)")
-  const isTablet = useMediaQuery("(min-width: 768px) and (max-width: 1023px)")
+  const isTablet = useMediaQuery(
+    "(min-width: 768px) and (max-width: 1023px)",
+  )
 
-  const getInitialAppUsageMode = useMemo(() => createGetInitialAppUsageMode({
-    isDesktop,
-    isTablet,
-    isPortrait,
-    isLandscape,
-    hasFinePointer,
-    hasCoarsePointer
-  }), [
-    isPortrait,
-    isLandscape,
-    hasFinePointer,
-    hasCoarsePointer,
-    isDesktop,
-    isTablet,
-  ])
+  const getInitialAppUsageMode = useMemo(
+    () =>
+      createGetInitialAppUsageMode({
+        isDesktop,
+        isTablet,
+        isPortrait,
+        isLandscape,
+        hasFinePointer,
+        hasCoarsePointer,
+      }),
+    [
+      isPortrait,
+      isLandscape,
+      hasFinePointer,
+      hasCoarsePointer,
+      isDesktop,
+      isTablet,
+    ],
+  )
 
-  const [usage] = useState<AppUsage>({
-    // Pour l'instant, état initial volontairement fixe
-    // afin de tester les différents modes.
-    mode: getInitialAppUsageMode(),
-  })
+  const [usage, setUsage] = useState<AppUsage | null>(null)
+
+  useEffect(() => {
+    setUsage({
+      mode: getInitialAppUsageMode(),
+    })
+  }, [getInitialAppUsageMode])
 
   const setAction = (action: AppUsageAction) => {
-    // later action is send to engine app usage that determine
-    // if AppUsageMode should be changed with:
-    // - new interactions (action argument)
-    // - latest interactions (stored in the engine client side session lifecycle)
-    // - capabilities of the devices (Mobile, Mobile paysage orientation, Mobile + pointer fine, tablet, ect...)
-    
-    // currently the Initial state (determined with the capabilities of the devices only) should never changed
-    // appUsageEngine(action)
+    // later evolutive logic to handle app usage actions
   }
 
-  const value = useMemo<AppUsageContextValue>(
-    () => ({
-      usage,
-      setAction, // Expose to client component for call engine
-    }),
-    [usage],
-  )
+  if (!usage) {
+    return null
+  }
+
+  const value: AppUsageContextValue = {
+    usage,
+    setAction,
+  }
 
   return (
     <AppUsageContext.Provider value={value}>
