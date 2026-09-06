@@ -9,6 +9,7 @@ import { VoiceRecorderWaveform } from "./voice-recorder-waveform"
 /** Renders the complete voice recording control and its live status. */
 export function VoiceRecorder({
   disabled = false,
+  size = "lg",
   onStart,
   onRecordFinish,
   onNoCompatible,
@@ -46,16 +47,19 @@ export function VoiceRecorder({
             levels={levels}
             side="left"
             isRecording={isRecording}
+            size={size}
           />
           <VoiceRecorderButton
             disabled={isDisabled}
             isRecording={isRecording}
             onClick={handleClick}
+            size={size}
           />
           <VoiceRecorderWaveform
             levels={levels}
             side="right"
             isRecording={isRecording}
+            size={size}
           />
         </div>
 

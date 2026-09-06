@@ -1,5 +1,7 @@
+"use client"
+
 import { cn } from "@/lib/utils"
-import { getTranslations } from "next-intl/server"
+import { useTranslations } from "next-intl"
 
 interface BrandNameProps {
   withLogo?: boolean
@@ -8,14 +10,14 @@ interface BrandNameProps {
   className?: string
 }
 
-export async function BrandName({
+export function BrandName({
   withLogo = false,
   withSlogan = false,
   size = "md",
   className,
 }: BrandNameProps) {
 
-  const t = await getTranslations("Brand")
+  const t = useTranslations("Brand")
 
   return (
     <>

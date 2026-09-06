@@ -2,7 +2,12 @@ import { motion } from "framer-motion"
 import { VoiceRecorderSpectrum } from "./voice-recorder-spectrum"
 import { VoiceRecorderTimer } from "./voice-recorder-timer"
 
-export function VoiceRecording({ levels, elapsedTime }: { levels: number[]; elapsedTime: number }) {
+export interface VoiceRecordingProps {
+  levels: number[]
+  elapsedTime: number
+}
+
+export function VoiceRecording({ levels, elapsedTime }: VoiceRecordingProps) {
 
   return (
     <motion.div

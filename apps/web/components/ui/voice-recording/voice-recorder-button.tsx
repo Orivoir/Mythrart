@@ -3,6 +3,13 @@
 import { Mic, Square } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import type { VoiceRecorderSize } from "./sizes"
+import {
+  buttonSizeClasses,
+  micIconSizeClasses,
+  ringSizePx,
+  stopIconSizeClasses,
+} from "./sizes"
 
 type VoiceRecorderButtonProps = {
   /** Disables the control. */
@@ -11,6 +18,8 @@ type VoiceRecorderButtonProps = {
   isRecording: boolean
   /** Handles starting or stopping the active recording. */
   onClick: () => void
+  /** Controls the button and icon dimensions. */
+  size: VoiceRecorderSize
 }
 
 /** Renders the primary start/stop button for the recorder. */
@@ -18,6 +27,7 @@ export function VoiceRecorderButton({
   disabled,
   isRecording,
   onClick,
+  size,
 }: VoiceRecorderButtonProps) {
   return (
     <Button
@@ -32,20 +42,30 @@ export function VoiceRecorderButton({
       }
       aria-pressed={isRecording}
       onClick={onClick}
+      style={{
+        boxShadow: `0 0 0 ${ringSizePx[size]}px color-mix(in oklab, var(--primary) 8%, transparent)`,
+      }}
       className={cn(
-        "relative size-20 rounded-full",
+        "relative rounded-full",
+        buttonSizeClasses[size],
         "bg-primary text-primary-foreground",
         "hover:bg-primary hover:text-primary-foreground",
-        "shadow-[0_0_0_10px_color-mix(in_oklab,var(--primary)_8%,transparent)]",
         "transition-transform duration-200",
         "active:scale-95",
         isRecording && "scale-105",
       )}
     >
       {isRecording ? (
-        <Square className="size-7 fill-current" aria-hidden="true" />
+        <Square
+          className={cn(stopIconSizeClasses[size], "fill-current")}
+          aria-hidden="true"
+        />
       ) : (
-        <Mic className="size-8" strokeWidth={2} aria-hidden="true" />
+        <Mic
+          className={micIconSizeClasses[size]}
+          strokeWidth={2}
+          aria-hidden="true"
+        />
       )}
     </Button>
   )

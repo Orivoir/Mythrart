@@ -1,79 +1,115 @@
-import {
-  ChartLine,
-  Compass,
-  Folder,
-  House,
-} from "lucide-react"
+"use client"
 
+import { usePathname } from "next/navigation"
+import { Plus } from "lucide-react"
+
+import type {
+  Subscription,
+  User,
+} from "@/components/api/types"
+import { AppLink } from "@/components/ui/app-link"
 import { BrandName } from "@/components/ui/brand/brand-name"
+import { ButtonWithIcon } from "@/components/ui/button-with-icon"
 import { FloatingSearch } from "@/components/ui/floating-search"
 import { NavigationItem } from "@/components/ui/navigation-item"
+import { Notification } from "@/components/ui/notifications"
+import type { SuggestionsData } from "@/components/ui/suggestion-ressource/types"
 
-import { CreateProjectButton } from "./create-project-button"
+import { TOP_NAV_ITEMS } from "./nav-items"
+import { UserAvatarMenu } from "./user-avatar-menu"
 
-export function AdaptiveTopHeaderWorkspace() {
+export type WorkspaceTopHeaderProps = {
+  mode: "quick" | "workspace"
+  user?: User
+  subscription?: Subscription
+  notificationsCount?: number
+  suggestions?: SuggestionsData
+  onNewProject?: () => void
+  onNotificationsClick?: () => void
+}
+
+export function WorkspaceTopHeader({
+  mode,
+  user,
+  subscription,
+  notificationsCount = 0,
+  suggestions = [],
+  onNewProject,
+  onNotificationsClick,
+}: WorkspaceTopHeaderProps) {
+  const pathname = usePathname()
+  const isQuick = mode === "quick"
+
+  const items = isQuick
+    ? TOP_NAV_ITEMS.filter((item) => item.quickWorkspace)
+    : TOP_NAV_ITEMS
+
   return (
-    <header className="w-full px-4 py-4">
-      <div className="mx-auto flex h-20 w-full items-center rounded-xl border bg-background px-6 shadow-sm">
-        {/* Brand */}
-        <div className="shrink-0">
-          <BrandName
-            withSlogan={false}
-            withLogo={false}
-            size="lg"
-          />
-        </div>
+    <header
+      className="
+        sticky
+        top-0
+        z-30
+        flex
+        h-16
+        w-full
+        items-center
+        gap-4
+        border-b
+        border-border
+        bg-background
+        px-4
+        md:px-6
+      "
+    >
+      <AppLink
+        href="/dashboard"
+        mutedOnHover={false}
+        className="shrink-0"
+      >
+        <BrandName size="sm" />
+      </AppLink>
 
-        {/* Main navigation */}
-        <nav className="ml-10 flex items-center gap-6">
+      <nav
+        aria-label="Navigation principale"
+        className="flex shrink-0 items-center gap-1"
+      >
+        {items.map((item) => (
           <NavigationItem
-            icon={House}
-            label="Home"
-            href="#"
-            active
+            key={item.href}
+            icon={item.icon}
+            label={item.label}
+            href={item.href}
+            active={pathname === item.href}
+            withTitle={!isQuick}
           />
+        ))}
+      </nav>
 
-          <NavigationItem
-            icon={Folder}
-            label="Projects"
-            href="#"
-          />
+      <div className={isQuick ? "max-w-sm flex-1" : "max-w-xl flex-1"}>
+        <FloatingSearch suggestions={suggestions} />
+      </div>
 
-          <NavigationItem
-            icon={Compass}
-            label="Explore"
-            href="#"
-          />
+      <div className="flex shrink-0 items-center gap-2">
+        <ButtonWithIcon
+          type="button"
+          icon={Plus}
+          iconPosition="left"
+          iconSize="sm"
+          onClick={onNewProject}
+        >
+          Nouveau projet
+        </ButtonWithIcon>
 
-          <NavigationItem
-            icon={ChartLine}
-            label="Analytics"
-            href="#"
-          />
-        </nav>
+        <Notification
+          count={notificationsCount}
+          onClick={onNotificationsClick}
+        />
 
-        {/* Right actions */}
-        <div className="ml-auto flex items-center gap-6">
-          {/* Search */}
-          <div className="w-[208px]">
-            <FloatingSearch suggestions={[]} />
-          </div>
-
-          {/* Create project */}
-          <CreateProjectButton />
-
-          {/* Notifications */}
-          {/* <Notification ... /> */}
-
-          {/* Separator */}
-          <div
-            className="h-8 w-px bg-border"
-            aria-hidden="true"
-          />
-
-          {/* User */}
-          {/* <UserMenu ... /> */}
-        </div>
+        <UserAvatarMenu
+          user={user}
+          subscription={subscription}
+        />
       </div>
     </header>
   )

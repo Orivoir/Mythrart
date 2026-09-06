@@ -1,9 +1,15 @@
 "use client"
 
+import type { VoiceRecorderSize } from "./sizes"
+
+export type { VoiceRecorderSize } from "./sizes"
+
 /** Public props accepted by the voice recorder component. */
 export type VoiceRecorderProps = {
   /** Prevents starting a new recording. */
   disabled?: boolean
+  /** Size of the trigger button and its idle/recording waveform. Defaults to "lg". */
+  size?: VoiceRecorderSize
   /** Called after the media recorder starts capturing audio. */
   onStart?: () => void
   /** Called with the completed audio blob when recording stops. */

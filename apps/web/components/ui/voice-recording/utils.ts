@@ -1,12 +1,3 @@
-/** Fixed bar heights displayed before recording begins. */
-export const waveformBars = [
-  "h-3",
-  "h-5",
-  "h-8",
-  "h-5",
-  "h-3",
-]
-
 /** Returns whether the browser exposes the APIs required for recording. */
 export function isVoiceRecordingSupported() {
   return (

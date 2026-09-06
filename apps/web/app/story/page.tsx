@@ -10,6 +10,7 @@ import AdaptiveSurfaceFixtures from "./fixtures/adaptive-surface"
 import UserMenuFixtures from "./fixtures/user-menu"
 import RichUserMenuFixtures from "./fixtures/rich-user-menu"
 import BottomNavigationFixtures from "./fixtures/bottom-navigation"
+import LoggedHeaderFixture from "./fixtures/logged-header"
 
 export default function StoryPage() {
 
@@ -46,7 +47,9 @@ export default function StoryPage() {
         <RichUserMenuFixtures />
 
         <BottomNavigationFixtures />
- 
+
+        <LoggedHeaderFixture />
+
       </div>
     </main>
   )
