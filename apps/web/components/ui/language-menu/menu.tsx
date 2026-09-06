@@ -4,6 +4,7 @@ import { Check } from "lucide-react"
 import { FR, GB } from "country-flag-icons/react/3x2"
 
 import { useAdaptiveSurface } from "@/components/hooks/useAdaptiveSurface"
+import { useLocaleSwitcher } from "@/components/hooks/useLocaleSwitcher"
 import {
   HelperText,
   Text,
@@ -25,6 +26,7 @@ export function LanguageMenu({
   onLanguageChange,
 }: LanguageMenuProps) {
   const { Surface } = useAdaptiveSurface()
+  const switchLocale = useLocaleSwitcher()
 
   return (
     <Surface trigger={trigger}>
@@ -64,6 +66,7 @@ export function LanguageMenu({
                 )}
                 onClick={() => {
                   if (!isCurrent) {
+                    switchLocale(language.locale)
                     onLanguageChange?.(language.locale)
                   }
                 }}

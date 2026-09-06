@@ -1,3 +1,5 @@
+"use client"
+
 import type { LucideIcon } from "lucide-react"
 import {
   Folder,
@@ -6,6 +8,7 @@ import {
   Trash2,
   Users,
 } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 export type DrawerMenuActionKey =
   | "collaborations"
@@ -21,33 +24,39 @@ export type DrawerMenuAction = {
   description?: string
 }
 
-export const DRAWER_MENU_ACTIONS: DrawerMenuAction[] = [
-  {
-    key: "collaborations",
-    icon: Users,
-    label: "Collaborations",
-  },
-  {
-    key: "assets",
-    icon: Folder,
-    label: "Assets",
-    description: "Mes fichiers",
-  },
-  {
-    key: "settings",
-    icon: Settings,
-    label: "Settings",
-    description: "Préférences et compte",
-  },
-  {
-    key: "trash",
-    icon: Trash2,
-    label: "Corbeil",
-  },
-  {
-    key: "publications",
-    icon: Globe,
-    label: "Publications",
-    description: "Mes projets publiés",
-  },
-]
+/** Translated shortcut actions shared by every drawer menu variant. */
+export function useDrawerMenuActions(): DrawerMenuAction[] {
+  const t = useTranslations("Header.Logged.DrawerMenu.Actions")
+
+  return [
+    {
+      key: "collaborations",
+      icon: Users,
+      label: t("Collaborations"),
+    },
+    {
+      key: "assets",
+      icon: Folder,
+      label: t("Assets.Label"),
+      description: t("Assets.Description"),
+    },
+    {
+      key: "settings",
+      icon: Settings,
+      label: t("Settings.Label"),
+      description: t("Settings.Description"),
+    },
+    {
+      key: "trash",
+      icon: Trash2,
+      label: t("Trash"),
+    },
+    {
+      key: "publications",
+      icon: Globe,
+      label: t("Publications.Label"),
+      description: t("Publications.Description"),
+    },
+  ]
+}
+

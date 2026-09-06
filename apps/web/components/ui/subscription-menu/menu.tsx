@@ -45,7 +45,7 @@ export function SubscriptionMenu({
 
   return (
     <Surface trigger={trigger}>
-      <div className="w-full min-w-[280px] p-2">
+      <div className="w-fit p-2">
         <CurrentSubscription
           planLabel={planLabel}
           statusLabel={statusLabel}
@@ -61,7 +61,7 @@ export function SubscriptionMenu({
 
         <Separator className="my-2" />
 
-        <div className="space-y-1">
+        <div className="w-fit space-y-1 flex flex-col">
           <ButtonWithIcon
             type="button"
             icon={CreditCard}

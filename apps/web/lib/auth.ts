@@ -81,6 +81,39 @@ export const authOptions: AuthOptions = {
 
       return true
     },
+
+    // Subscription plan/status are only refetched at sign-in or on an explicit
+    // session.update() call, keeping the JWT strategy DB-free on every request.
+    async jwt({ token, user, trigger }) {
+      if (user?.id) {
+        token.sub = user.id
+      }
+
+      if ((user?.id || trigger === "update") && token.sub) {
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.sub },
+          select: { plan: true, subscriptionStatus: true, id: true },
+        })
+
+        if (dbUser) {
+          token.plan = dbUser.plan
+          token.subscriptionStatus = dbUser.subscriptionStatus
+          token.sub = dbUser.id
+        }
+      }
+
+      return token
+    },
+
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.sub ?? "<no-defined>"
+        session.user.plan = token.plan ?? "free"
+        session.user.subscriptionStatus = token.subscriptionStatus ?? "none"
+      }
+
+      return session
+    },
   },
 
   pages: {

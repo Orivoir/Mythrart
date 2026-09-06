@@ -15,8 +15,8 @@ export default function CurrentSubscription({
 }: CurrentSubscriptionProps) {
 
   return (
-    <div className="rounded-lg bg-muted/40 p-3">
-      <div className="flex items-start gap-3">
+    <div className="rounded-lg bg-soft-blue p-3 w-full">
+      <div className="flex items-start gap-3 w-fit">
         <div
           className="
             flex size-10 shrink-0 items-center

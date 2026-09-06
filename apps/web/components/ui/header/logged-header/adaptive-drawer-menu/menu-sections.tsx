@@ -1,7 +1,9 @@
 "use client"
 
+import { useTranslations } from "next-intl"
+
 import type { DrawerMenuActionKey } from "./menu-data"
-import { DRAWER_MENU_ACTIONS } from "./menu-data"
+import { useDrawerMenuActions } from "./menu-data"
 import { MenuActionItem } from "./menu-action-item"
 import { PlanCard } from "./plan-card"
 import { SupportSection } from "./support-section"
@@ -10,29 +12,32 @@ export type DrawerMenuSectionsProps = {
   planLabel?: string
   projectsUsed?: number
   projectsLimit?: number
-  clientId?: string
   onActionClick?: (key: DrawerMenuActionKey) => void
   onPlansClick?: () => void
   onHelpClick?: () => void
+  userId?: string
 }
 
 export function DrawerMenuSections({
   planLabel,
   projectsUsed,
   projectsLimit,
-  clientId,
+  userId,
   onActionClick,
   onPlansClick,
-  onHelpClick,
+  onHelpClick
 }: DrawerMenuSectionsProps) {
+  const t = useTranslations("Header.Logged.DrawerMenu.Sections")
+  const drawerMenuActions = useDrawerMenuActions()
+
   return (
     <div className="space-y-6 p-4">
       <div className="space-y-1">
         <p className="px-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          Raccourcis
+          {t("Shortcuts")}
         </p>
 
-        {DRAWER_MENU_ACTIONS.map((action) => (
+        {drawerMenuActions.map((action) => (
           <MenuActionItem
             key={action.key}
             icon={action.icon}
@@ -45,7 +50,7 @@ export function DrawerMenuSections({
 
       <div className="space-y-2">
         <p className="px-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          Abonnement
+          {t("Subscription")}
         </p>
 
         <PlanCard
@@ -58,11 +63,11 @@ export function DrawerMenuSections({
 
       <div className="space-y-2">
         <p className="px-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          Support
+          {t("Support")}
         </p>
 
         <SupportSection
-          clientId={clientId}
+          clientId={userId}
           onHelpClick={onHelpClick}
         />
       </div>

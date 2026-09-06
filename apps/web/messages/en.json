@@ -105,5 +105,103 @@
 
             }
         }
+    },
+    "Header": {
+        "Unlogged": {
+            "Nav": {
+                "Features": "Features",
+                "Pricing": "Pricing",
+                "About": "About"
+            },
+            "Resources": {
+                "Label": "Resources",
+                "Blog": "Blog",
+                "Guides": "Writing guides",
+                "Help": "Help center"
+            },
+            "Actions": {
+                "Login": "Log in",
+                "TryFree": "Try for free",
+                "OpenMenuAria": "Open menu"
+            }
+        },
+        "Logged": {
+            "TopHeader": {
+                "NavAriaLabel": "Main navigation",
+                "NewProject": "New project",
+                "Nav": {
+                    "Home": "Home",
+                    "Projects": "Projects",
+                    "Explore": "Explore",
+                    "Library": "Library",
+                    "Stats": "Stats"
+                }
+            },
+            "UserMenu": {
+                "TriggerAria": "User menu",
+                "Subscription": "Subscription status",
+                "Profile": {
+                    "Label": "Profile",
+                    "Description": "View and edit your profile"
+                },
+                "Settings": {
+                    "Label": "Settings",
+                    "Description": "Preferences and account"
+                },
+                "Language": "Language",
+                "Help": {
+                    "Label": "Help center",
+                    "Description": "Get help and contact us"
+                },
+                "Logout": "Log out"
+            },
+            "DrawerMenu": {
+                "Sections": {
+                    "Shortcuts": "Shortcuts",
+                    "Subscription": "Subscription",
+                    "Support": "Support"
+                },
+                "Actions": {
+                    "Collaborations": "Collaborations",
+                    "Assets": {
+                        "Label": "Assets",
+                        "Description": "My files"
+                    },
+                    "Settings": {
+                        "Label": "Settings",
+                        "Description": "Preferences and account"
+                    },
+                    "Trash": "Trash",
+                    "Publications": {
+                        "Label": "Publications",
+                        "Description": "My published projects"
+                    }
+                },
+                "PlanCard": {
+                    "DefaultPlanLabel": "Free plan",
+                    "Projects": "Projects {used} / {limit}",
+                    "ViewOffers": "View plans"
+                },
+                "Support": {
+                    "ClientId": "Client ID",
+                    "ClientIdDescription": "Provide this ID to our support.",
+                    "CopyAria": "Copy client ID",
+                    "Help": "Need help?",
+                    "HelpDescription": "Contact support"
+                },
+                "Quick": {
+                    "OpenAria": "Open menu",
+                    "CloseAria": "Close menu",
+                    "Title": "Menu"
+                },
+                "Workspace": {
+                    "SubscriptionAria": "Subscription",
+                    "HelpAria": "Need help?",
+                    "Logout": "Log out",
+                    "ExpandAria": "Expand menu",
+                    "CollapseAria": "Collapse menu"
+                }
+            }
+        }
     }
 }

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useLocale } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import {
   ChevronDown,
   CircleHelp,
@@ -20,6 +20,7 @@ import Avatar from "@/components/ui/avatar"
 import { Chip } from "@/components/ui/chip"
 import { LanguageMenu } from "@/components/ui/language-menu"
 import type { AvailableLanguage } from "@/components/ui/language-menu/types"
+import { SubscriptionMenu } from "@/components/ui/subscription-menu"
 import { UserMenu } from "@/components/ui/user-menu"
 import {
   getLocaleCode,
@@ -51,6 +52,8 @@ export type UserAvatarMenuProps = {
   onHelpClick?: () => void
   onLogout?: () => void
   onLanguageChange?: (locale: string) => void
+  onBillingClick?: () => void
+  onPlansClick?: () => void
 }
 
 /** Avatar trigger + adaptive menu shared by every top header variant. */
@@ -63,9 +66,12 @@ export function UserAvatarMenu({
   onHelpClick,
   onLogout,
   onLanguageChange,
+  onBillingClick,
+  onPlansClick,
 }: UserAvatarMenuProps) {
   const [open, setOpen] = useState(false)
   const currentLocale = useLocale()
+  const t = useTranslations("Header.Logged.UserMenu")
 
   return (
     <UserMenu>
@@ -75,7 +81,7 @@ export function UserAvatarMenu({
         trigger={
           <button
             type="button"
-            aria-label="Menu utilisateur"
+            aria-label={t("TriggerAria")}
             className="
               flex
               shrink-0
@@ -124,29 +130,38 @@ export function UserAvatarMenu({
             {subscription && (
               <UserMenu.Action
                 icon={Crown}
-                label="État de l'abonnement"
+                label={t("Subscription")}
                 description={getSubscriptionLabel(subscription)}
                 chevron
+                renderMenu={(trigger) => (
+                  <SubscriptionMenu
+                    trigger={trigger}
+                    type={subscription.type}
+                    status={subscription.status}
+                    onBillingClick={onBillingClick}
+                    onPlansClick={onPlansClick}
+                  />
+                )}
               />
             )}
 
             <UserMenu.Action
               icon={UserRound}
-              label="Profil"
-              description="Voir et modifier votre profil"
+              label={t("Profile.Label")}
+              description={t("Profile.Description")}
               onClick={onProfileClick}
             />
 
             <UserMenu.Action
               icon={Settings}
-              label="Paramètres"
-              description="Préférences et compte"
+              label={t("Settings.Label")}
+              description={t("Settings.Description")}
               onClick={onSettingsClick}
             />
 
             <UserMenu.Action
               icon={Globe}
-              label="Langue"
+              label={t("Language")}
               description={getLocaleLabel(currentLocale)}
               trailing={
                 <Chip className="px-2 py-0.5 text-xs">
@@ -169,8 +184,8 @@ export function UserAvatarMenu({
 
           <UserMenu.Action
             icon={CircleHelp}
-            label="Centre d'aide"
-            description="Obtenir de l'aide et nous contacter"
+            label={t("Help.Label")}
+            description={t("Help.Description")}
             onClick={onHelpClick}
           />
 
@@ -178,7 +193,7 @@ export function UserAvatarMenu({
 
           <UserMenu.Action
             icon={LogOut}
-            label="Déconnexion"
+            label={t("Logout")}
             variant="danger"
             onClick={onLogout}
           />

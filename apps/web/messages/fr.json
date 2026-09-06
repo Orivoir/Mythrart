@@ -106,5 +106,103 @@
                 "PrivacyPolicy": "Politique de confidentialité"
             }
         }
+    },
+    "Header": {
+        "Unlogged": {
+            "Nav": {
+                "Features": "Fonctionnalités",
+                "Pricing": "Tarifs",
+                "About": "À propos"
+            },
+            "Resources": {
+                "Label": "Ressources",
+                "Blog": "Blog",
+                "Guides": "Guides d'écriture",
+                "Help": "Centre d'aide"
+            },
+            "Actions": {
+                "Login": "Se connecter",
+                "TryFree": "Essayer gratuitement",
+                "OpenMenuAria": "Ouvrir le menu"
+            }
+        },
+        "Logged": {
+            "TopHeader": {
+                "NavAriaLabel": "Navigation principale",
+                "NewProject": "Nouveau projet",
+                "Nav": {
+                    "Home": "Accueil",
+                    "Projects": "Projets",
+                    "Explore": "Explorer",
+                    "Library": "Bibliothèque",
+                    "Stats": "Statistiques"
+                }
+            },
+            "UserMenu": {
+                "TriggerAria": "Menu utilisateur",
+                "Subscription": "État de l'abonnement",
+                "Profile": {
+                    "Label": "Profil",
+                    "Description": "Voir et modifier votre profil"
+                },
+                "Settings": {
+                    "Label": "Paramètres",
+                    "Description": "Préférences et compte"
+                },
+                "Language": "Langue",
+                "Help": {
+                    "Label": "Centre d'aide",
+                    "Description": "Obtenir de l'aide et nous contacter"
+                },
+                "Logout": "Déconnexion"
+            },
+            "DrawerMenu": {
+                "Sections": {
+                    "Shortcuts": "Raccourcis",
+                    "Subscription": "Abonnement",
+                    "Support": "Support"
+                },
+                "Actions": {
+                    "Collaborations": "Collaborations",
+                    "Assets": {
+                        "Label": "Assets",
+                        "Description": "Mes fichiers"
+                    },
+                    "Settings": {
+                        "Label": "Settings",
+                        "Description": "Préférences et compte"
+                    },
+                    "Trash": "Corbeil",
+                    "Publications": {
+                        "Label": "Publications",
+                        "Description": "Mes projets publiés"
+                    }
+                },
+                "PlanCard": {
+                    "DefaultPlanLabel": "Plan Free",
+                    "Projects": "Projets {used} / {limit}",
+                    "ViewOffers": "Voir les offres"
+                },
+                "Support": {
+                    "ClientId": "ID Client",
+                    "ClientIdDescription": "Communiquez cet ID à notre support.",
+                    "CopyAria": "Copier l'ID client",
+                    "Help": "Besoin d'aide ?",
+                    "HelpDescription": "Contactez le support"
+                },
+                "Quick": {
+                    "OpenAria": "Ouvrir le menu",
+                    "CloseAria": "Fermer le menu",
+                    "Title": "Menu"
+                },
+                "Workspace": {
+                    "SubscriptionAria": "Abonnement",
+                    "HelpAria": "Besoin d'aide ?",
+                    "Logout": "Se déconnecter",
+                    "ExpandAria": "Déplier le menu",
+                    "CollapseAria": "Réduire le menu"
+                }
+            }
+        }
     }
 }

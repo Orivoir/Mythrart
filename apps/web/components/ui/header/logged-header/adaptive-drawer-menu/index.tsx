@@ -11,6 +11,7 @@ export type AdaptiveDrawerMenuProps = DrawerMenuSectionsProps & {
   open?: boolean
   onOpenChange?: (open: boolean) => void
   onLogout?: () => void
+  userId?: string;
 }
 
 export function AdaptiveDrawerMenu({
@@ -28,6 +29,7 @@ export function AdaptiveDrawerMenu({
       <CompanionDrawerMenu
         open={open}
         onOpenChange={(next) => onOpenChange?.(next)}
+        userId={sectionsProps.userId}
         {...sectionsProps}
       />
     )
@@ -39,6 +41,7 @@ export function AdaptiveDrawerMenu({
 
   return (
     <WorkspaceSidebarMenu
+      userId={sectionsProps.userId}
       onLogout={onLogout}
       {...sectionsProps}
     />

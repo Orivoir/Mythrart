@@ -8,18 +8,20 @@ import {
   Headphones,
   LogOut,
 } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 import { AppLink } from "@/components/ui/app-link"
 import { BrandName } from "@/components/ui/brand/brand-name"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
-import { DRAWER_MENU_ACTIONS } from "./menu-data"
+import { useDrawerMenuActions } from "./menu-data"
 import { DrawerMenuSections } from "./menu-sections"
 import type { DrawerMenuSectionsProps } from "./menu-sections"
 
 export type WorkspaceSidebarMenuProps = DrawerMenuSectionsProps & {
   onLogout?: () => void
+  userId?: string
 }
 
 /** Fixed left sidebar with an expanded (labels) and reduced (icons only) state. */
@@ -28,9 +30,13 @@ export function WorkspaceSidebarMenu({
   onActionClick,
   onPlansClick,
   onHelpClick,
+  userId,
   ...sectionsProps
 }: WorkspaceSidebarMenuProps) {
   const [collapsed, setCollapsed] = useState(false)
+  const t = useTranslations("Header.Logged.DrawerMenu.Workspace")
+  const brandT = useTranslations("Brand")
+  const drawerMenuActions = useDrawerMenuActions()
 
   return (
     <aside
@@ -49,7 +55,7 @@ export function WorkspaceSidebarMenu({
           {collapsed ? (
             <span
               className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary"
-              aria-label="Mythrart"
+              aria-label={brandT("Name")}
             >
               M
             </span>
@@ -62,7 +68,7 @@ export function WorkspaceSidebarMenu({
       <div className="min-h-0 flex-1 overflow-y-auto">
         {collapsed ? (
           <div className="flex flex-col items-center gap-1 py-4">
-            {DRAWER_MENU_ACTIONS.map((action) => (
+            {drawerMenuActions.map((action) => (
               <Button
                 key={action.key}
                 type="button"
@@ -82,8 +88,8 @@ export function WorkspaceSidebarMenu({
               type="button"
               variant="ghost"
               size="icon"
-              title="Abonnement"
-              aria-label="Abonnement"
+              title={t("SubscriptionAria")}
+              aria-label={t("SubscriptionAria")}
               onClick={onPlansClick}
             >
               <Crown className="size-5" aria-hidden="true" />
@@ -93,8 +99,8 @@ export function WorkspaceSidebarMenu({
               type="button"
               variant="ghost"
               size="icon"
-              title="Besoin d'aide ?"
-              aria-label="Besoin d'aide ?"
+              title={t("HelpAria")}
+              aria-label={t("HelpAria")}
               onClick={onHelpClick}
             >
               <Headphones className="size-5" aria-hidden="true" />
@@ -102,6 +108,7 @@ export function WorkspaceSidebarMenu({
           </div>
         ) : (
           <DrawerMenuSections
+            userId={userId}
             {...sectionsProps}
             onActionClick={onActionClick}
             onPlansClick={onPlansClick}
@@ -121,19 +128,19 @@ export function WorkspaceSidebarMenu({
           variant="ghost"
           size={collapsed ? "icon" : "default"}
           className={collapsed ? "" : "w-full justify-start gap-2"}
-          title="Se déconnecter"
-          aria-label="Se déconnecter"
+          title={t("Logout")}
+          aria-label={t("Logout")}
           onClick={onLogout}
         >
           <LogOut className="size-5" aria-hidden="true" />
 
-          {!collapsed && "Se déconnecter"}
+          {!collapsed && t("Logout")}
         </Button>
       </div>
 
       <button
         type="button"
-        aria-label={collapsed ? "Déplier le menu" : "Réduire le menu"}
+        aria-label={collapsed ? t("ExpandAria") : t("CollapseAria")}
         onClick={() => setCollapsed((value) => !value)}
         className="
           absolute

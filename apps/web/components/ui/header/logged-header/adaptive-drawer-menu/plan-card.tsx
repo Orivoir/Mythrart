@@ -1,6 +1,7 @@
 "use client"
 
 import { Crown } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 import { ButtonWithIcon } from "@/components/ui/button-with-icon"
 
@@ -12,11 +13,12 @@ export type PlanCardProps = {
 }
 
 export function PlanCard({
-  planLabel = "Plan Free",
+  planLabel,
   projectsUsed = 0,
   projectsLimit = 1,
   onPlansClick,
 }: PlanCardProps) {
+  const t = useTranslations("Header.Logged.DrawerMenu.PlanCard")
   const progress =
     projectsLimit > 0
       ? Math.min(100, (projectsUsed / projectsLimit) * 100)
@@ -30,11 +32,11 @@ export function PlanCard({
           aria-hidden="true"
         />
 
-        {planLabel}
+        {planLabel ?? t("DefaultPlanLabel")}
       </div>
 
       <p className="mt-1 text-xs text-muted-foreground">
-        Projets {projectsUsed} / {projectsLimit}
+        {t("Projects", { used: projectsUsed, limit: projectsLimit })}
       </p>
 
       <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-border">
@@ -54,7 +56,7 @@ export function PlanCard({
         className="mt-3 h-10"
         onClick={onPlansClick}
       >
-        Voir les offres
+        {t("ViewOffers")}
       </ButtonWithIcon>
     </div>
   )

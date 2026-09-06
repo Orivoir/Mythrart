@@ -1,29 +1,32 @@
+import { getTranslations } from "next-intl/server"
+
 import { AppLink as Link } from "@/components/ui/app-link"
 import { DropdownMenu, DropdownMenuLink } from "../../DropdownMenu"
 
-export function RessourcesMenu() {
+export async function RessourcesMenu() {
+  const t = await getTranslations("Header.Unlogged.Resources")
 
   return (
     <DropdownMenu
-      label="Ressources"
+      label={t("Label")}
     >
         <DropdownMenuLink>
           <Link href="/blog">
-            Blog
+            {t("Blog")}
           </Link>
         </DropdownMenuLink>
 
 
         <DropdownMenuLink>
           <Link href="/guides">
-            Guides d'écriture
+            {t("Guides")}
           </Link>
         </DropdownMenuLink>
 
 
         <DropdownMenuLink>
           <Link href="/help">
-            Centre d'aide
+            {t("Help")}
           </Link>
         </DropdownMenuLink>
     </DropdownMenu>

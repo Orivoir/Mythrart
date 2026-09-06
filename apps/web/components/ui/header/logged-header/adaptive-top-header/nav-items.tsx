@@ -1,3 +1,5 @@
+"use client"
+
 import type { LucideIcon } from "lucide-react"
 import {
   BarChart3,
@@ -6,6 +8,7 @@ import {
   Folder,
   House,
 } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 export type TopNavItem = {
   icon: LucideIcon
@@ -15,34 +18,40 @@ export type TopNavItem = {
   quickWorkspace?: boolean
 }
 
-export const TOP_NAV_ITEMS: TopNavItem[] = [
-  {
-    icon: House,
-    label: "Accueil",
-    href: "/dashboard",
-    quickWorkspace: true,
-  },
-  {
-    icon: Folder,
-    label: "Projets",
-    href: "/dashboard/projects",
-    quickWorkspace: true,
-  },
-  {
-    icon: Compass,
-    label: "Explorer",
-    href: "/dashboard/explore",
-    quickWorkspace: true,
-  },
-  {
-    icon: BookOpen,
-    label: "Bibliothèque",
-    href: "/dashboard/library",
-    quickWorkspace: true,
-  },
-  {
-    icon: BarChart3,
-    label: "Statistiques",
-    href: "/dashboard/stats",
-  },
-]
+/** Translated navigation items shared by the workspace and quick-workspace top headers. */
+export function useTopNavItems(): TopNavItem[] {
+  const t = useTranslations("Header.Logged.TopHeader.Nav")
+
+  return [
+    {
+      icon: House,
+      label: t("Home"),
+      href: "/dashboard",
+      quickWorkspace: true,
+    },
+    {
+      icon: Folder,
+      label: t("Projects"),
+      href: "/dashboard/projects",
+      quickWorkspace: true,
+    },
+    {
+      icon: Compass,
+      label: t("Explore"),
+      href: "/dashboard/explore",
+      quickWorkspace: true,
+    },
+    {
+      icon: BookOpen,
+      label: t("Library"),
+      href: "/dashboard/library",
+      quickWorkspace: true,
+    },
+    {
+      icon: BarChart3,
+      label: t("Stats"),
+      href: "/dashboard/stats",
+    },
+  ]
+}
+

@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation"
 import { Plus } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 import type {
   Subscription,
@@ -15,7 +16,7 @@ import { NavigationItem } from "@/components/ui/navigation-item"
 import { Notification } from "@/components/ui/notifications"
 import type { SuggestionsData } from "@/components/ui/suggestion-ressource/types"
 
-import { TOP_NAV_ITEMS } from "./nav-items"
+import { useTopNavItems } from "./nav-items"
 import { UserAvatarMenu } from "./user-avatar-menu"
 
 export type WorkspaceTopHeaderProps = {
@@ -38,11 +39,13 @@ export function WorkspaceTopHeader({
   onNotificationsClick,
 }: WorkspaceTopHeaderProps) {
   const pathname = usePathname()
+  const t = useTranslations("Header.Logged.TopHeader")
+  const topNavItems = useTopNavItems()
   const isQuick = mode === "quick"
 
   const items = isQuick
-    ? TOP_NAV_ITEMS.filter((item) => item.quickWorkspace)
-    : TOP_NAV_ITEMS
+    ? topNavItems.filter((item) => item.quickWorkspace)
+    : topNavItems
 
   return (
     <header
@@ -71,7 +74,7 @@ export function WorkspaceTopHeader({
       </AppLink>
 
       <nav
-        aria-label="Navigation principale"
+        aria-label={t("NavAriaLabel")}
         className="flex shrink-0 items-center gap-1"
       >
         {items.map((item) => (
@@ -98,7 +101,7 @@ export function WorkspaceTopHeader({
           iconSize="sm"
           onClick={onNewProject}
         >
-          Nouveau projet
+          {t("NewProject")}
         </ButtonWithIcon>
 
         <Notification

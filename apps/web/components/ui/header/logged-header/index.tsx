@@ -33,6 +33,7 @@ export function LoggedHeader({
       <AdaptiveDrawerMenu
         open={menuOpen}
         onOpenChange={setMenuOpen}
+        userId={user?.id}
       />
     </>
   )

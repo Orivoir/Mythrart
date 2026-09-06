@@ -7,17 +7,21 @@ import { UnloggedHeader } from "@/components/ui/header/unlogged-header"
 
 export default async function Header() {
 
-  // Session retrieval from JWT and should provide subscription informations.
   const session = await getServerSession(authOptions)
 
+  console.log(session)
 
   const agnosticHeader = !session ? <UnloggedHeader />: (
     <LoggedHeader
         user={{
-          id: session.user?.email ?? "",
-          name: session.user?.name ?? "",
-          email: session.user?.email ?? "",
+          id: session.user?.id ?? "<no-defined>",
+          name: session.user?.name ?? "<no-defined>",
+          email: session.user?.email ?? "<no-defined>",
           image: session.user?.image,
+        }}
+        subscription={{
+          type: session.user?.plan ?? "free",
+          status: session.user?.subscriptionStatus ?? "none",
         }}
     />
   )

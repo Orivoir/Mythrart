@@ -1,7 +1,10 @@
+import { getTranslations } from "next-intl/server"
+
 import { RessourcesMenu } from "./ressources-menu"
 import { AppLink as Link } from "@/components/ui/app-link"
 
-export function MainNavigation() {
+export async function MainNavigation() {
+  const t = await getTranslations("Header.Unlogged.Nav")
 
   return (
     <nav className="
@@ -13,17 +16,17 @@ export function MainNavigation() {
       md:flex
     ">
       <Link href="/features">
-        Fonctionnalités
+        {t("Features")}
       </Link>
 
       <Link href="/pricing">
-        Tarifs
+        {t("Pricing")}
       </Link>
 
       <RessourcesMenu />
 
       <Link href="/about">
-        À propos
+        {t("About")}
       </Link>
     </nav>
   )

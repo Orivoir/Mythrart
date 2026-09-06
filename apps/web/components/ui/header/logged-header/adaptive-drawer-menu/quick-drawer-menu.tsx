@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Grid2X2, X } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 import { Button } from "@/components/ui/button"
 
@@ -11,12 +12,13 @@ import type { DrawerMenuSectionsProps } from "./menu-sections"
 /** Floating action button opening the menu as a right-anchored overlay panel. */
 export function QuickDrawerMenu(props: DrawerMenuSectionsProps) {
   const [open, setOpen] = useState(false)
+  const t = useTranslations("Header.Logged.DrawerMenu.Quick")
 
   return (
     <>
       <Button
         type="button"
-        aria-label="Ouvrir le menu"
+        aria-label={t("OpenAria")}
         onClick={() => setOpen(true)}
         className="fixed bottom-6 right-6 z-40 size-12 rounded-full p-0 shadow-lg"
       >
@@ -50,14 +52,14 @@ export function QuickDrawerMenu(props: DrawerMenuSectionsProps) {
           >
             <div className="flex shrink-0 items-center justify-between border-b border-border p-4">
               <p className="text-sm font-semibold">
-                Menu
+                {t("Title")}
               </p>
 
               <Button
                 type="button"
                 variant="ghost"
                 size="icon"
-                aria-label="Fermer le menu"
+                aria-label={t("CloseAria")}
                 onClick={() => setOpen(false)}
               >
                 <X className="size-4" aria-hidden="true" />

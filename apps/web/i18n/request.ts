@@ -1,7 +1,11 @@
-import { headers } from "next/headers"
+import { cookies, headers } from "next/headers"
 import { getRequestConfig } from "next-intl/server"
-const supportedLocales = ["en", "fr"] as const
-const defaultLocale = "en"
+
+import {
+  defaultLocale,
+  LOCALE_COOKIE_NAME,
+  toSupportedLocale,
+} from "./locale"
 
 function pickLocaleFromAcceptLanguage(value: string | null): string {
   if (!value) {
@@ -23,10 +27,10 @@ function pickLocaleFromAcceptLanguage(value: string | null): string {
     .sort((a, b) => b.q - a.q)
 
   for (const candidate of parsed) {
-    const base = candidate.tag.split("-")[0]
+    const locale = toSupportedLocale(candidate.tag)
 
-    if (supportedLocales.includes(base as (typeof supportedLocales)[number])) {
-      return base
+    if (locale) {
+      return locale
     }
   }
 
@@ -34,11 +38,19 @@ function pickLocaleFromAcceptLanguage(value: string | null): string {
 }
 
 export default getRequestConfig(async () => {
+  const cookieStore = await cookies()
+  const localeCookie = toSupportedLocale(
+    cookieStore.get(LOCALE_COOKIE_NAME)?.value,
+  )
+
   const requestHeaders = await headers()
-  const locale = pickLocaleFromAcceptLanguage(requestHeaders.get("accept-language"))
+  const locale =
+    localeCookie ??
+    pickLocaleFromAcceptLanguage(requestHeaders.get("accept-language"))
 
   return {
     locale,
     messages: (await import(`../messages/${locale}.json`)).default,
   }
 })
+
