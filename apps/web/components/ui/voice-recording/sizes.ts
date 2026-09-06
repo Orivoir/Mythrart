@@ -34,11 +34,28 @@ export const ringSizePx: Record<VoiceRecorderSize, number> = {
 }
 
 export const waveformGapClasses: Record<VoiceRecorderSize, string> = {
-  xs: "gap-2",
-  sm: "gap-3",
-  md: "gap-4",
-  lg: "gap-5",
-  xl: "gap-6",
+  xs: "gap-0.5",
+  sm: "gap-0.5",
+  md: "gap-1",
+  lg: "gap-1",
+  xl: "gap-1.5",
+}
+
+// Gap between the button and each of its side waveforms.
+export const recorderGapClasses: Record<VoiceRecorderSize, string> = {
+  xs: "gap-1.5",
+  sm: "gap-2",
+  md: "gap-2.5",
+  lg: "gap-3",
+  xl: "gap-3.5",
+}
+
+export const waveformBarWidthClasses: Record<VoiceRecorderSize, string> = {
+  xs: "w-0.5",
+  sm: "w-0.5",
+  md: "w-0.5",
+  lg: "w-1",
+  xl: "w-1",
 }
 
 /** Fixed bar heights displayed before recording begins. */

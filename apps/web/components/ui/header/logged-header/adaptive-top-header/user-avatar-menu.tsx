@@ -1,10 +1,12 @@
 "use client"
 
 import { useState } from "react"
+import { useLocale } from "next-intl"
 import {
   ChevronDown,
   CircleHelp,
   Crown,
+  Globe,
   LogOut,
   Settings,
   UserRound,
@@ -15,28 +17,55 @@ import type {
   User,
 } from "@/components/api/types"
 import Avatar from "@/components/ui/avatar"
+import { Chip } from "@/components/ui/chip"
+import { LanguageMenu } from "@/components/ui/language-menu"
+import type { AvailableLanguage } from "@/components/ui/language-menu/types"
 import { UserMenu } from "@/components/ui/user-menu"
-import { getSubscriptionLabel } from "@/components/ui/user-menu/utils"
+import {
+  getLocaleCode,
+  getLocaleLabel,
+  getSubscriptionLabel,
+} from "@/components/ui/user-menu/utils"
+
+const DEFAULT_AVAILABLE_LANGUAGES: AvailableLanguage[] = [
+  {
+    locale: "fr",
+    label: "Français",
+    code: "FR",
+    countryCode: "FR",
+  },
+  {
+    locale: "en",
+    label: "English",
+    code: "EN",
+    countryCode: "GB",
+  },
+]
 
 export type UserAvatarMenuProps = {
   user?: User
   subscription?: Subscription
+  availableLanguages?: AvailableLanguage[]
   onProfileClick?: () => void
   onSettingsClick?: () => void
   onHelpClick?: () => void
   onLogout?: () => void
+  onLanguageChange?: (locale: string) => void
 }
 
 /** Avatar trigger + adaptive menu shared by every top header variant. */
 export function UserAvatarMenu({
   user,
   subscription,
+  availableLanguages = DEFAULT_AVAILABLE_LANGUAGES,
   onProfileClick,
   onSettingsClick,
   onHelpClick,
   onLogout,
+  onLanguageChange,
 }: UserAvatarMenuProps) {
   const [open, setOpen] = useState(false)
+  const currentLocale = useLocale()
 
   return (
     <UserMenu>
@@ -113,6 +142,26 @@ export function UserAvatarMenu({
               label="Paramètres"
               description="Préférences et compte"
               onClick={onSettingsClick}
+            />
+
+            <UserMenu.Action
+              icon={Globe}
+              label="Langue"
+              description={getLocaleLabel(currentLocale)}
+              trailing={
+                <Chip className="px-2 py-0.5 text-xs">
+                  {getLocaleCode(currentLocale)}
+                </Chip>
+              }
+              chevron
+              renderMenu={(trigger) => (
+                <LanguageMenu
+                  trigger={trigger}
+                  availableLanguages={availableLanguages}
+                  currentLocale={currentLocale}
+                  onLanguageChange={onLanguageChange}
+                />
+              )}
             />
           </div>
 

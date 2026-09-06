@@ -23,7 +23,7 @@ export function PlanCard({
       : 0
 
   return (
-    <div className="rounded-lg bg-muted/40 p-3">
+    <div className="rounded-lg bg-soft-blue p-3">
       <div className="flex items-center gap-1.5 text-sm font-medium">
         <Crown
           className="size-4 text-primary"

@@ -4,7 +4,7 @@ import { NextIntlClientProvider } from "next-intl"
 import { getLocale, getMessages } from "next-intl/server"
 import Providers from "./providers"
 import "./globals.css"
-import { UnloggedHeader } from "@/components/ui/header/unlogged-header"
+import Header from "@/components/ui/header"
 
 const inter = Inter({
   variable: "--font-inter",
@@ -38,7 +38,7 @@ export default async function RootLayout({
       <body className={`${inter.variable} ${playfair.variable} font-sans`}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Providers>
-            <UnloggedHeader />
+            <Header />
             <main>
               {children}
             </main>

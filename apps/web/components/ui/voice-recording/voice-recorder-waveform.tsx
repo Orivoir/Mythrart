@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 import type { VoiceRecorderSize } from "./sizes"
 import {
+  waveformBarWidthClasses,
   waveformGapClasses,
   waveformIdleBars,
   waveformMaxHeightPx,
@@ -44,7 +45,7 @@ export function VoiceRecorderWaveform({
         (level, index) => (
           <motion.span
             key={`${side}-${index}`}
-            className="w-1 rounded-full bg-primary/60"
+            className={cn("rounded-full bg-primary/60", waveformBarWidthClasses[size])}
             animate={{
               height: `${Math.max(maxHeight * 0.3, level * maxHeight)}px`,
             }}
@@ -64,7 +65,7 @@ export function VoiceRecorderWaveform({
       {waveformIdleBars[size].map((height, index) => (
         <span
           key={`${side}-${index}`}
-          className={cn("w-1 rounded-full bg-primary/60", height)}
+          className={cn("rounded-full bg-primary/60", waveformBarWidthClasses[size], height)}
         />
       ))}
     </div>

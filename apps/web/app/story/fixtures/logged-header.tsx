@@ -1,6 +1,22 @@
 "use client"
 
+import type {
+  Subscription,
+  User,
+} from "@/components/api/types"
 import { LoggedHeader } from "@/components/ui/header/logged-header"
+
+const user: User = {
+  id: "user-1",
+  name: "Samuel",
+  email: "samuel@example.com",
+  image: undefined,
+}
+
+const subscription: Subscription = {
+  type: "premium",
+  status: "active",
+}
 
 /** Renders the real LoggedHeader; resize/rotate or toggle devtools device mode to see it adapt. */
 export default function LoggedHeaderFixture() {
@@ -19,7 +35,11 @@ export default function LoggedHeaderFixture() {
       </div>
 
       {/* The header/sidebar/bottom-nav are fixed to the viewport, not this box. */}
-      <LoggedHeader />
+      <LoggedHeader
+        user={user}
+        subscription={subscription}
+      />
     </section>
   )
 }
+
