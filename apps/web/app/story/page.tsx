@@ -8,6 +8,7 @@ import FixturesSearchBar from "./fixtures/searchbar"
 import RichSearchBarFixture from "./fixtures/rich-searchbar"
 import AdaptiveSurfaceFixtures from "./fixtures/adaptive-surface"
 import UserMenuFixtures from "./fixtures/user-menu"
+import RichUserMenuFixtures from "./fixtures/rich-user-menu"
 
 export default function StoryPage() {
 
@@ -40,6 +41,8 @@ export default function StoryPage() {
         <AdaptiveSurfaceFixtures />
         
         <UserMenuFixtures />
+
+        <RichUserMenuFixtures />
  
       </div>
     </main>

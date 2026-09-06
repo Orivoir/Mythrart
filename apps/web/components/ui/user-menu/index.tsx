@@ -1,86 +1,54 @@
 "use client"
 
-import type { ReactNode } from "react"
+import {
+  createContext,
+  useContext,
+  type ReactNode,
+} from "react"
 
-import type { Subscription, User } from "@/components/api/types"
-import { useAdaptiveSurface } from "@/components/hooks/useAdaptiveSurface"
 
-import Avatar from "@/components/ui/avatar"
+import { UserMenuLayout } from "./layout"
 import { UserMenuContent } from "./content"
+import { UserMenuIdentity } from "./identity"
+import { UserMenuAction } from "./action"
 
-export interface UserMenuProps {
-  subscription?: Subscription
-  user?: User
-  currentLocale?: string
+interface UserMenuContextValue {}
 
-  trigger?: ReactNode
-  open?: boolean
-  onOpenChange?: (open: boolean) => void
+const UserMenuContext =
+  createContext<UserMenuContextValue | null>(null)
 
-  onSubscriptionClick?: () => void
-  onProfileClick?: () => void
-  onSettingsClick?: () => void
-  onLanguageClick?: () => void
-  onHelpClick?: () => void
-  onLogoutClick?: () => void
+export function useUserMenu() {
+  const context = useContext(UserMenuContext)
+
+  if (!context) {
+    throw new Error(
+      "UserMenu components must be used within UserMenu."
+    )
+  }
+
+  return context
 }
 
-export function UserMenu({
-  subscription,
-  user,
-  currentLocale = "fr-FR",
-  trigger,
-  open,
-  onOpenChange,
-  onSubscriptionClick,
-  onProfileClick,
-  onSettingsClick,
-  onLanguageClick,
-  onHelpClick,
-  onLogoutClick,
-}: UserMenuProps) {
-  const { Surface } = useAdaptiveSurface()
+interface UserMenuRootProps {
+  children: ReactNode
+}
 
-  const defaultTrigger = user ? (
-    <button
-      type="button"
-      aria-label="Ouvrir le menu utilisateur"
-      className="rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
-    >
-      <Avatar
-        image={user.image ?? undefined}
-        email={user.email}
-        alt={user.name}
-        size="md"
-      />
-    </button>
-  ) : (
-    <button
-      type="button"
-      aria-label="Ouvrir le menu utilisateur"
-      className="rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
-    >
-      <div className="size-10 animate-pulse rounded-full bg-muted" />
-    </button>
-  )
-
+function UserMenuRoot({
+  children,
+}: UserMenuRootProps) {
   return (
-    <Surface
-      trigger={trigger ?? defaultTrigger}
-      open={open}
-      onOpenChange={onOpenChange}
-    >
-      <UserMenuContent
-        user={user}
-        subscription={subscription}
-        currentLocale={currentLocale}
-        onSubscriptionClick={onSubscriptionClick}
-        onProfileClick={onProfileClick}
-        onSettingsClick={onSettingsClick}
-        onLanguageClick={onLanguageClick}
-        onHelpClick={onHelpClick}
-        onLogoutClick={onLogoutClick}
-      />
-    </Surface>
+    <UserMenuContext.Provider value={{}}>
+      {children}
+    </UserMenuContext.Provider>
   )
 }
+
+export const UserMenu = Object.assign(
+  UserMenuRoot,
+  {
+    Layout: UserMenuLayout,
+    Content: UserMenuContent,
+    Identity: UserMenuIdentity,
+    Action: UserMenuAction,
+  }
+)

@@ -4,7 +4,7 @@ import { ChevronRight } from "lucide-react"
 
 import { ButtonWithIcon } from "@/components/ui/button-with-icon"
 
-interface UserMenuItemProps {
+export interface UserMenuActionProps {
   icon: LucideIcon
   label: string
   description?: string
@@ -13,10 +13,13 @@ interface UserMenuItemProps {
   trailing?: ReactNode
   loading?: boolean
   onClick?: () => void
-  renderMenu?: (trigger: ReactNode) => ReactNode
+
+  renderMenu?: (
+    trigger: ReactNode,
+  ) => ReactNode
 }
 
-export function UserMenuItem({
+export function UserMenuAction({
   icon,
   label,
   description,
@@ -26,7 +29,7 @@ export function UserMenuItem({
   loading = false,
   onClick,
   renderMenu,
-}: UserMenuItemProps) {
+}: UserMenuActionProps) {
   const trigger = (
     <ButtonWithIcon
       type="button"
@@ -91,7 +94,9 @@ export function UserMenuItem({
     </ButtonWithIcon>
   )
 
-  return renderMenu
-    ? renderMenu(trigger)
-    : trigger
+  if (renderMenu) {
+    return renderMenu(trigger)
+  }
+
+  return trigger
 }

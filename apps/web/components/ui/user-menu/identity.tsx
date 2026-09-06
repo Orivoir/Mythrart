@@ -9,17 +9,18 @@ import type {
 
 import Avatar from "@/components/ui/avatar"
 import { Chip } from "@/components/ui/chip"
+
 import { getPlanLabel } from "./utils"
 
-interface UserIdentityProps {
+export interface UserMenuIdentityProps {
   user?: User
   subscription?: Subscription
 }
 
-export function UserIdentity({
+export function UserMenuIdentity({
   user,
   subscription,
-}: UserIdentityProps) {
+}: UserMenuIdentityProps) {
   if (!user) {
     return (
       <div className="flex items-center gap-3">
