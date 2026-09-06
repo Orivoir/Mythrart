@@ -59,7 +59,7 @@ export default function RichUserMenuFixtures() {
   const [open, setOpen] = useState(false)
 
   return (
-    <div className="flex min-h-[600px] items-start justify-center p-10">
+    <div className="flex items-start justify-center p-10">
       <UserMenu>
         <UserMenu.Layout
           open={open}
