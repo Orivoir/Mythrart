@@ -11,6 +11,7 @@ import UserMenuFixtures from "./fixtures/user-menu"
 import RichUserMenuFixtures from "./fixtures/rich-user-menu"
 import StepperFixtures from "./fixtures/stepper"
 import BottomNavigationFixtures from "./fixtures/bottom-navigation"
+import TextareaFixtures from "./fixtures/textarea"
 
 export default function StoryPage() {
 
@@ -49,6 +50,8 @@ export default function StoryPage() {
         <BottomNavigationFixtures />
 
         <StepperFixtures />
+
+        <TextareaFixtures />
 
       </div>
     </main>
