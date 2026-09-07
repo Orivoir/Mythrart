@@ -2,6 +2,7 @@
 
 import * as SelectPrimitive from "@radix-ui/react-select"
 import { ChevronDown } from "lucide-react"
+import { useState } from "react"
 
 import { cn } from "@/lib/utils"
 
@@ -20,9 +21,27 @@ export function Select({
   required = false,
   className,
 }: SelectProps) {
-  const selectedOption = options.find(
-    (option) => option.value === value,
+  const [internalValue, setInternalValue] = useState(
+    defaultValue,
   )
+
+  const selectedValue = value ?? internalValue
+
+  const selectedOption = options.find(
+    (option) => option.value === selectedValue,
+  )
+
+  const handleValueChange = (nextValue: string) => {
+    if (value === undefined) {
+      setInternalValue(nextValue)
+    }
+
+    onValueChange?.(nextValue)
+  }
+
+  const isRichOption =
+    !!selectedOption?.image ||
+    !!selectedOption?.description
 
   const SelectedLeftIcon = selectedOption?.leftIcon
   const SelectedRightIcon = selectedOption?.rightIcon
@@ -31,7 +50,7 @@ export function Select({
     <SelectPrimitive.Root
       value={value}
       defaultValue={defaultValue}
-      onValueChange={onValueChange}
+      onValueChange={handleValueChange}
       disabled={disabled}
       name={name}
       required={required}
@@ -39,34 +58,62 @@ export function Select({
       <SelectPrimitive.Trigger
         className={cn(
           `
-            flex h-10 w-full items-center justify-between gap-3
+            flex w-full items-center justify-between gap-3
             rounded-md border-2 border-muted bg-surface
-            px-4 py-2 text-sm text-foreground
+            px-4 text-sm text-foreground
             outline-none transition-colors
             focus:border-accent/40
             disabled:cursor-not-allowed disabled:opacity-50
           `,
+          isRichOption
+            ? "min-h-16 py-2"
+            : "h-10 py-2",
           className,
         )}
-        aria-label={placeholder}
       >
-        <span className="flex min-w-0 flex-1 items-center gap-2">
-          {SelectedLeftIcon && (
-            <SelectedLeftIcon
-              className="size-4 shrink-0 text-muted-foreground"
-              aria-hidden="true"
-            />
-          )}
+        {selectedOption ? (
+          <span className="flex min-w-0 flex-1 items-center gap-3">
+            {selectedOption.image && (
+              <img
+                src={selectedOption.image}
+                alt=""
+                className="
+                  size-10 shrink-0 rounded-md object-cover
+                "
+              />
+            )}
 
-          <SelectPrimitive.Value placeholder={placeholder} />
+            {SelectedLeftIcon && !selectedOption.image && (
+              <SelectedLeftIcon
+                className="size-4 shrink-0 text-muted-foreground"
+                aria-hidden="true"
+              />
+            )}
 
-          {SelectedRightIcon && (
-            <SelectedRightIcon
-              className="size-4 shrink-0 text-muted-foreground"
-              aria-hidden="true"
-            />
-          )}
-        </span>
+            <span className="min-w-0 flex-1 text-left">
+              <span className="block truncate font-medium">
+                {selectedOption.label}
+              </span>
+
+              {selectedOption.description && (
+                <span className="mt-0.5 block truncate text-xs text-muted-foreground">
+                  {selectedOption.description}
+                </span>
+              )}
+            </span>
+
+            {SelectedRightIcon && (
+              <SelectedRightIcon
+                className="size-4 shrink-0 text-muted-foreground"
+                aria-hidden="true"
+              />
+            )}
+          </span>
+        ) : (
+          <SelectPrimitive.Value
+            placeholder={placeholder}
+          />
+        )}
 
         <SelectPrimitive.Icon asChild>
           <ChevronDown
@@ -81,10 +128,10 @@ export function Select({
           position="popper"
           sideOffset={4}
           className="
-            bg-surface
-            z-50 max-h-[min(320px,calc(100vh-2rem))] w-[var(--radix-select-trigger-width)]
-            overflow-hidden rounded-md border bg-popover
-            text-popover-foreground shadow-md
+            z-50 max-h-[min(400px,calc(100vh-2rem))]
+            w-[var(--radix-select-trigger-width)]
+            overflow-hidden rounded-md border
+            bg-surface text-foreground shadow-md
             data-[state=open]:animate-in
             data-[state=closed]:animate-out
             data-[state=closed]:fade-out-0
