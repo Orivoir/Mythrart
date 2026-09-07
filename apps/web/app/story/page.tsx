@@ -13,6 +13,7 @@ import StepperFixtures from "./fixtures/stepper"
 import BottomNavigationFixtures from "./fixtures/bottom-navigation"
 import TextareaFixtures from "./fixtures/textarea"
 import SelectFixtures from "./fixtures/select"
+import FileUploadFixtures from "./fixtures/file-upload"
 
 export default function StoryPage() {
 
@@ -55,6 +56,8 @@ export default function StoryPage() {
         <TextareaFixtures />
 
         <SelectFixtures />
+
+        <FileUploadFixtures />
 
       </div>
     </main>
