@@ -9,8 +9,8 @@ import RichSearchBarFixture from "./fixtures/rich-searchbar"
 import AdaptiveSurfaceFixtures from "./fixtures/adaptive-surface"
 import UserMenuFixtures from "./fixtures/user-menu"
 import RichUserMenuFixtures from "./fixtures/rich-user-menu"
+import StepperFixtures from "./fixtures/stepper"
 import BottomNavigationFixtures from "./fixtures/bottom-navigation"
-import LoggedHeaderFixture from "./fixtures/logged-header"
 
 export default function StoryPage() {
 
@@ -48,7 +48,7 @@ export default function StoryPage() {
 
         <BottomNavigationFixtures />
 
-        <LoggedHeaderFixture />
+        <StepperFixtures />
 
       </div>
     </main>
