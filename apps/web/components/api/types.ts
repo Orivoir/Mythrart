@@ -10,4 +10,6 @@ export interface User {
   name: string;
   email: string;
   image?: string | null | undefined;
+  plan: PlanType;
+  subscriptionStatus: SubscriptionStatus
 }

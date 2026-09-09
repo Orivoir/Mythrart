@@ -204,5 +204,147 @@
                 }
             }
         }
+    },
+    "Buttons": {
+        "SeeDemoLabel": "Voir une démo"
+    },
+    "CreateProject": {
+        "StepOne": {
+            "optional": "(optionnel)",
+            "information": {
+                "titleLabel": "Titre du projet",
+                "titlePlaceholder": "Ex. Mon premier roman",
+                "subtitleLabel": "Sous-titre",
+                "subtitlePlaceholder": "Ex. Les chroniques d'un nouveau monde"
+            },
+            "type": {
+                "label": "Type de projet",
+                "placeholder": "Sélectionner un type"
+            },
+            "description": {
+                "label": "Description",
+                "placeholder": "Décrivez votre projet, son univers et vos objectifs..."
+            },
+            "theme": {
+                "label": "Thème / Modèle",
+                "placeholder": "Sélectionner un thème",
+                "by": "par",
+                "anonymous": "anonyme"
+            },
+            "cover": {
+                "label": "Image de couverture",
+                "upload": "Ajouter une image",
+                "fileTypes": "PNG, JPG ou WebP",
+                "maxSize": "(max. 5 Mo)",
+                "morePresets": "Plus de modèles",
+                "usePreset": "Utiliser {label}",
+                "useCover": "Utiliser cette couverture"
+            }
+        },
+        "StepTwo": {
+            "Header": {
+                "Title": "Synopsis du projet",
+                "Complement": "(optionnel)",
+                "Describe": "Ajoutez un fichier de synopsis pour aider Mythrart à mieux comprendre votre univers.",
+                "LockedLabel": "Fonctionnalité Premium"
+            },
+            "FreeActions": {
+                "CompareOffers": "Comparer les offres"
+            },
+            "FreeCTA": {
+                "Title": "Analysez votre synopsis",
+                "Describe": "Importez votre synopsis pour laisser Mythrart analyser votre histoire.",
+                "PreviewLabel": "L'IA de Mythrart analyse votre histoire",
+                "PreviewDescribe": "Votre synopsis est analysé pour extraire les personnages, lieux, arcs narratifs et éléments clés. Vous obtenez une vue claire de votre univers pour mieux écrire.",
+                "Features": {
+                    "0": "Liste des personnages et leurs rôles",
+                    "1": "Lieux principaux et contexte",
+                    "2": "Arcs narratifs et thèmes",
+                    "3": "Timeline de l'histoire",
+                    "4": "Relations entre les entités"
+                }
+            },
+            "CompletedAnalysis": {
+                "Title": "Mythrart a analysé votre synopsis",
+                "Describe": "Votre histoire a été analysée avec succès. Voici un aperçu des résultats :",
+                "ButtonDetailsLabel": "Voir les détails",
+                "HelperText": "Ces résultats vous aideront à mieux structurer votre projet et à générer du contenu plus cohérent."
+            },
+            "LoadingAnalysis": {
+                "Title": "Analyse de votre synopsis en cours",
+                "Describe": "Mythrart analyse les éléments importants de votre histoire.",
+                "CancelButtonLabel": "Annuler"
+            },
+            "UploadArea": {
+                "DropzoneText": "Déposez votre synopsis ici",
+                "AllowedFormatText": "PDF, TXT ou DOCX · 10 Mo maximum",
+                "SelectText": "ou cliquez pour sélectionner un fichier",
+                "HelperText": "Conseil: plus votre synopsis est détaillé, plus Mythrart pourra vous fournir une analyse précise et utile."
+            }
+        },
+        "StepThree": {
+            "Features": {
+                "Title": "Fonctionnalités du projet",
+                "Subtitle": "Activez les fonctionnalités que vous souhaitez utiliser.",
+                "Infos": {
+                    "Title": "Fonctionnalités du projet",
+                    "Describe": "Choisissez les fonctionnalités disponibles dans votre projet."
+                },
+                "LinkFreeTrialPeriod": "Essayer gratuitement",
+                "FreeTrialCTA": "7 jours d'essai · Sans engagement"
+            },
+            "GoalWriting": {
+                "GoalComputeByDay": "Cela représente environ {dailyTarget} {unit} par jour.",
+                "HelperText": "Nous vous rappellerons votre objectif et suivrons votre progression.",
+                "LabelSelectQuantity": "Objectif de",
+                "SelectOptionsQuantity": {
+                    "label_1": "Nombre de mots",
+                    "label_2": "Nombre de pages",
+                    "label_3": "Nombre de chapitres"
+                },
+                "LabelSelectType": "Cible",
+                "VolumeUnit": {
+                    "words": "mots",
+                    "pages": "pages",
+                    "chapters": "chap."
+                },
+                "LabelSelectDuration": "Sur une durée de",
+                "SelectOptionsDuration": {
+                    "label_1": "1 mois",
+                    "label_2": "3 mois",
+                    "label_3": "6 mois",
+                    "label_4": "12 mois"
+                }
+            },
+            "Suggest": {
+                "Title": "Suggestions IA",
+                "Tooltip": "Choisissez le niveau d'assistance de l'IA pendant votre écriture.",
+                "HelperText": "Choisissez le niveau d'assistance de l'IA.",
+                "InfoAriaLabel": "Plus d'informations",
+                "InfoHelperText": "Avec l'assistance avancée, l'IA vous aide à garder une histoire cohérente et riche, du début à la fin.",
+                "LinkFreeTrialPeriod": "Essayer gratuitement"
+            }
+        },
+        "StepFour": {
+            "AboutRoles": {
+                "Header": {
+                    "Title": "À propos des rôles",
+                    "Subtitle": "Chaque rôle définit ce qu'un collaborateur peut consulter ou modifier dans votre projet."
+                }
+            },
+            "Collaborators": {
+                "Header": {
+                    "Title": "Collaborateurs",
+                    "ButtonHandleAccessLabel": "Gérer les accès"
+                }
+            },
+            "Invite": {
+                "Title": "Inviter un collaborateur",
+                "Method": {
+                    "Email": "Par e-mail",
+                    "Tel": "Par téléphone"
+                }
+            }
+        }
     }
 }

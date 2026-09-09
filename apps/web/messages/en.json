@@ -203,5 +203,141 @@
                 }
             }
         }
+    },
+    "Buttons": {
+        "SeeDemoLabel": "See a demo"
+    },
+    "CreateProject": {
+        "StepOne": {
+            "optional": "(optional)",
+            "information": {
+                "titleLabel": "Project title",
+                "titlePlaceholder": "E.g. My first novel",
+                "subtitleLabel": "Subtitle",
+                "subtitlePlaceholder": "E.g. The chronicles of a new world"
+            },
+            "type": {
+                "label": "Project type",
+                "placeholder": "Select a type"
+            },
+            "description": {
+                "label": "Description",
+                "placeholder": "Describe your project, its universe, and your goals..."
+            },
+            "theme": {
+                "label": "Theme / Template",
+                "placeholder": "Select a theme",
+                "by": "by",
+                "anonymous": "anonymous"
+            },
+            "cover": {
+                "label": "Cover image",
+                "upload": "Add an image",
+                "fileTypes": "PNG, JPG or WebP",
+                "maxSize": "(max. 5 MB)",
+                "morePresets": "More templates",
+                "usePreset": "Use {label}",
+                "useCover": "Use this cover"
+            }
+        },
+        "StepTwo": {
+            "Header": {
+                "Title": "Project synopsis",
+                "Complement": "(optional)",
+                "Describe": "Add synopsis file to help Mythrart better understand your universe.",
+                "LockedLabel": "Premium feature"
+            },
+            "FreeActions": {
+                "Demo": "See a demo",
+                "CompareOffers": "Compare offers"
+            },
+            "FreeCTA": {
+                "Title": "Analyze your synopsis",
+                "Describe": "Import your synopsis to let Mythrart analyze your story.",
+                "PreviewLabel": "Mythrart's AI analyzes your story",
+                "PreviewDescribe": "Your synopsis is analyzed to extract characters, locations, narrative arcs, and key elements. You get a clear view of your universe to write better.",
+                "Features": {
+                    "0": "List of characters and their roles",
+                    "1": "Main locations and context",
+                    "2": "Narrative arcs and themes",
+                    "3": "Story timeline",
+                    "4": "Relationships between entities"
+                }
+            },
+            "CompletedAnalysis": {
+                "Title": "Mythrart has analyzed your synopsis",
+                "Describe": "Your story has been successfully analyzed. Here is an overview of the results:",
+                "ButtonDetailsLabel": "View details",
+                "HelperText": "These results will help you better structure your project and generate more coherent content."
+            },
+            "LoadingAnalysis": {
+                "Title": "Analyzing your synopsis",
+                "Describe": "Mythrart analyzes the important elements of your story.",
+                "CancelButtonLabel": "Cancel"
+            },
+            "UploadArea": {
+                "DropzoneText": "Drag and drop your synopsis file here, or click to select a file.",
+                "AllowedFormatText": "PDF, TXT or DOCX · 10 MB maximum",
+                "SelectText": "or click to select a file",
+                "HelperText": "Tip: the more detailed your synopsis, the more accurately Mythrart can analyze it."
+            }
+        },
+        "StepThree": {
+            "Features": {
+                "Title": "Project features",
+                "Subtitle": "Enable the features you want to use.",
+                "Infos": {
+                    "Title": "Project features",
+                    "Describe": "Choose the features available in your project."
+                },
+                "LinkFreeTrialPeriod": "Free trial",
+                "FreeTrialCTA": "7 days free trial · No engagement · Cancel anytime"
+            },
+            "GoalWriting": {
+                "GoalComputeByDay": "This represents approximately {dailyTarget} {unit} per day.",
+                "HelperText": "We remind you of your goal and track your progress.",
+                "LabelSelectQuantity": "Goal of",
+                "SelectOptionsQuantity": {
+                    "label_1": "Number of words",
+                    "label_2": "Number of pages",
+                    "label_3": "Number of chapters"
+                },
+                "LabelSelectType": "Target",
+                "VolumeUnit": {
+                    "words": "words",
+                    "pages": "pages",
+                    "chapters": "chap."
+                },
+                "LabelSelectDuration": "Over a period of",
+                "SelectOptionsDuration": {
+                    "label_1": "1 month",
+                    "label_2": "3 months",
+                    "label_3": "6 months",
+                    "label_4": "12 months"
+                }
+            },
+            "Suggest": {
+                "Title": "AI Suggestions",
+                "Tooltip": "Choose the level of AI assistance while writing.",
+                "HelperText": "Choose the level of AI assistance.",
+                "InfoAriaLabel": "More information",
+                "InfoHelperText": "With advanced assistance, the AI helps you maintain a coherent and rich story from beginning to end.",
+                "LinkFreeTrialPeriod": "Free trial"
+            }
+        },
+        "StepFour": {
+            "AboutRoles": {
+                "Header": {
+                    "Title": "About roles",
+                    "Subtitle": "Each role defines what a collaborator can view or edit in your project."
+                }
+            },
+            "Collaborators": {
+                "Header": {
+                    "Title": "Collaborators",
+                    "ButtonHandleAccessLabel": "Manage access"
+                }
+            }
+        }
     }
 }

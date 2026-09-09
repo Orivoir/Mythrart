@@ -1,5 +1,5 @@
 "use client"
-
+import CreateProjectStepOneFixture from "./fixtures/create-project-step-one"
 import FixtureAvatar from "./fixtures/avatar"
 import FixtureBadge from "./fixtures/badge"
 import FixturesNotifications from "./fixtures/notifications"
@@ -14,6 +14,9 @@ import BottomNavigationFixtures from "./fixtures/bottom-navigation"
 import TextareaFixtures from "./fixtures/textarea"
 import SelectFixtures from "./fixtures/select"
 import FileUploadFixtures from "./fixtures/file-upload"
+import CreateProjectStepTwoFixture from "./fixtures/create-project-step-two"
+import CreateProjectStepThreeFixture from "./fixtures/create-project-step-three"
+import CreateProjectStepFourFixture from "./fixtures/create-project-step-four"
 
 export default function StoryPage() {
 
@@ -58,6 +61,14 @@ export default function StoryPage() {
         <SelectFixtures />
 
         <FileUploadFixtures />
+
+        <CreateProjectStepOneFixture />
+
+        <CreateProjectStepTwoFixture />
+
+        <CreateProjectStepThreeFixture />
+
+        <CreateProjectStepFourFixture />
 
       </div>
     </main>

@@ -12,8 +12,8 @@ export function StepDescription({
   }
 
   return (
-    <div className="mt-2 pl-11">
-      <Text variant="muted">
+    <div className="mt-0 pl-10">
+      <Text className="text-xs" variant="muted">
         {description}
       </Text>
     </div>

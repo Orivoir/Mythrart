@@ -22,7 +22,7 @@ export function SelectItem({
       value={option.value}
       disabled={option.disabled}
       className="
-        relative flex w-full cursor-default select-none
+        relative flex flex-row w-full cursor-pointer select-none
         items-center rounded-sm px-3
         text-sm outline-none
         data-[disabled]:pointer-events-none
@@ -78,7 +78,7 @@ export function SelectItem({
 
       <span
         className="
-          absolute right-2 flex size-4
+          absolute right-2 flex flex-row size-4
           items-center justify-center
         "
       >
