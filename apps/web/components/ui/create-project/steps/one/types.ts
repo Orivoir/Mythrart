@@ -19,19 +19,21 @@ export type CreateProjectCoverPreset = {
 export type CreateProjectStepOneValues = {
   title: string
   subtitle: string
-  type: string
+  type: string // Ebook Type ID
   description: string
-  theme: string
+  theme: string // Theme ID
   cover: File | null
-  coverPreset: string | null
+  coverPreset: string | null // Cover preset ID
 }
 
 export type CreateProjectStepOneProps = {
   value: CreateProjectStepOneValues
 
-  projectTypes: SelectOption[]
-  themes: CreateProjectTheme[]
-  coverPresets: CreateProjectCoverPreset[]
+  projectTypes: SelectOption[] // List of available Ebook Type
+ 
+  themes: CreateProjectTheme[] // List of available Ebook Theme
+ 
+  coverPresets: CreateProjectCoverPreset[] // List of available Ebook Cover Preset
 
   onChange: (
     field: keyof Omit<
@@ -43,6 +45,4 @@ export type CreateProjectStepOneProps = {
 
   onCoverChange: FileUploadProps["onChange"]
   onCoverPresetChange: (preset: string | null) => void
-
-  onMorePresetCover?: () => void
 }

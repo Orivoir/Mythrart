@@ -281,63 +281,6 @@
                 "SelectText": "or click to select a file",
                 "HelperText": "Tip: the more detailed your synopsis, the more accurately Mythrart can analyze it."
             }
-        },
-        "StepThree": {
-            "Features": {
-                "Title": "Project features",
-                "Subtitle": "Enable the features you want to use.",
-                "Infos": {
-                    "Title": "Project features",
-                    "Describe": "Choose the features available in your project."
-                },
-                "LinkFreeTrialPeriod": "Free trial",
-                "FreeTrialCTA": "7 days free trial · No engagement · Cancel anytime"
-            },
-            "GoalWriting": {
-                "GoalComputeByDay": "This represents approximately {dailyTarget} {unit} per day.",
-                "HelperText": "We remind you of your goal and track your progress.",
-                "LabelSelectQuantity": "Goal of",
-                "SelectOptionsQuantity": {
-                    "label_1": "Number of words",
-                    "label_2": "Number of pages",
-                    "label_3": "Number of chapters"
-                },
-                "LabelSelectType": "Target",
-                "VolumeUnit": {
-                    "words": "words",
-                    "pages": "pages",
-                    "chapters": "chap."
-                },
-                "LabelSelectDuration": "Over a period of",
-                "SelectOptionsDuration": {
-                    "label_1": "1 month",
-                    "label_2": "3 months",
-                    "label_3": "6 months",
-                    "label_4": "12 months"
-                }
-            },
-            "Suggest": {
-                "Title": "AI Suggestions",
-                "Tooltip": "Choose the level of AI assistance while writing.",
-                "HelperText": "Choose the level of AI assistance.",
-                "InfoAriaLabel": "More information",
-                "InfoHelperText": "With advanced assistance, the AI helps you maintain a coherent and rich story from beginning to end.",
-                "LinkFreeTrialPeriod": "Free trial"
-            }
-        },
-        "StepFour": {
-            "AboutRoles": {
-                "Header": {
-                    "Title": "About roles",
-                    "Subtitle": "Each role defines what a collaborator can view or edit in your project."
-                }
-            },
-            "Collaborators": {
-                "Header": {
-                    "Title": "Collaborators",
-                    "ButtonHandleAccessLabel": "Manage access"
-                }
-            }
         }
     }
 }

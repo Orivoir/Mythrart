@@ -8,6 +8,7 @@ import type {
 import ButtonMore from "./button-more"
 import PresetItem from "./preset-item"
 import CoverUpload from "./cover-upload"
+import fireEvent from "@/lib/constants/custom-events"
 
 interface ProjectCoverProps {
   cover: File | null
@@ -16,7 +17,6 @@ interface ProjectCoverProps {
 
   onCoverChange?: (files: File[]) => void
   onCoverPresetChange: (preset: string | null) => void
-  onMorePresetCover?: () => void
 }
 
 export function ProjectCover({
@@ -24,10 +24,13 @@ export function ProjectCover({
   coverPreset,
   coverPresets,
   onCoverChange,
-  onCoverPresetChange,
-  onMorePresetCover
+  onCoverPresetChange
 }: ProjectCoverProps) {
   const t = useTranslations("CreateProject.StepOne")
+
+  const onMorePresetCover = () => {
+    fireEvent.showMorePresetCover()
+  }
 
   return (
     <div className="space-y-2">

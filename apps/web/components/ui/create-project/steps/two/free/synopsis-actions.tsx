@@ -5,15 +5,14 @@ import { ButtonWithIcon } from "@/components/ui/button-with-icon"
 import { URI_BILLING } from "@/lib/constants/client-routes"
 import {useTranslations} from "next-intl"
 import ButtonSeeDemo from "@/components/ui/button-see-demo"
+import fireEvent from "@/lib/constants/custom-events"
 
-interface SynopsisActionsProps {
-  onClickDemo: () => void
-}
-
-export function SynopsisActions({
-  onClickDemo,
-}: SynopsisActionsProps) {
+export function SynopsisActions() {
   const t = useTranslations("CreateProject.StepTwo.FreeActions")
+
+  const onClickDemo = () => {
+    fireEvent.clickDemo()
+  }
 
   return (
     <div className="flex flex-wrap items-center gap-3">

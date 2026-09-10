@@ -86,7 +86,7 @@ const coverPresets: CreateProjectCoverPreset[] = [
     label: "Château",
   },
   {
-    id: "night",
+    id: "night", // In real usage should be a prisma (Psql ID)
     image: "https://placehold.co/180x260",
     label: "Nuit étoilée",
   },
@@ -104,19 +104,7 @@ const steps = [
     index: 2,
     title: "Synopsis",
     description: "Votre histoire et son analyse",
-  },
-  {
-    id: "features",
-    index: 3,
-    title: "Fonctionnalités",
-    description: "Personnalisez votre projet",
-  },
-  {
-    id: "collaborators",
-    index: 4,
-    title: "Collaborateurs",
-    description: "Invitez des personnes",
-  },
+  }
 ]
 
 export default function CreateProjectStepOneFixture() {
@@ -148,7 +136,7 @@ export default function CreateProjectStepOneFixture() {
     setValue((current) => ({
       ...current,
       cover: files[0] ?? null,
-      coverPreset: null,
+      coverPreset: !files[0] ? current.coverPreset: null,
     }))
   }
 

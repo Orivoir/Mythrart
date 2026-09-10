@@ -20,9 +20,7 @@ export function CreateProjectStepTwo({
   value,
   analysis,
   onFileChange,
-  onCancelAnalysis,
-  onClickDemo,
-  onShowDetails,
+  onCancelAnalysis
 }: CreateProjectStepTwoProps) {
   const hasSynopsis = value.synopsisFile !== null
 
@@ -33,9 +31,7 @@ export function CreateProjectStepTwo({
 
         <SynopsisPremiumCTA />
 
-        <SynopsisActions
-          onClickDemo={onClickDemo}
-        />
+        <SynopsisActions />
       </div>
     )
   }
@@ -61,10 +57,7 @@ export function CreateProjectStepTwo({
           )}
 
           {analysis.percent === 100 && analysis.data && (
-            <SynopsisAnalysisComplete
-              data={analysis.data}
-              onShowDetails={onShowDetails}
-            />
+            <SynopsisAnalysisComplete data={analysis.data} />
           )}
         </>
       )}

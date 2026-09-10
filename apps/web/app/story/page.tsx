@@ -15,8 +15,7 @@ import TextareaFixtures from "./fixtures/textarea"
 import SelectFixtures from "./fixtures/select"
 import FileUploadFixtures from "./fixtures/file-upload"
 import CreateProjectStepTwoFixture from "./fixtures/create-project-step-two"
-import CreateProjectStepThreeFixture from "./fixtures/create-project-step-three"
-import CreateProjectStepFourFixture from "./fixtures/create-project-step-four"
+import CreateProjectCompositionFixture from "./fixtures/composition-create-project"
 
 export default function StoryPage() {
 
@@ -66,9 +65,7 @@ export default function StoryPage() {
 
         <CreateProjectStepTwoFixture />
 
-        <CreateProjectStepThreeFixture />
-
-        <CreateProjectStepFourFixture />
+        <CreateProjectCompositionFixture />
 
       </div>
     </main>

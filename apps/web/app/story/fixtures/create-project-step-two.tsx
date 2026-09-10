@@ -109,16 +109,6 @@ export default function CreateProjectStepTwoFixture() {
     setState("file")
   }
 
-  const handleClickDemo = () => {
-    console.log("Fixture: voir la démo")
-  }
-
-  const handleShowDetails = (
-    data: SynopsisShortAnalysisData,
-  ) => {
-    console.log("Fixture: afficher les détails", data)
-  }
-
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap gap-2">
@@ -145,8 +135,6 @@ export default function CreateProjectStepTwoFixture() {
           analysis={getAnalysis()}
           onFileChange={handleFileChange}
           onCancelAnalysis={handleCancelAnalysis}
-          onClickDemo={handleClickDemo}
-          onShowDetails={handleShowDetails}
         />
       </div>
     </div>

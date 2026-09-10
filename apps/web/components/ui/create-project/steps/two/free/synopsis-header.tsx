@@ -48,7 +48,7 @@ export function SynopsisHeader({isLocked}: {isLocked: boolean}) {
             className="size-3.5"
             aria-hidden="true"
           />
-          {t("LockedLabel")}
+          Premium
         </Chip>
       )}
     </div>

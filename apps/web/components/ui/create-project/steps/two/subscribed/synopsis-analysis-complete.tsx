@@ -16,18 +16,21 @@ import { AnalysisItem } from "./synopsis-analysis-complete-item"
 import type { SynopsisShortAnalysisData } from "../types"
 
 import { useTranslations } from "next-intl"
+import fireEvent from "@/lib/constants/custom-events"
 
 interface SynopsisAnalysisCompleteProps {
   data: SynopsisShortAnalysisData
-  onShowDetails: (data: SynopsisShortAnalysisData) => void
 }
 
 export function SynopsisAnalysisComplete({
-  data,
-  onShowDetails,
+  data
 }: SynopsisAnalysisCompleteProps) {
 
   const t = useTranslations("CreateProject.StepTwo.CompletedAnalysis")
+
+  const onShowDetail = () => {
+    fireEvent.showAnalysisDetails(data)
+  }
 
   return (
     <div className="space-y-3">
@@ -100,7 +103,7 @@ export function SynopsisAnalysisComplete({
             size="sm"
             icon={ArrowRight}
             iconPosition="right"
-            onClick={() => onShowDetails(data)}
+            onClick={onShowDetail}
             className="hidden shrink-0 sm:inline-flex"
           >
             {t("ButtonDetailsLabel")}
@@ -114,7 +117,7 @@ export function SynopsisAnalysisComplete({
           size="sm"
           icon={ArrowRight}
           iconPosition="right"
-          onClick={() => onShowDetails(data)}
+          onClick={onShowDetail}
           className="mt-4 w-full sm:hidden"
         >
           {t("ButtonDetailsLabel")}

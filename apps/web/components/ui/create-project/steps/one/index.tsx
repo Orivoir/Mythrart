@@ -13,8 +13,7 @@ export function CreateProjectStepOne({
   coverPresets,
   onChange,
   onCoverChange,
-  onCoverPresetChange,
-  onMorePresetCover
+  onCoverPresetChange
 }: CreateProjectStepOneProps) {
   return (
     <div className="space-y-5">
@@ -51,7 +50,6 @@ export function CreateProjectStepOne({
         coverPresets={coverPresets}
         onCoverChange={onCoverChange}
         onCoverPresetChange={onCoverPresetChange}
-        onMorePresetCover={onMorePresetCover}
       />
     </div>
   )
