@@ -1,0 +1,30 @@
+model EbookTheme {
+  id          String  @id @default(cuid())
+
+  name        String
+  slug        String  @unique
+  description String?
+
+  /** 
+   * Theme properties for the ebook, including colors, fonts, and spacing.
+   */
+  backgroundColor String
+  textColor       String
+
+  textFont        String
+  titleFont       String
+  subtitleFont    String?
+
+  headingColor    String?
+
+  fontSize        String?
+  lineHeight      String?
+
+  paragraphSpacing String?
+  headingSpacing   String?
+
+  ebooks      Ebook[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

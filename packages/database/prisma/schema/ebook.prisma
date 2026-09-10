@@ -18,6 +18,13 @@ model Ebook {
   chapters          Chapter[]
   collaborators     EbookCollaborator[]
   customRoles       EbookCustomRole[]
+  writingGoals       WritingGoal[]
+
+  ebookTypeId String
+  ebookType   EbookType @relation(fields: [ebookTypeId], references: [id])
+
+  ebookThemeId String
+  ebookTheme   EbookTheme @relation(fields: [ebookThemeId], references: [id])
 
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt

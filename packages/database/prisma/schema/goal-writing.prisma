@@ -1,0 +1,19 @@
+model WritingGoal {
+  id          String  @id @default(cuid())
+
+  userId      String
+  user        User    @relation(fields: [userId], references: [id])
+
+  ebookId     String? @unique
+  ebook       Ebook?  @relation(fields: [ebookId], references: [id])
+
+  title       String?
+
+  targetWords Int?
+  targetDate  DateTime?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+}

@@ -16,6 +16,7 @@ model User {
   accounts Account[]
   ebooks   Ebook[]
   assets   Asset[]
+  writingGoals WritingGoal[]
   uploadHandshakes UploadHandshake[]
   ebookCollaborations EbookCollaborator[]
   createdCustomRoles EbookCustomRole[] @relation("CustomRoleCreatedBy")
