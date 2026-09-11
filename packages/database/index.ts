@@ -56,11 +56,14 @@ export {
 } from "./app/generated/prisma/index.js"
 
 // expose type schemas
-export type {
+export {
   Chapter,
   EbookCollaborator,
   EbookCustomRole,
-  PrismaClient
+  EbookEntityRelation,
+  EbookEntityRelationType,
+  EbookEntityType,
+  PrismaClient,
 } from "./app/generated/prisma/index.js"
 
 // expose type Prisma

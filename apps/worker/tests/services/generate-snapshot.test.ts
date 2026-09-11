@@ -8,7 +8,12 @@ import {
 import { afterAll, beforeEach, describe, expect, it } from "vitest"
 import { Prisma, prisma } from "@mythrart/database"
 import { s3 } from "@mythrart/s3"
-import { generate } from "./../../src/services/snapshot/snapshot"
+import { generate } from "./../../src/services/snapshot/index.js"
+
+import {
+  createEbookTypeFixture,
+  createEbookThemeFixture
+} from "./../helpers/persisted-export-fixture.js"
 
 type SnapshotPayload = {
   formatVersion: number
@@ -102,15 +107,20 @@ async function createEbookFixture(): Promise<EbookFixture> {
   const subtitle = faker.lorem.sentence({ min: 4, max: 8 })
   const shortDescription = faker.lorem.sentence({ min: 8, max: 16 })
 
-  const ebook = await prisma.ebook.create({
-    data: {
-      ownerId: owner.id,
-      title,
-      subtitle,
-      shortDescription,
-      coverAssetId: coverAsset.id,
-    },
-  })
+  const ebookType = await createEbookTypeFixture()
+  const ebookTheme = await createEbookThemeFixture()
+
+  const data: Prisma.EbookUncheckedCreateInput = {
+    ownerId: owner.id,
+    title,
+    subtitle,
+    shortDescription,
+    coverAssetId: coverAsset.id,
+    ebookTypeId: ebookType.id,
+    ebookThemeId: ebookTheme.id,
+  }
+
+  const ebook = await prisma.ebook.create({ data })
 
   const chapterOneContent: Prisma.JsonValue = {
     type: "doc",

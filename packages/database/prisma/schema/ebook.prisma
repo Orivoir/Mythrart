@@ -18,7 +18,9 @@ model Ebook {
   chapters          Chapter[]
   collaborators     EbookCollaborator[]
   customRoles       EbookCustomRole[]
-  writingGoals       WritingGoal[]
+  writingGoals       WritingGoal?
+  entities          EbookEntity[]
+  entityRelations    EbookEntityRelation[]
 
   ebookTypeId String
   ebookType   EbookType @relation(fields: [ebookTypeId], references: [id])

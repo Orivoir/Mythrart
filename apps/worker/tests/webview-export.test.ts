@@ -19,6 +19,11 @@ import {
   tipTapEbookFixture,
 } from "./fixtures/index.js"
 
+import {
+  createEbookTypeFixture,
+  createEbookThemeFixture
+} from "./helpers/persisted-export-fixture.js"
+
 const TEST_EMAIL_PREFIX = "webview-export-itg-"
 const createdObjectKeys = new Set<string>()
 const imageUrlExpirySeconds = 60 * 60 * 24 * 7
@@ -139,12 +144,17 @@ async function createEbookFixture(
     throw new Error("Cover asset was not created")
   }
 
+  const ebookType = await createEbookTypeFixture()
+  const ebookTheme = await createEbookThemeFixture()
+
   const ebook = await prisma.ebook.create({
     data: {
       ownerId: owner.id,
       title: tipTapEbookFixture.title,
       subtitle: tipTapEbookFixture.subtitle,
       coverAssetId: coverAsset.id,
+      ebookTypeId: ebookType.id,
+      ebookThemeId: ebookTheme.id,
     },
   })
 

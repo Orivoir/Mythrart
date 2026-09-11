@@ -59,3 +59,29 @@ enum UploadHandshakeStatus {
   FAILED
   EXPIRED
 }
+
+enum EbookEntityType {
+  CHARACTER
+  LOCATION
+  ORGANIZATION
+  OBJECT
+  EVENT
+  OTHER
+}
+
+enum EbookEntityRelationType {
+  FAMILY
+  FRIENDSHIP
+  ROMANTIC
+  PROFESSIONAL
+  OWNERSHIP
+  LOCATION
+  FAMILY_HOME
+  MEMBER_OF
+  ALLY
+  ENEMY
+  CREATOR
+  EMPLOYER
+  EMPLOYEE
+  OTHER
+}

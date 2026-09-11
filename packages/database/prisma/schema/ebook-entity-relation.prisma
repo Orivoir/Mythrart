@@ -1,0 +1,22 @@
+model EbookEntityRelation {
+  id String @id @default(cuid())
+
+  ebookId String
+  ebook   Ebook @relation(fields: [ebookId], references: [id], onDelete: Cascade)
+
+  fromEntityId String
+  fromEntity   EbookEntity @relation("EntityRelationFrom", fields: [fromEntityId], references: [id], onDelete: Cascade)
+
+  toEntityId String
+  toEntity   EbookEntity @relation("EntityRelationTo", fields: [toEntityId], references: [id], onDelete: Cascade)
+
+  type EbookEntityRelationType
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([ebookId, fromEntityId, toEntityId, type])
+  @@index([ebookId])
+  @@index([fromEntityId])
+  @@index([toEntityId])
+}

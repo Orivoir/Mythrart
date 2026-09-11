@@ -1,7 +1,19 @@
 import { getDocument, OPS } from "pdfjs-dist/legacy/build/pdf.mjs"
 import { afterAll, beforeEach, describe, expect, it } from "vitest"
+
 import { PdfExporter } from "../src/services/export/exporters/pdf.exporter.js"
-import { testExtensions, tipTapChapterFixtures, tipTapEbookFixture } from "./fixtures/index.js"
+import {
+  testExtensions,
+  tipTapChapterFixtures,
+  tipTapEbookFixture,
+} from "./fixtures/index.js"
+import {
+  createPersistedExportFixture,
+  deletePersistedExportFixtures,
+  ensureIntegrationBucket,
+  getIntegrationBucketName,
+  loadNormalizedPersistedEbook,
+} from "./helpers/persisted-export-fixture.js"
 
 type PdfTextItem = {
   str: string
@@ -20,22 +32,17 @@ function isPdfTextItem(value: unknown): value is PdfTextItem {
 
   const candidate = value as Record<string, unknown>
 
-  return typeof candidate.str === "string"
-    && typeof candidate.dir === "string"
-    && Array.isArray(candidate.transform)
-    && candidate.transform.every((entry) => typeof entry === "number")
-    && typeof candidate.width === "number"
-    && typeof candidate.height === "number"
-    && typeof candidate.fontName === "string"
-    && typeof candidate.hasEOL === "boolean"
+  return (
+    typeof candidate.str === "string" &&
+    typeof candidate.dir === "string" &&
+    Array.isArray(candidate.transform) &&
+    candidate.transform.every((entry) => typeof entry === "number") &&
+    typeof candidate.width === "number" &&
+    typeof candidate.height === "number" &&
+    typeof candidate.fontName === "string" &&
+    typeof candidate.hasEOL === "boolean"
+  )
 }
-import {
-  createPersistedExportFixture,
-  deletePersistedExportFixtures,
-  ensureIntegrationBucket,
-  getIntegrationBucketName,
-  loadNormalizedPersistedEbook,
-} from "./helpers/persisted-export-fixture.js"
 
 const TEST_EMAIL_PREFIX = "pdf-export-itg-"
 
@@ -51,7 +58,9 @@ type PdfMetrics = {
 }
 
 async function inspectPdfDocument(pdfBuffer: Buffer): Promise<PdfMetrics> {
-  const pdfDocument = await getDocument({ data: new Uint8Array(pdfBuffer) }).promise
+  const pdfDocument = await getDocument({
+    data: new Uint8Array(pdfBuffer),
+  }).promise
 
   const pageSizes: Array<{ width: number; height: number }> = []
   let totalImageOps = 0
@@ -61,13 +70,21 @@ async function inspectPdfDocument(pdfBuffer: Buffer): Promise<PdfMetrics> {
   let maxY = Number.NEGATIVE_INFINITY
   const textChunks: string[] = []
 
-  for (let pageIndex = 1; pageIndex <= pdfDocument.numPages; pageIndex += 1) {
+  for (
+    let pageIndex = 1;
+    pageIndex <= pdfDocument.numPages;
+    pageIndex += 1
+  ) {
     const page = await pdfDocument.getPage(pageIndex)
     const viewport = page.getViewport({ scale: 1 })
 
-    pageSizes.push({ width: viewport.width, height: viewport.height })
+    pageSizes.push({
+      width: viewport.width,
+      height: viewport.height,
+    })
 
     const operatorList = await page.getOperatorList()
+
     const imageOperatorIds = new Set<number>([
       OPS.paintImageXObject,
       OPS.paintImageMaskXObject,
@@ -76,7 +93,11 @@ async function inspectPdfDocument(pdfBuffer: Buffer): Promise<PdfMetrics> {
       OPS.paintInlineImageXObject,
       OPS.paintInlineImageXObjectGroup,
     ])
-    totalImageOps += operatorList.fnArray.filter((fn) => typeof fn === "number" && imageOperatorIds.has(fn)).length
+
+    totalImageOps += operatorList.fnArray.filter(
+      (fn) =>
+        typeof fn === "number" && imageOperatorIds.has(fn),
+    ).length
 
     const textContent = await page.getTextContent()
 
@@ -142,6 +163,7 @@ function expectA4PrintLayout(metrics: PdfMetrics): void {
 describe("PdfExporter integration", () => {
   beforeEach(async () => {
     const bucket = getIntegrationBucketName()
+
     await ensureIntegrationBucket(bucket)
     await deletePersistedExportFixtures(TEST_EMAIL_PREFIX)
   })
@@ -150,55 +172,77 @@ describe("PdfExporter integration", () => {
     await deletePersistedExportFixtures(TEST_EMAIL_PREFIX)
   })
 
-  it("exports readable PDFs with embedded images and standard readable layout", async () => {
-    const fixture = await createPersistedExportFixture(TEST_EMAIL_PREFIX)
-    const ebook = await loadNormalizedPersistedEbook(fixture.ebookId)
-    const exportedFile = await new PdfExporter("readable", testExtensions).export(ebook)
+  it(
+    "exports readable PDFs with embedded images and standard readable layout",
+    async () => {
+      const fixture = await createPersistedExportFixture(TEST_EMAIL_PREFIX)
+      const ebook = await loadNormalizedPersistedEbook(fixture.ebookId)
+      const exportedFile = await new PdfExporter(
+        "readable",
+        testExtensions,
+      ).export(ebook)
 
-    expect(exportedFile.fileName).toMatch(/\.pdf$/)
-    expect(exportedFile.mimeType).toBe("application/pdf")
-    expect(Buffer.isBuffer(exportedFile.data)).toBe(true)
-    expect(exportedFile.data.subarray(0, 5).toString()).toBe("%PDF-")
+      expect(exportedFile.fileName).toMatch(/\.pdf$/)
+      expect(exportedFile.mimeType).toBe("application/pdf")
+      expect(Buffer.isBuffer(exportedFile.data)).toBe(true)
+      expect(exportedFile.data.subarray(0, 5).toString()).toBe("%PDF-")
 
-    const metrics = await inspectPdfDocument(exportedFile.data)
+      const metrics = await inspectPdfDocument(exportedFile.data)
 
-    expect(metrics.pageCount).toBeGreaterThan(0)
-    expect(metrics.imageOps).toBeGreaterThan(0)
-    expect(metrics.text).toContain(tipTapEbookFixture.title)
-    expect(metrics.text).toContain(tipTapEbookFixture.subtitle)
+      expect(metrics.pageCount).toBeGreaterThan(0)
+      expect(metrics.imageOps).toBeGreaterThan(0)
+      expect(metrics.text).toContain(tipTapEbookFixture.title)
+      expect(metrics.text).toContain(tipTapEbookFixture.subtitle)
 
-    for (const chapter of tipTapChapterFixtures) {
-      expect(metrics.text).toContain(chapter.title)
-    }
+      for (const chapter of tipTapChapterFixtures) {
+        expect(metrics.text).toContain(chapter.title)
+      }
 
-    expect(metrics.text).toContain("At first light")
-    expect(metrics.text).toContain("A pencil, a ruler, and room to revise.")
-    expect(metrics.text).toContain("Travel is an education in attention, not accumulation.")
-    expect(metrics.text).toContain("observe")
-    expect(metrics.text).toContain("the archive")
-    expect(metrics.text).toContain("Ada Rowan")
+      expect(metrics.text).toContain("At first light")
+      expect(metrics.text).toContain(
+        "A pencil, a ruler, and room to revise.",
+      )
+      expect(metrics.text).toContain(
+        "Travel is an education in attention, not accumulation.",
+      )
+      expect(metrics.text).toContain("observe")
+      expect(metrics.text).toContain("the archive")
+      expect(metrics.text).toContain("Ada Rowan")
 
-    expectStandardReadableMargins(metrics)
-  }, 30_000)
+      expectStandardReadableMargins(metrics)
+    },
+    30_000,
+  )
 
-  it("exports ready-to-print PDFs in A4 with print-style margins and embedded images", async () => {
-    const fixture = await createPersistedExportFixture(TEST_EMAIL_PREFIX)
-    const ebook = await loadNormalizedPersistedEbook(fixture.ebookId)
-    const exportedFile = await new PdfExporter("ready-to-print", testExtensions).export(ebook)
+  it(
+    "exports ready-to-print PDFs in A4 with print-style margins and embedded images",
+    async () => {
+      const fixture = await createPersistedExportFixture(TEST_EMAIL_PREFIX)
+      const ebook = await loadNormalizedPersistedEbook(fixture.ebookId)
+      const exportedFile = await new PdfExporter(
+        "ready-to-print",
+        testExtensions,
+      ).export(ebook)
 
-    expect(exportedFile.fileName).toMatch(/\.pdf$/)
-    expect(exportedFile.mimeType).toBe("application/pdf")
-    expect(Buffer.isBuffer(exportedFile.data)).toBe(true)
-    expect(exportedFile.data.subarray(0, 5).toString()).toBe("%PDF-")
+      expect(exportedFile.fileName).toMatch(/\.pdf$/)
+      expect(exportedFile.mimeType).toBe("application/pdf")
+      expect(Buffer.isBuffer(exportedFile.data)).toBe(true)
+      expect(exportedFile.data.subarray(0, 5).toString()).toBe("%PDF-")
 
-    const metrics = await inspectPdfDocument(exportedFile.data)
+      const metrics = await inspectPdfDocument(exportedFile.data)
 
-    expect(metrics.pageCount).toBeGreaterThan(0)
-    expect(metrics.imageOps).toBeGreaterThan(0)
-    expect(metrics.text).toContain(tipTapEbookFixture.title)
-    expect(metrics.text).toContain("A pencil, a ruler, and room to revise.")
-    expect(metrics.text).toContain("By evening, the itinerary had become a story.")
+      expect(metrics.pageCount).toBeGreaterThan(0)
+      expect(metrics.imageOps).toBeGreaterThan(0)
+      expect(metrics.text).toContain(tipTapEbookFixture.title)
+      expect(metrics.text).toContain(
+        "A pencil, a ruler, and room to revise.",
+      )
+      expect(metrics.text).toContain(
+        "By evening, the itinerary had become a story.",
+      )
 
-    expectA4PrintLayout(metrics)
-  }, 30_000)
+      expectA4PrintLayout(metrics)
+    },
+    30_000,
+  )
 })
