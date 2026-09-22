@@ -1,10 +1,21 @@
 import { afterAll, beforeEach, expect, test } from "vitest"
 
 import { GET, POST } from "@/app/api/ebooks/routes"
-import type { CreateEbookResponseAPI, PaginatedEbooksAPI } from "@/app/types/api/ebook"
-import { createEbooksFixture } from "../../helpers/factories"
+import type {
+    CreateEbookResponseAPI,
+    PaginatedEbooksAPI,
+} from "@/app/types/api/ebook"
+import {
+    createEbookThemeFixture,
+    createEbookTypeFixture,
+    createEbooksFixture,
+} from "../../helpers/factories"
 
-import { authorizedRequest, setupEbookFixture, teardownEbookFixture } from "./shared"
+import {
+    authorizedRequest,
+    setupEbookFixture,
+    teardownEbookFixture,
+} from "./shared"
 
 let userId = ""
 
@@ -18,8 +29,10 @@ afterAll(async () => {
 })
 
 test("GET /api/ebooks should return a empty list paginated result", async () => {
-    const response = await GET(authorizedRequest("http://localhost:3000/api/ebooks", userId))
-    const body = await response.json() as PaginatedEbooksAPI
+    const response = await GET(
+        authorizedRequest("http://localhost:3000/api/ebooks", userId),
+    )
+    const body = (await response.json()) as PaginatedEbooksAPI
 
     expect(response.status).toBe(200)
     expect(body.items).toEqual([])
@@ -49,10 +62,16 @@ test("GET /api/ebooks should return many ebooks", async () => {
     ]
 
     const createdCount = await createEbooksFixture(userId, ebooksToCreate)
+
     expect(createdCount).toBe(3)
 
-    const response = await GET(authorizedRequest("http://localhost:3000/api/ebooks?page=1&pageSize=10", userId))
-    const body = await response.json() as PaginatedEbooksAPI
+    const response = await GET(
+        authorizedRequest(
+            "http://localhost:3000/api/ebooks?page=1&pageSize=10",
+            userId,
+        ),
+    )
+    const body = (await response.json()) as PaginatedEbooksAPI
 
     expect(response.status).toBe(200)
     expect(body.items).toHaveLength(3)
@@ -61,20 +80,31 @@ test("GET /api/ebooks should return many ebooks", async () => {
     expect(body.pageSize).toBe(10)
     expect(body.totalPages).toBe(1)
     expect(body.items.map((item) => item.title)).toEqual(
-        expect.arrayContaining(["Ebook One", "Ebook Two", "Ebook Three"]),
+        expect.arrayContaining([
+            "Ebook One",
+            "Ebook Two",
+            "Ebook Three",
+        ]),
     )
 })
 
 test("POST /api/ebooks should create a new ebook and return 201", async () => {
-    const response = await POST(authorizedRequest("http://localhost:3000/api/ebooks", userId, {
-        method: "POST",
-        body: {
-            title: "Created From POST",
-            subtitle: "API",
-            shortDescription: "Created in integration test",
-        },
-    }))
-    const body = await response.json() as CreateEbookResponseAPI
+    const ebookType = await createEbookTypeFixture()
+    const ebookTheme = await createEbookThemeFixture()
+
+    const response = await POST(
+        authorizedRequest("http://localhost:3000/api/ebooks", userId, {
+            method: "POST",
+            body: {
+                title: "Created From POST",
+                subtitle: "API",
+                shortDescription: "Created in integration test",
+                ebookTypeId: ebookType.id,
+                ebookThemeId: ebookTheme.id,
+            },
+        }),
+    )
+    const body = (await response.json()) as CreateEbookResponseAPI
 
     expect(response.status).toBe(201)
     expect(body.id).toBeDefined()

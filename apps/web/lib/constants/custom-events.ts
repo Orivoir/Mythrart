@@ -5,7 +5,7 @@ export const EVENT_NAME_CREATE_NEW_PROJECT = `${PREFIX_CUSTOM_EVENT}create-new-p
 export const EVENT_NAME_SHOW_MORE_PRESET_COVER = `${PREFIX_CUSTOM_EVENT}show-more-preset-cover`
 export const EVENT_NAME_CLICK_DEMO = `${PREFIX_CUSTOM_EVENT}click-demo`
 export const EVENT_NAME_SHOW_ANALYSIS_DETAILS = `${PREFIX_CUSTOM_EVENT}show-analysis-details`
-
+export const EVENT_NAME_WORK_MODE_START = `${PREFIX_CUSTOM_EVENT}work-mode-start`
 
 export type DetailType = Record<string, any>
 
@@ -40,6 +40,9 @@ const fireEvent = {
   ),
   showAnalysisDetails: (detail: DetailType = {}) => (
     emitEvent({ eventName: EVENT_NAME_SHOW_ANALYSIS_DETAILS, detail })
+  ),
+  workModeStart: (detail: DetailType = {}) => (
+    emitEvent({ eventName: EVENT_NAME_WORK_MODE_START, detail })
   )
 }
 

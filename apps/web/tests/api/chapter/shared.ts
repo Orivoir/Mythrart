@@ -1,8 +1,13 @@
 import { NextRequest } from "next/server"
 
 import { CollaborationRole } from "@mythrart/database"
+
 import prisma from "../../helpers/prisma"
-import { createUserFixture } from "../../helpers/factories"
+import {
+    createEbookThemeFixture,
+    createEbookTypeFixture,
+    createUserFixture,
+} from "../../helpers/factories"
 import resetDb from "../../helpers/reset-db"
 
 export type ChapterFixture = {
@@ -26,22 +31,31 @@ export function chapterRequest(options: {
     authUserId?: string
     defaultOwnerId: string
 }): NextRequest {
-    return new NextRequest(`http://localhost:3000/api/chapters/${options.chapterId}`, {
-        method: options.method,
-        headers: {
-            ...(options.body ? { "content-type": "application/json" } : {}),
-            ...((options.authenticated ?? true)
-                ? { "x-auth-user-id": options.authUserId ?? options.defaultOwnerId }
-                : {}),
+    return new NextRequest(
+        `http://localhost:3000/api/chapters/${options.chapterId}`,
+        {
+            method: options.method,
+            headers: {
+                ...(options.body
+                    ? { "content-type": "application/json" }
+                    : {}),
+                ...((options.authenticated ?? true)
+                    ? {
+                          "x-auth-user-id":
+                              options.authUserId ?? options.defaultOwnerId,
+                      }
+                    : {}),
+            },
+            ...(options.body ? { body: options.body } : {}),
         },
-        ...(options.body ? { body: options.body } : {}),
-    })
+    )
 }
 
 export async function setupChapterFixture(): Promise<ChapterFixture> {
     await resetDb()
 
     const owner = await createUserFixture()
+
     const otherOwner = await prisma.user.create({
         data: {
             email: `other-${owner.id}@example.com`,
@@ -69,10 +83,15 @@ export async function setupChapterFixture(): Promise<ChapterFixture> {
         },
     })
 
+    const ebookType = await createEbookTypeFixture()
+    const ebookTheme = await createEbookThemeFixture()
+
     const ebook = await prisma.ebook.create({
         data: {
             title: "Owner ebook",
             ownerId: owner.id,
+            ebookTypeId: ebookType.id,
+            ebookThemeId: ebookTheme.id,
         },
     })
 
@@ -80,6 +99,8 @@ export async function setupChapterFixture(): Promise<ChapterFixture> {
         data: {
             title: "Other owner ebook",
             ownerId: otherOwner.id,
+            ebookTypeId: ebookType.id,
+            ebookThemeId: ebookTheme.id,
         },
     })
 

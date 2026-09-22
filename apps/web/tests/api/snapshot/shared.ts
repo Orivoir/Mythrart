@@ -1,8 +1,13 @@
 import { NextRequest } from "next/server"
 
 import { CollaborationRole } from "@mythrart/database"
+
 import prisma from "../../helpers/prisma"
-import { createUserFixture } from "../../helpers/factories"
+import {
+    createEbookThemeFixture,
+    createEbookTypeFixture,
+    createUserFixture,
+} from "../../helpers/factories"
 import resetDb from "../../helpers/reset-db"
 
 export type SnapshotFixture = {
@@ -29,10 +34,15 @@ export async function setupSnapshotFixture(): Promise<SnapshotFixture> {
     const proofreaderCollaborator = await createUserFixture()
     const outsider = await createUserFixture()
 
+    const ebookType = await createEbookTypeFixture()
+    const ebookTheme = await createEbookThemeFixture()
+
     const ebook = await prisma.ebook.create({
         data: {
             ownerId: owner.id,
             title: "Snapshot fixture ebook",
+            ebookTypeId: ebookType.id,
+            ebookThemeId: ebookTheme.id,
         },
     })
 
@@ -78,8 +88,12 @@ export function createSnapshotRequest(options: {
     return new NextRequest("http://localhost:3000/api/snapshot", {
         method: "POST",
         headers: {
-            ...((hasStructuredBody || hasRawBody) ? { "content-type": "application/json" } : {}),
-            ...(options.userId ? { "x-auth-user-id": options.userId } : {}),
+            ...((hasStructuredBody || hasRawBody)
+                ? { "content-type": "application/json" }
+                : {}),
+            ...(options.userId
+                ? { "x-auth-user-id": options.userId }
+                : {}),
         },
         ...(
             hasStructuredBody
@@ -91,7 +105,10 @@ export function createSnapshotRequest(options: {
     })
 }
 
-export function createJobRequest(jobId: string, userId?: string): NextRequest {
+export function createJobRequest(
+    jobId: string,
+    userId?: string,
+): NextRequest {
     return new NextRequest(`http://localhost:3000/api/job/${jobId}`, {
         method: "GET",
         headers: {
@@ -100,13 +117,19 @@ export function createJobRequest(jobId: string, userId?: string): NextRequest {
     })
 }
 
-export function createGetSnapshotRequest(snapshotId: string, userId?: string): NextRequest {
-    return new NextRequest(`http://localhost:3000/api/snapshot/${snapshotId}`, {
-        method: "GET",
-        headers: {
-            ...(userId ? { "x-auth-user-id": userId } : {}),
+export function createGetSnapshotRequest(
+    snapshotId: string,
+    userId?: string,
+): NextRequest {
+    return new NextRequest(
+        `http://localhost:3000/api/snapshot/${snapshotId}`,
+        {
+            method: "GET",
+            headers: {
+                ...(userId ? { "x-auth-user-id": userId } : {}),
+            },
         },
-    })
+    )
 }
 
 export function jobRouteContext(jobId: string) {

@@ -14,7 +14,9 @@
   },
   "scripts": {
     "prisma:generate": "pnpm exec prisma generate",
-    "prisma:migrate": "pnpm exec prisma migrate deploy"
+    "prisma:migrate": "pnpm exec prisma migrate deploy",
+    "prisma:migrate:test": "DATABASE_URL=\"postgresql://mythrart:mythrart@localhost:5432/e2e_test\" pnpm exec prisma migrate deploy",
+    "prisma:migrate:all": "pnpm run prisma:migrate && pnpm run prisma:migrate:test"
   },
   "keywords": [],
   "author": "",

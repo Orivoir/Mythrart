@@ -1,11 +1,22 @@
 import { afterAll, beforeEach, expect, test } from "vitest"
 
 import { DELETE, PUT } from "@/app/api/ebooks/[id]/routes"
-import type { CreateEbookResponseAPI, ResponseErrorAPI } from "@/app/types/api/ebook"
+import type {
+    CreateEbookResponseAPI,
+    ResponseErrorAPI,
+} from "@/app/types/api/ebook"
 import prisma from "../../helpers/prisma"
-import { createUserFixture } from "../../helpers/factories"
+import {
+    createEbookThemeFixture,
+    createEbookTypeFixture,
+    createUserFixture,
+} from "../../helpers/factories"
 
-import { authorizedRequest, setupEbookFixture, teardownEbookFixture } from "./shared"
+import {
+    authorizedRequest,
+    setupEbookFixture,
+    teardownEbookFixture,
+} from "./shared"
 
 let userId = ""
 
@@ -19,25 +30,37 @@ afterAll(async () => {
 })
 
 test("PUT /api/ebooks/:id updates an owned ebook without requiring body.id", async () => {
+    const ebookType = await createEbookTypeFixture()
+    const ebookTheme = await createEbookThemeFixture()
+
     const created = await prisma.ebook.create({
         data: {
             title: "Original title",
             subtitle: "Original subtitle",
             shortDescription: "Original description",
             ownerId: userId,
+            ebookTypeId: ebookType.id,
+            ebookThemeId: ebookTheme.id,
         },
     })
 
-    const response = await PUT(authorizedRequest(`http://localhost:3000/api/ebooks/${created.id}`, userId, {
-        method: "PUT",
-        body: {
-            id: "999999",
-            title: "Updated title",
-            subtitle: "Updated subtitle",
-            shortDescription: "Updated description",
-        },
-    }), { params: Promise.resolve({ id: created.id }) })
-    const body = await response.json() as CreateEbookResponseAPI
+    const response = await PUT(
+        authorizedRequest(
+            `http://localhost:3000/api/ebooks/${created.id}`,
+            userId,
+            {
+                method: "PUT",
+                body: {
+                    id: "999999",
+                    title: "Updated title",
+                    subtitle: "Updated subtitle",
+                    shortDescription: "Updated description",
+                },
+            },
+        ),
+        { params: Promise.resolve({ id: created.id }) },
+    )
+    const body = (await response.json()) as CreateEbookResponseAPI
 
     expect(response.status).toBe(200)
     expect(body.id).toBe(created.id)
@@ -47,39 +70,68 @@ test("PUT /api/ebooks/:id updates an owned ebook without requiring body.id", asy
 })
 
 test("DELETE /api/ebooks/:id deletes an owned ebook without requiring body.id", async () => {
+    const ebookType = await createEbookTypeFixture()
+    const ebookTheme = await createEbookThemeFixture()
+
     const created = await prisma.ebook.create({
         data: {
             title: "Ebook to delete",
             ownerId: userId,
+            ebookTypeId: ebookType.id,
+            ebookThemeId: ebookTheme.id,
         },
     })
 
-    const response = await DELETE(authorizedRequest(`http://localhost:3000/api/ebooks/${created.id}`, userId, {
-        method: "DELETE",
-    }), { params: Promise.resolve({ id: created.id }) })
-    const body = await response.json() as { success: boolean }
+    const response = await DELETE(
+        authorizedRequest(
+            `http://localhost:3000/api/ebooks/${created.id}`,
+            userId,
+            {
+                method: "DELETE",
+            },
+        ),
+        { params: Promise.resolve({ id: created.id }) },
+    )
+    const body = (await response.json()) as { success: boolean }
 
     expect(response.status).toBe(200)
     expect(body).toEqual({ success: true })
-    expect(await prisma.ebook.findUnique({ where: { id: created.id } })).toBeNull()
+    expect(
+        await prisma.ebook.findUnique({
+            where: { id: created.id },
+        }),
+    ).toBeNull()
 })
 
 test("PUT /api/ebooks/:id returns NOT_FOUND when the ebook belongs to another user", async () => {
     const otherOwner = await createUserFixture()
+
+    const ebookType = await createEbookTypeFixture()
+    const ebookTheme = await createEbookThemeFixture()
+
     const created = await prisma.ebook.create({
         data: {
             title: "Other owner's ebook",
             ownerId: otherOwner.id,
+            ebookTypeId: ebookType.id,
+            ebookThemeId: ebookTheme.id,
         },
     })
 
-    const response = await PUT(authorizedRequest(`http://localhost:3000/api/ebooks/${created.id}`, userId, {
-        method: "PUT",
-        body: {
-            title: "Should fail",
-        },
-    }), { params: Promise.resolve({ id: created.id }) })
-    const body = await response.json() as ResponseErrorAPI
+    const response = await PUT(
+        authorizedRequest(
+            `http://localhost:3000/api/ebooks/${created.id}`,
+            userId,
+            {
+                method: "PUT",
+                body: {
+                    title: "Should fail",
+                },
+            },
+        ),
+        { params: Promise.resolve({ id: created.id }) },
+    )
+    const body = (await response.json()) as ResponseErrorAPI
 
     expect(response.status).toBe(404)
     expect(body.code).toBe("NOT_FOUND")

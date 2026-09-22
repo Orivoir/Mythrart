@@ -33,3 +33,4 @@ export async function getPlanFeaturesByName(featureName: PlanFeaturesName, plan:
 export * from "./upload"
 export * from "./collaborations"
 export * from "./chapter"
+export * from "./scene"

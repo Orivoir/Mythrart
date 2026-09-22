@@ -21,6 +21,8 @@ export interface CreateEbookRequestAPI {
     title: string;
     subtitle?: string;
     shortDescription?: string;
+    ebookTypeId?: string;
+    ebookThemeId?: string;
 }
 
 export interface CreateEbookResponseAPI extends EbookResponseAPI {

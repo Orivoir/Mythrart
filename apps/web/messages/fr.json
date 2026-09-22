@@ -282,5 +282,8 @@
                 "HelperText": "Conseil: plus votre synopsis est détaillé, plus Mythrart pourra vous fournir une analyse précise et utile."
             }
         }
+    },
+    "ProjectChapterItem": {
+        "ButtonMoreOptions": "Plus d'options"
     }
 }

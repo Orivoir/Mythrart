@@ -53,17 +53,19 @@ export {
   CollaborationRole,
   CollaborationPermission,
   UploadHandshakeStatus,
+  EbookEntityRelationType,
+  EbookEntityType,
+
+  PrismaClient
 } from "./app/generated/prisma/index.js"
 
 // expose type schemas
-export {
+export type {
   Chapter,
   EbookCollaborator,
   EbookCustomRole,
   EbookEntityRelation,
-  EbookEntityRelationType,
-  EbookEntityType,
-  PrismaClient,
+  EbookTheme,
 } from "./app/generated/prisma/index.js"
 
 // expose type Prisma

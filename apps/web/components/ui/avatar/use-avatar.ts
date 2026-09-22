@@ -19,12 +19,14 @@ export function useAvatar({ image, email, alt }: UseAvatarProps) {
     [email],
   )
 
-  const initial = alt.trim().charAt(0).toUpperCase()
+  const initial = email.trim().charAt(0).toUpperCase()
 
   const generatedUrl = useMemo(
     () => getGeneratedAvatarUrl(initial),
     [initial],
   )
+
+  console.log(generatedUrl)
 
   const src =
     source === "image"

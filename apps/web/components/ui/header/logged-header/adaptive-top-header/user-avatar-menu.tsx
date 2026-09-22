@@ -89,6 +89,7 @@ export function UserAvatarMenu({
               gap-1
               rounded-full
               p-1
+              cursor-pointer
               transition-colors
               duration-150
               hover:bg-muted/5

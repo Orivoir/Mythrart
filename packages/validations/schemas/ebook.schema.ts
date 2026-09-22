@@ -13,6 +13,7 @@ export const EbookSchema = z.object({
         .max(MAX_LENGTH.TITLE_EBOOK, {
             message: VALIDATION_ERRORS.TITLE_TOO_LONG,
         }),
+
     subtitle: z
         .string({
             message: VALIDATION_ERRORS.SUBTITLE_TOO_SHORT,
@@ -24,6 +25,7 @@ export const EbookSchema = z.object({
             message: VALIDATION_ERRORS.SUBTITLE_TOO_LONG,
         })
         .optional(),
+
     shortDescription: z
         .string({
             message: VALIDATION_ERRORS.SHORT_DESCRIPTION_TOO_SHORT,
@@ -35,6 +37,15 @@ export const EbookSchema = z.object({
             message: VALIDATION_ERRORS.SHORT_DESCRIPTION_TOO_LONG,
         })
         .optional(),
+
+    ebookTypeId: z
+        .string()
+        .min(1, "ebookTypeId is required"),
+
+    ebookThemeId: z
+        .string()
+        .min(1, "ebookThemeId is required"),
 })
 
 export type Ebook = z.infer<typeof EbookSchema>
+export const UpdateEbookSchema = EbookSchema.partial()

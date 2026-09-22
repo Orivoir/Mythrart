@@ -24,3 +24,29 @@ export const CollaborationPermission = {
     COLLABORATOR_REMOVE: "COLLABORATOR_REMOVE",
     ROLE_ASSIGN: "ROLE_ASSIGN",
 } as const
+
+export const EbookEntityType = {
+    CHARACTER: "CHARACTER",
+    LOCATION: "LOCATION",
+    ORGANIZATION: "ORGANIZATION",
+    OBJECT: "OBJECT",
+    EVENT: "EVENT",
+    OTHER: "OTHER",
+} as const
+
+export const EbookEntityRelationType = {
+    FAMILY: "FAMILY",
+    FRIENDSHIP: "FRIENDSHIP",
+    ROMANTIC: "ROMANTIC",
+    PROFESSIONAL: "PROFESSIONAL",
+    OWNERSHIP: "OWNERSHIP",
+    LOCATION: "LOCATION",
+    FAMILY_HOME: "FAMILY_HOME",
+    MEMBER_OF: "MEMBER_OF",
+    ALLY: "ALLY",
+    ENEMY: "ENEMY",
+    CREATOR: "CREATOR",
+    EMPLOYER: "EMPLOYER",
+    EMPLOYEE: "EMPLOYEE",
+    OTHER: "OTHER",
+} as const

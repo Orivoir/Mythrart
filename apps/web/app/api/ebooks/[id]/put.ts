@@ -10,7 +10,7 @@ import { HTTP_ERRORS } from "@/lib/constants/http-code"
 import { ApiException, parseApiJsonObject, withApiHandler } from "@/lib/errors"
 import { normalizeStringValue } from "@/lib/normalize-string-value"
 import { prisma } from "@mythrart/database"
-import { EbookSchema } from "@mythrart/validations"
+import { UpdateEbookSchema } from "@mythrart/validations"
 
 import { mapEbookToResponse } from "../utils"
 
@@ -26,10 +26,12 @@ export const PUT = withApiHandler(async (
 
     const { id } = await params
     const body = await parseApiJsonObject(request) as Partial<UpdateEbookRequestAPI>
-    const parsed = EbookSchema.parse({
+    const parsed = UpdateEbookSchema.parse({
         title: normalizeStringValue(body.title) ?? undefined,
         subtitle: body.subtitle === undefined ? undefined : normalizeStringValue(body.subtitle) ?? "",
         shortDescription: body.shortDescription === undefined ? undefined : normalizeStringValue(body.shortDescription) ?? "",
+        ebookTypeId: body.ebookTypeId === undefined ? undefined : normalizeStringValue(body.ebookTypeId) ?? "",
+        ebookThemeId: body.ebookThemeId === undefined ? undefined : normalizeStringValue(body.ebookThemeId) ?? ""
     })
 
     const updateResult = await prisma.ebook.updateMany({

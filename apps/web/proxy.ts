@@ -9,7 +9,7 @@ import { ApiException, apiErrorResponse } from "./lib/errors"
 const METHODS_REQUIRING_ACCESS_CHECK = new Set(["GET", "PUT", "PATCH", "DELETE", "POST"])
 
 type ResourceId = {
-    resource: "ebooks" | "chapters" | "collaboration-ebooks" | "collaboration-roles"
+    resource: "ebooks" | "chapters" | "scenes" | "collaboration-ebooks" | "collaboration-roles"
     id: string
 }
 
@@ -52,6 +52,15 @@ function getResourceIdFromRoute(pathname: string): ResourceId | null {
         return {
             resource: "chapters",
             id: chapterMatch[1],
+        }
+    }
+
+    const sceneMatch = pathname.match(/^\/api\/scenes\/([^/]+)(?:\/.*)?$/)
+
+    if (sceneMatch?.[1]) {
+        return {
+            resource: "scenes",
+            id: sceneMatch[1],
         }
     }
 
@@ -112,6 +121,22 @@ function getRequiredPermission(pathname: string, method: string, resource: Resou
             return null
         }
 
+        if (/^\/api\/ebooks\/[^/]+\/entities(?:\/.*)?$/.test(pathname)) {
+            if (method === "GET") {
+                return {
+                    ebookPermission: CollaborationPermission.EBOOK_READ,
+                }
+            }
+
+            if (method === "POST" || method === "PUT" || method === "DELETE") {
+                return {
+                    ebookPermission: CollaborationPermission.EBOOK_UPDATE_METADATA,
+                }
+            }
+
+            return null
+        }
+
         if (method === "PUT") {
             return {
                 ebookPermission: CollaborationPermission.EBOOK_UPDATE_METADATA,
@@ -128,6 +153,38 @@ function getRequiredPermission(pathname: string, method: string, resource: Resou
     }
 
     if (resource === "chapters") {
+        if (method === "GET") {
+            return {
+                ebookPermission: CollaborationPermission.CHAPTER_READ,
+                chapterPermission: CollaborationPermission.CHAPTER_READ,
+            }
+        }
+
+        if (method === "PUT") {
+            return {
+                ebookPermission: CollaborationPermission.CHAPTER_UPDATE,
+                chapterPermission: CollaborationPermission.CHAPTER_UPDATE,
+            }
+        }
+
+        if (method === "DELETE") {
+            return {
+                ebookPermission: CollaborationPermission.CHAPTER_DELETE,
+                chapterPermission: CollaborationPermission.CHAPTER_DELETE,
+            }
+        }
+
+        return null
+    }
+
+    if (resource === "scenes") {
+        if (method === "GET") {
+            return {
+                ebookPermission: CollaborationPermission.CHAPTER_READ,
+                chapterPermission: CollaborationPermission.CHAPTER_READ,
+            }
+        }
+
         if (method === "PUT") {
             return {
                 ebookPermission: CollaborationPermission.CHAPTER_UPDATE,
@@ -178,6 +235,34 @@ async function ensureAuthorizedResource(request: NextRequest, resourceId: Resour
         })
     }
 
+    if (resourceId.resource === "scenes") {
+        const scene = await prisma.scene.findFirst({
+            where: {
+                id: resourceId.id,
+            },
+            select: {
+                id: true,
+                chapterId: true,
+                chapter: {
+                    select: {
+                        ebookId: true,
+                    },
+                },
+            },
+        })
+
+        if (!scene || !scene.chapterId || !scene.chapter) {
+            return false
+        }
+
+        return hasEbookPermissionForUser({
+            ebookId: scene.chapter.ebookId,
+            userId,
+            permission: permission.ebookPermission,
+            chapterId: scene.chapterId,
+        })
+    }
+
     return hasEbookPermissionForUser({
         ebookId: resourceId.id,
         userId,
@@ -197,6 +282,19 @@ async function ensureResourceExists(resourceId: ResourceId): Promise<boolean> {
         })
 
         return Boolean(chapter)
+    }
+
+    if (resourceId.resource === "scenes") {
+        const scene = await prisma.scene.findFirst({
+            where: {
+                id: resourceId.id,
+            },
+            select: {
+                id: true,
+            },
+        })
+
+        return Boolean(scene)
     }
 
     const ebook = await prisma.ebook.findFirst({

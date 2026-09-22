@@ -3,7 +3,11 @@ import { NextRequest } from "next/server"
 import { PlanType } from "@mythrart/database"
 
 import prisma from "../../helpers/prisma"
-import { createUserFixture } from "../../helpers/factories"
+import {
+    createEbookThemeFixture,
+    createEbookTypeFixture,
+    createUserFixture,
+} from "../../helpers/factories"
 import resetDb from "../../helpers/reset-db"
 
 export type CollaborationFixture = {
@@ -47,10 +51,15 @@ export async function setupCollaborationFixture(): Promise<CollaborationFixture>
     const outsider = await createUserFixture({ plan: PlanType.free })
     const collaboratorTarget = await createUserFixture({ plan: PlanType.free })
 
+    const ebookType = await createEbookTypeFixture()
+    const ebookTheme = await createEbookThemeFixture()
+
     const ebook = await prisma.ebook.create({
         data: {
             title: "Owner Ebook",
             ownerId: owner.id,
+            ebookTypeId: ebookType.id,
+            ebookThemeId: ebookTheme.id,
         },
     })
 
@@ -58,6 +67,8 @@ export async function setupCollaborationFixture(): Promise<CollaborationFixture>
         data: {
             title: "Pro Owner Ebook",
             ownerId: ownerPro.id,
+            ebookTypeId: ebookType.id,
+            ebookThemeId: ebookTheme.id,
         },
     })
 

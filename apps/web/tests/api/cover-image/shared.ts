@@ -1,11 +1,21 @@
 import { NextRequest } from "next/server"
-import {s3, CreateBucketCommand, DeleteObjectCommand, HeadBucketCommand } from "@mythrart/s3"
+import {
+    s3,
+    CreateBucketCommand,
+    DeleteObjectCommand,
+    HeadBucketCommand,
+} from "@mythrart/s3"
 import { expect } from "vitest"
 
-import { createUserFixture } from "../../helpers/factories"
+import { UploadHandshakeStatus } from "@mythrart/database"
+
+import {
+    createEbookThemeFixture,
+    createEbookTypeFixture,
+    createUserFixture,
+} from "../../helpers/factories"
 import prisma from "../../helpers/prisma"
 import resetDb from "../../helpers/reset-db"
-import { type UploadHandshakeStatus } from "@mythrart/database"
 
 export interface PresignedUploadResponse {
     uploadHandshakeId: string
@@ -65,10 +75,16 @@ export async function setupUploadFixture() {
     await ensureBucketExists(bucket)
 
     const user = await createUserFixture()
+
+    const ebookType = await createEbookTypeFixture()
+    const ebookTheme = await createEbookThemeFixture()
+
     const ebook = await prisma.ebook.create({
         data: {
             title: "Ebook cover upload",
             ownerId: user.id,
+            ebookTypeId: ebookType.id,
+            ebookThemeId: ebookTheme.id,
         },
     })
 
@@ -83,7 +99,10 @@ export async function teardownUploadFixture() {
     await resetDb()
 }
 
-export async function cleanupUploadedKeys(bucket: string, uploadedKeys: string[]) {
+export async function cleanupUploadedKeys(
+    bucket: string,
+    uploadedKeys: string[],
+) {
     while (uploadedKeys.length > 0) {
         const key = uploadedKeys.pop()
 
@@ -92,40 +111,57 @@ export async function cleanupUploadedKeys(bucket: string, uploadedKeys: string[]
         }
 
         try {
-            await s3.send(new DeleteObjectCommand({ Bucket: bucket, Key: key }))
+            await s3.send(
+                new DeleteObjectCommand({
+                    Bucket: bucket,
+                    Key: key,
+                }),
+            )
         } catch {
             // Best-effort cleanup for integration artifacts.
         }
     }
 }
 
-export function createPresignedUrlRequest(userId: string, body: {
-    fileName: string
-    mimeType: string
-    context: "COVER"
-    size: number
-}) {
-    return new NextRequest("http://localhost:3000/api/uploads/presigned-url", {
-        method: "POST",
-        headers: {
-            "content-type": "application/json",
-            "x-auth-user-id": userId,
+export function createPresignedUrlRequest(
+    userId: string,
+    body: {
+        fileName: string
+        mimeType: string
+        context: "COVER"
+        size: number
+    },
+) {
+    return new NextRequest(
+        "http://localhost:3000/api/uploads/presigned-url",
+        {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+                "x-auth-user-id": userId,
+            },
+            body: JSON.stringify(body),
         },
-        body: JSON.stringify(body),
-    })
+    )
 }
 
-export function createCompleteUploadRequest(userId: string, body: {
-    uploadHandshakeId: string
-}) {
-    return new NextRequest("http://localhost:3000/api/uploads/complete", {
-        method: "POST",
-        headers: {
-            "content-type": "application/json",
-            "x-auth-user-id": userId,
+export function createCompleteUploadRequest(
+    userId: string,
+    body: {
+        uploadHandshakeId: string
+    },
+) {
+    return new NextRequest(
+        "http://localhost:3000/api/uploads/complete",
+        {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+                "x-auth-user-id": userId,
+            },
+            body: JSON.stringify(body),
         },
-        body: JSON.stringify(body),
-    })
+    )
 }
 
 export async function getUploadHandshake(uploadHandshakeId: string) {
@@ -134,21 +170,30 @@ export async function getUploadHandshake(uploadHandshakeId: string) {
     })
 }
 
-export async function expectUploadHandshakeStatus(uploadHandshakeId: string, status: UploadHandshakeStatus) {
+export async function expectUploadHandshakeStatus(
+    uploadHandshakeId: string,
+    status: UploadHandshakeStatus,
+) {
     const handshake = await getUploadHandshake(uploadHandshakeId)
     expect(handshake.status).toBe(status)
     return handshake
 }
 
-export function createCoverReferenceRequest(userId: string, assetId: string) {
-    return new NextRequest("http://localhost:3000/api/uploads/reference/cover-image", {
-        method: "PUT",
-        headers: {
-            "content-type": "application/json",
-            "x-auth-user-id": userId,
+export function createCoverReferenceRequest(
+    userId: string,
+    assetId: string,
+) {
+    return new NextRequest(
+        "http://localhost:3000/api/uploads/reference/cover-image",
+        {
+            method: "PUT",
+            headers: {
+                "content-type": "application/json",
+                "x-auth-user-id": userId,
+            },
+            body: JSON.stringify({
+                assetId,
+            }),
         },
-        body: JSON.stringify({
-            assetId,
-        }),
-    })
+    )
 }

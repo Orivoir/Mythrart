@@ -1,0 +1,21 @@
+model Scene {
+  id String @id @default(cuid())
+
+  chapterId String?
+  chapter   Chapter? @relation(fields: [chapterId], references: [id], onDelete: SetNull)
+
+  title String
+
+  objective String?
+  
+  entities SceneEntity[]
+
+  order Int?
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+
+  @@index([chapterId, order])
+}

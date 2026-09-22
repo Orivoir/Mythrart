@@ -26,6 +26,8 @@ export const POST = withApiHandler(async (request: NextRequest): Promise<NextRes
         title: normalizeStringValue(body.title) ?? undefined,
         subtitle: body.subtitle === undefined ? undefined : normalizeStringValue(body.subtitle) ?? "",
         shortDescription: body.shortDescription === undefined ? undefined : normalizeStringValue(body.shortDescription) ?? "",
+        ebookTypeId: body.ebookTypeId === undefined ? undefined : normalizeStringValue(body.ebookTypeId) ?? "",
+        ebookThemeId: body.ebookThemeId === undefined ? undefined : normalizeStringValue(body.ebookThemeId) ?? ""
     })
 
     const ebook = await prisma.ebook.create({

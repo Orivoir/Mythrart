@@ -6,8 +6,12 @@ import { POST } from "@/app/api/ebooks/[id]/chapters/routes"
 import type { CreateChapterResponseAPI } from "@/app/types/api/chapter"
 import type { ResponseErrorAPI } from "@/app/types/api/ebook"
 import { PLANS } from "@/lib/constants/plan"
+import {
+    createEbookThemeFixture,
+    createEbookTypeFixture,
+    createUserFixture,
+} from "../helpers/factories"
 import prisma from "../helpers/prisma"
-import { createUserFixture } from "../helpers/factories"
 import resetDb from "../helpers/reset-db"
 
 let ownerId = ""
@@ -23,33 +27,48 @@ function createChapterRequest(options: {
     userId?: string
     body: Record<string, unknown>
 }): NextRequest {
-    return new NextRequest(`http://localhost:3000/api/ebooks/${ebookId}/chapters`, {
-        method: "POST",
-        headers: {
-            "content-type": "application/json",
-            ...(options.userId ? { "x-auth-user-id": options.userId } : {}),
+    return new NextRequest(
+        `http://localhost:3000/api/ebooks/${ebookId}/chapters`,
+        {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+                ...(options.userId
+                    ? { "x-auth-user-id": options.userId }
+                    : {}),
+            },
+            body: JSON.stringify(options.body),
         },
-        body: JSON.stringify(options.body),
-    })
+    )
 }
 
 beforeEach(async () => {
     await resetDb()
 
     const owner = await createUserFixture({ plan: PlanType.free })
-    const authorCollaborator = await createUserFixture({ plan: PlanType.free })
-    const proofreaderCollaborator = await createUserFixture({ plan: PlanType.free })
+    const authorCollaborator = await createUserFixture({
+        plan: PlanType.free,
+    })
+    const proofreaderCollaborator = await createUserFixture({
+        plan: PlanType.free,
+    })
 
     ownerId = owner.id
     authorCollaboratorId = authorCollaborator.id
     proofreaderCollaboratorId = proofreaderCollaborator.id
 
+    const ebookType = await createEbookTypeFixture()
+    const ebookTheme = await createEbookThemeFixture()
+
     const ebook = await prisma.ebook.create({
         data: {
             title: "Ebook for chapter create",
             ownerId,
+            ebookTypeId: ebookType.id,
+            ebookThemeId: ebookTheme.id,
         },
     })
+
     ebookId = ebook.id
 
     await prisma.ebookCollaborator.create({
@@ -87,7 +106,7 @@ test("POST /api/ebooks/:id/chapters creates chapter for owner", async () => {
         routeContext(ebookId),
     )
 
-    const body = await response.json() as CreateChapterResponseAPI
+    const body = (await response.json()) as CreateChapterResponseAPI
 
     expect(response.status).toBe(201)
     expect(body.title).toBe("New chapter")
@@ -105,7 +124,7 @@ test("POST /api/ebooks/:id/chapters allows collaborator with create permission",
         routeContext(ebookId),
     )
 
-    const body = await response.json() as CreateChapterResponseAPI
+    const body = (await response.json()) as CreateChapterResponseAPI
 
     expect(response.status).toBe(201)
     expect(body.title).toBe("Collaborator chapter")
@@ -122,7 +141,7 @@ test("POST /api/ebooks/:id/chapters denies collaborator without create permissio
         routeContext(ebookId),
     )
 
-    const body = await response.json() as ResponseErrorAPI
+    const body = (await response.json()) as ResponseErrorAPI
 
     expect(response.status).toBe(404)
     expect(body.code).toBe("NOT_FOUND")
@@ -158,7 +177,7 @@ test("POST /api/ebooks/:id/chapters returns PAYMENT_REQUIRED when chapter plan l
         routeContext(ebookId),
     )
 
-    const body = await response.json() as ResponseErrorAPI
+    const body = (await response.json()) as ResponseErrorAPI
 
     expect(response.status).toBe(402)
     expect(body.code).toBe("PAYMENT_REQUIRED")
@@ -174,7 +193,7 @@ test("POST /api/ebooks/:id/chapters returns UNAUTHORIZED without auth", async ()
         routeContext(ebookId),
     )
 
-    const body = await response.json() as ResponseErrorAPI
+    const body = (await response.json()) as ResponseErrorAPI
 
     expect(response.status).toBe(401)
     expect(body.code).toBe("UNAUTHORIZED")
