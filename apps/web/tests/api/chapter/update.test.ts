@@ -1,6 +1,6 @@
 import { afterAll, beforeEach, expect, test } from "vitest"
 
-import { PUT } from "@/app/api/chapters/[id]/routes"
+import { PUT } from "@/app/api/chapters/[id]/route"
 import type { ResponseErrorAPI } from "@/app/types/api/ebook"
 import type { UpdateChapterResponseAPI } from "@/app/types/api/chapter"
 import { MAX_LENGTH } from "@/lib/constants/limits"

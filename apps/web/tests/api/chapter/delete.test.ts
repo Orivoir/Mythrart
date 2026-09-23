@@ -1,6 +1,6 @@
 import { afterAll, beforeEach, expect, test } from "vitest"
 
-import { DELETE } from "@/app/api/chapters/[id]/routes"
+import { DELETE } from "@/app/api/chapters/[id]/route"
 import type { DeleteChapterResponseAPI } from "@/app/types/api/chapter"
 import type { ResponseErrorAPI } from "@/app/types/api/ebook"
 import prisma from "../../helpers/prisma"

@@ -23,6 +23,8 @@ export function ProjectProvider({
       sceneId: null,
     })
 
+  const [currentLocale, setCurrentLocale] = useState<string>("en")
+
   const selectChapter = (chapterId: string) => {
     setCurrentChapterEdition({
       chapterId,
@@ -47,15 +49,21 @@ export function ProjectProvider({
     setProject(project)
   }
 
+  const selectLocale = (locale: string) => {
+    setCurrentLocale(locale)
+  }
+
   const value = useMemo(
     () => ({
       project,
       currentChapterEdition,
+      currentLocale,
       selectChapter,
+      selectLocale,
       selectScene,
       selectProject,
     }),
-    [project, currentChapterEdition],
+    [project, currentChapterEdition, currentLocale],
   )
 
   return (

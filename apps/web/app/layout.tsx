@@ -3,6 +3,7 @@ import { Inter, Playfair_Display } from "next/font/google"
 import { NextIntlClientProvider } from "next-intl"
 import { getLocale, getMessages } from "next-intl/server"
 import Providers from "./providers"
+import "@radix-ui/themes/styles.css"
 import "./globals.css"
 import Header from "@/components/ui/header"
 

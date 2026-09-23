@@ -1,6 +1,6 @@
 import { afterAll, beforeEach, expect, test } from "vitest"
 
-import { DELETE, PUT } from "@/app/api/ebooks/[id]/routes"
+import { DELETE, PUT } from "@/app/api/ebooks/[id]/route"
 import type {
     CreateEbookResponseAPI,
     ResponseErrorAPI,

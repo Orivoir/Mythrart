@@ -4,6 +4,12 @@ import { SessionProvider } from "next-auth/react"
 import { ThemeProvider as NextThemesProvider } from "next-themes"
 import { Theme } from "@radix-ui/themes" 
 import { AppUsageProvider } from "@/components/contexts/AppUsageMode"
+import {
+    QueryClient,
+    QueryClientProvider,
+} from "@tanstack/react-query"
+
+const queryClient = new QueryClient()
 
 export function ThemeProvider({
   children,
@@ -25,13 +31,15 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <>
     <SessionProvider>
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <Theme>
-          <AppUsageProvider>
-            {children}
-          </AppUsageProvider>
-        </Theme>
-      </ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Theme>
+            <AppUsageProvider>
+              {children}
+            </AppUsageProvider>
+          </Theme>
+        </ThemeProvider>
+      </QueryClientProvider>
     </SessionProvider>
     </> 
   )

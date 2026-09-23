@@ -5,13 +5,13 @@ import { cn } from "@/lib/utils"
 import {navigation} from "./navigation"
 import { HelpCircle } from "lucide-react"
 
-export type ProjectRightNavProps = {
+export type ProjectLeftNavProps = {
   className?: string
 }
 
-export default function ProjectRightNav({
+export default function ProjectLeftNav({
   className,
-}: ProjectRightNavProps) {
+}: ProjectLeftNavProps) {
 
   return (
     <nav

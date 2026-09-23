@@ -46,3 +46,5 @@ export interface DeleteChapterResponseAPI {
 export interface UpdateChapterRequestAPI extends Partial<CreateChapterRequestAPI> {}
 
 export interface UpdateChapterResponseAPI extends ChapterContentResponseAPI {}
+
+export interface GetChapterResponseAPI extends UpdateChapterResponseAPI {}

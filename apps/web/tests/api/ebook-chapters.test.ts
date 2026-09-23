@@ -2,7 +2,7 @@ import { afterAll, beforeEach, expect, test } from "vitest"
 import { NextRequest } from "next/server"
 
 import { CollaborationRole, PlanType } from "@mythrart/database"
-import { POST } from "@/app/api/ebooks/[id]/chapters/routes"
+import { POST } from "@/app/api/ebooks/[id]/chapters/route"
 import type { CreateChapterResponseAPI } from "@/app/types/api/chapter"
 import type { ResponseErrorAPI } from "@/app/types/api/ebook"
 import { PLANS } from "@/lib/constants/plan"
