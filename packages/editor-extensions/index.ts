@@ -13,6 +13,9 @@ import {
 } from "@tiptap/extension-text-style"
 import StarterKit from "@tiptap/starter-kit"
 
+import { EntityMention } from "./custom/entity-mention"
+import { AssetImage } from "./custom/asset-image"
+
 export const extensions: Extensions = [
   StarterKit,
   Link,
@@ -24,6 +27,8 @@ export const extensions: Extensions = [
   FontSize,
   FileHandler,
   FindAndReplace,
+  EntityMention,
+  AssetImage
 ]
 
 export function addExtensions(
