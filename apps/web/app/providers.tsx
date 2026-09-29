@@ -2,7 +2,7 @@
 
 import { SessionProvider } from "next-auth/react"
 import { ThemeProvider as NextThemesProvider } from "next-themes"
-import { Theme } from "@radix-ui/themes" 
+import { Theme as RadixTheme } from "@radix-ui/themes" 
 import { AppUsageProvider } from "@/components/contexts/AppUsageMode"
 import {
     QueryClient,
@@ -22,7 +22,9 @@ export function ThemeProvider({
       enableSystem
       {...props}
     >
-      {children}
+      <RadixTheme>
+        {children}
+      </RadixTheme>
     </NextThemesProvider>
   )
 }
@@ -33,11 +35,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     <SessionProvider>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <Theme>
             <AppUsageProvider>
-              {children}
+                {children}
             </AppUsageProvider>
-          </Theme>
         </ThemeProvider>
       </QueryClientProvider>
     </SessionProvider>

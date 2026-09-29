@@ -31,10 +31,7 @@ export const GET = withApiHandler(async (
         throw new ApiException(HTTP_ERRORS.NOT_FOUND)
     }
 
-    const locale = getRequestLocale({
-        headers: request.headers,
-        requestLocale: request.nextUrl?.searchParams.get("locale"),
-    }).toLocaleLowerCase()
+    const locale = request.nextUrl?.searchParams.get("locale") ?? "en"
 
     const chapterLocale = await prisma.chapterLocale.findUnique({
         where: {

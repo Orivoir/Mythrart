@@ -3,9 +3,7 @@ import type { Extensions } from "@tiptap/core"
 import CharacterCount from "@tiptap/extension-character-count"
 import FileHandler from "@tiptap/extension-file-handler"
 import FindAndReplace from "@tiptap/extension-find-and-replace"
-import Link from "@tiptap/extension-link"
 import Placeholder from "@tiptap/extension-placeholder"
-import Underline from "@tiptap/extension-underline"
 import {
   FontFamily,
   FontSize,
@@ -18,8 +16,6 @@ import { AssetImage } from "./custom/asset-image"
 
 export const extensions: Extensions = [
   StarterKit,
-  Link,
-  Underline,
   Placeholder,
   CharacterCount,
   TextStyle,
@@ -27,7 +23,6 @@ export const extensions: Extensions = [
   FontSize,
   FileHandler,
   FindAndReplace,
-  EntityMention,
   AssetImage
 ]
 
@@ -42,3 +37,4 @@ export function addExtensions(
 }
 
 export type { JSONContent } from "@tiptap/core"
+export {EntityMention} from "./custom/entity-mention"

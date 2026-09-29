@@ -1,7 +1,7 @@
 import { afterAll, beforeEach, expect, test } from "vitest"
 import { NextRequest } from "next/server"
 
-import { GET as GET_ALL, POST } from "@/app/api/ebooks/[id]/entities/routes"
+import { GET as GET_ALL, POST } from "@/app/api/ebooks/[id]/entities/route"
 import { DELETE, GET as GET_BY_ID, PUT } from "@/app/api/ebooks/[id]/entities/[entityId]/routes"
 import type {
     CreateEbookEntityResponseAPI,
@@ -10,7 +10,7 @@ import type {
     PaginatedEbookEntitiesAPI,
     UpdateEbookEntityResponseAPI,
 } from "@/app/types/api/ebook-entity"
-import { CollaborationRole, EbookEntityType } from "@mythrart/database"
+import { CollaborationRole, EbookEntityRelationType, EbookEntityType } from "@mythrart/database"
 import {
     createEbookThemeFixture,
     createEbookTypeFixture,
@@ -24,6 +24,7 @@ let authorCollaboratorId = ""
 let unauthorizedUserId = ""
 let ebookId = ""
 let createdEntityId = ""
+let camelotEntityId = ""
 
 function routeContext(id: string): { params: Promise<{ id: string; ebookId: string }> }
 function routeContext(id: string, entityId: string): { params: Promise<{ id: string; ebookId: string; entityId: string }> }
@@ -98,13 +99,23 @@ beforeEach(async () => {
     })
     createdEntityId = entity.id
 
-    await prisma.ebookEntity.create({
+    const camelotEntity = await prisma.ebookEntity.create({
         data: {
             ebookId,
             name: "Camelot",
             slug: "camelot",
             type: EbookEntityType.LOCATION,
             description: "The capital fortress",
+        },
+    })
+    camelotEntityId = camelotEntity.id
+
+    await prisma.ebookEntityRelation.create({
+        data: {
+            ebookId,
+            fromEntityId: createdEntityId,
+            toEntityId: camelotEntityId,
+            type: EbookEntityRelationType.LOCATION,
         },
     })
 })
@@ -203,6 +214,33 @@ test("GET /api/ebooks/:id/entities returns paginated entities", async () => {
     expect(body.items[0]).toHaveProperty("type")
     expect(typeof body.items[0].createdAt).toBe("number")
     expect(typeof body.items[0].updatedAt).toBe("number")
+
+    const arthur = body.items.find((item) => item.id === createdEntityId)
+    const camelot = body.items.find((item) => item.id === camelotEntityId)
+
+    expect(arthur?.relations).toHaveLength(1)
+    expect(arthur?.relations[0]).toMatchObject({
+        type: EbookEntityRelationType.LOCATION,
+        direction: "from",
+        relatedEntity: {
+            id: camelotEntityId,
+            name: "Camelot",
+            slug: "camelot",
+            type: EbookEntityType.LOCATION,
+        },
+    })
+
+    expect(camelot?.relations).toHaveLength(1)
+    expect(camelot?.relations[0]).toMatchObject({
+        type: EbookEntityRelationType.LOCATION,
+        direction: "to",
+        relatedEntity: {
+            id: createdEntityId,
+            name: "Arthur Pendragon",
+            slug: "arthur-pendragon",
+            type: EbookEntityType.CHARACTER,
+        },
+    })
 })
 
 test("GET /api/ebooks/:id/entities filters by type", async () => {

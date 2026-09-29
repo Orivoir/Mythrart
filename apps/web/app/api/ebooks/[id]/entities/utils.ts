@@ -1,9 +1,12 @@
-import type { EbookEntityResponseAPI } from "@/app/types/api/ebook-entity"
+import type { EbookEntityResponseAPI, EbookEntityWithRelationsResponseAPI } from "@/app/types/api/ebook-entity"
 import { hasEbookPermissionForUser } from "@/lib/authorization"
 import { HTTP_ERRORS } from "@/lib/constants/http-code"
 import { ApiException } from "@/lib/errors"
 import { mapModelTimestamps } from "@/lib/map-date-fields-to-timestamps"
 import { CollaborationPermission, prisma, type EbookEntity } from "@mythrart/database"
+import slugify from "slugify"
+
+import type { EbookEntityWithRelations } from "./shared"
 
 export function mapEntityToResponse(entity: EbookEntity): EbookEntityResponseAPI {
     const mapped = mapModelTimestamps(entity)
@@ -19,6 +22,35 @@ export function mapEntityToResponse(entity: EbookEntity): EbookEntityResponseAPI
         updatedAt: mapped.updatedAt,
     }
 }
+
+export function mapEntityWithRelationsToResponse(
+    entity: EbookEntityWithRelations,
+): EbookEntityWithRelationsResponseAPI {
+    const { relationsFrom, relationsTo, ...rest } = entity
+
+    return {
+        ...mapEntityToResponse(rest),
+        relations: [
+            ...relationsFrom.map((relation) => ({
+                id: relation.id,
+                type: relation.type,
+                direction: "from" as const,
+                relatedEntity: relation.toEntity,
+                createdAt: relation.createdAt.getTime(),
+                updatedAt: relation.updatedAt.getTime(),
+            })),
+            ...relationsTo.map((relation) => ({
+                id: relation.id,
+                type: relation.type,
+                direction: "to" as const,
+                relatedEntity: relation.fromEntity,
+                createdAt: relation.createdAt.getTime(),
+                updatedAt: relation.updatedAt.getTime(),
+            })),
+        ],
+    }
+}
+
 
 export async function ensureEbookPermission(
     ebookId: string,
@@ -38,7 +70,7 @@ export async function ensureEbookPermission(
     const ebook = await prisma.ebook.findUnique({
         where: {
             id: ebookId,
-        },
+        }
     })
 
     if (!ebook) {
@@ -49,14 +81,7 @@ export async function ensureEbookPermission(
 }
 
 export function generateSlug(name: string): string {
-    const slug = name
-        .toLowerCase()
-        .trim()
-        .replace(/[^\w\s-]/g, "")
-        .replace(/[\s_-]+/g, "-")
-        .replace(/^-+|-+$/g, "")
-
-    return slug || "entity"
+    return slugify(name || "entity", { lower: true, strict: true })
 }
 
 export async function generateUniqueEntitySlug(

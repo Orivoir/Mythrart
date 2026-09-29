@@ -3,6 +3,9 @@
 import { CreateEbookResponseAPI } from "@/app/types/api/ebook"
 
 import { useMemo, useState } from "react"
+import type { JSONContent } from "@tiptap/react"
+import { useUpdateChapter } from "@/components/hooks/queries/use-update-chapter"
+
 
 import { ProjectContext } from "./ProjectContext"
 import type {
@@ -25,7 +28,24 @@ export function ProjectProvider({
 
   const [currentLocale, setCurrentLocale] = useState<string>("en")
 
-  const selectChapter = (chapterId: string) => {
+  const { mutate: updateChapterMutation } = useUpdateChapter()
+
+  const selectChapter = (chapterId: string, newContent?: JSONContent) => {
+
+    if(chapterId === currentChapterEdition?.chapterId) {
+      return
+    }
+
+    if(newContent && currentChapterEdition?.chapterId) {
+      updateChapterMutation({
+        chapterId: currentChapterEdition?.chapterId,
+        data: {
+          content: newContent,
+          locale: currentLocale
+        },
+      })
+    }
+
     setCurrentChapterEdition({
       chapterId,
       sceneId: null,

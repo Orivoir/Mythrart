@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getAuthenticatedUserIdFromHeaders } from "@/lib/auth"
 import { HTTP_ERRORS } from "@/lib/constants/http-code"
 import { ApiException, withApiHandler } from "@/lib/errors"
-import {PlanType, prisma} from "@mythrart/database"
+import { EbookEntityType, PlanType, prisma } from "@mythrart/database"
 
 import { mapEbookToResponse } from "../ebooks/utils"
 
@@ -11,7 +11,8 @@ export const GET = withApiHandler(async (
     request: NextRequest,
 ): Promise<NextResponse> => {
 
-  const userId = getAuthenticatedUserIdFromHeaders(request.headers)
+  const userId = getAuthenticatedUserIdFromHeaders(request.headers) ??
+  request.nextUrl.searchParams.get("userId") // only for testing route
 
   if (!userId) {
       throw new ApiException(HTTP_ERRORS.UNAUTHORIZED)
@@ -44,6 +45,14 @@ export const GET = withApiHandler(async (
 
     if (ebookIds.length > 0) {
       await prisma.chapterLocale.deleteMany({
+        where: {
+          chapter: {
+            ebookId: { in: ebookIds },
+          },
+        },
+      })
+
+      await prisma.scene.deleteMany({
         where: {
           chapter: {
             ebookId: { in: ebookIds },
@@ -199,8 +208,10 @@ export const GET = withApiHandler(async (
         },
       ]
 
+      let fixtureChapterId: string | null = null
+
       for (const chapterDefinition of chapterDefinitions) {
-        await tx.chapter.create({
+        const chapter = await tx.chapter.create({
           data: {
             title: chapterDefinition.title,
             position: chapterDefinition.position,
@@ -214,7 +225,63 @@ export const GET = withApiHandler(async (
             },
           },
         })
+
+        if (chapterDefinition.position === 1) {
+          fixtureChapterId = chapter.id
+        }
       }
+
+      if (!fixtureChapterId) {
+        throw new Error("Fixture chapter was not created")
+      }
+
+      const entityDefinitions = [
+        {
+          name: "Aerin Vale",
+          slug: "aerin-vale",
+          type: EbookEntityType.CHARACTER,
+          description: "A curious explorer drawn to the newly awakened world.",
+        },
+        {
+          name: "Glassmere",
+          slug: "glassmere",
+          type: EbookEntityType.LOCATION,
+          description: "A quiet settlement beneath a sky of unfamiliar stars.",
+        },
+        {
+          name: "Lantern of First Light",
+          slug: "lantern-of-first-light",
+          type: EbookEntityType.OBJECT,
+          description: "An ancient lantern said to reveal paths between worlds.",
+        },
+      ]
+
+      const entities = await Promise.all(
+        entityDefinitions.map((entityDefinition) =>
+          tx.ebookEntity.create({
+            data: {
+              ebookId: ebook.id,
+              ...entityDefinition,
+            },
+          }),
+        ),
+      )
+
+      const scene = await tx.scene.create({
+        data: {
+          chapterId: fixtureChapterId,
+          title: "A World Awakens",
+          objective: "Introduce Aerin and the first signs of the new world.",
+          order: 0,
+        },
+      })
+
+      await tx.sceneEntity.createMany({
+        data: entities.map(({ id }) => ({
+          sceneId: scene.id,
+          entityId: id,
+        })),
+      })
 
       return ebook
     })

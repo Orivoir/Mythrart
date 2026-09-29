@@ -4,7 +4,7 @@ import { useProject } from "@/components/hooks/queries/use-project"
 
 import { ProjectProvider } from "@/components/contexts/ProjectContext"
 
-const PROJECT_ID_FIXTURE = "cmucyhrna000x6fm9iaq3qh50"
+const PROJECT_ID_FIXTURE = "cmumljgvb0000ibm99m8yv5yq"
 
 export default function Resolver() {
 
@@ -23,7 +23,7 @@ export default function Resolver() {
   if(error) {
 
     return  (
-      <div>
+      <div className="flex justify-end flex-col gap-1 bg-soft-blue/40">
         <h1>Error</h1>
         <p>There was an error loading the project.</p>
         <pre>

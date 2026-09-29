@@ -1,5 +1,11 @@
 import Mention from "@tiptap/extension-mention"
 
-export const EntityMention = Mention.extend({
+const EntityMention = Mention.extend({
   name: "mention",
+}).configure({
+  suggestion: {
+    char: "@"
+  }
 })
+
+export { EntityMention }

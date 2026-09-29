@@ -6,6 +6,7 @@ export const EVENT_NAME_SHOW_MORE_PRESET_COVER = `${PREFIX_CUSTOM_EVENT}show-mor
 export const EVENT_NAME_CLICK_DEMO = `${PREFIX_CUSTOM_EVENT}click-demo`
 export const EVENT_NAME_SHOW_ANALYSIS_DETAILS = `${PREFIX_CUSTOM_EVENT}show-analysis-details`
 export const EVENT_NAME_WORK_MODE_START = `${PREFIX_CUSTOM_EVENT}work-mode-start`
+export const EVENT_NAME_SELECT_SCENE = `${PREFIX_CUSTOM_EVENT}select-scene`
 
 export type DetailType = Record<string, any>
 
@@ -43,6 +44,9 @@ const fireEvent = {
   ),
   workModeStart: (detail: DetailType = {}) => (
     emitEvent({ eventName: EVENT_NAME_WORK_MODE_START, detail })
+  ),
+  selectScene: (detail: DetailType = {}) => (
+    emitEvent({ eventName: EVENT_NAME_SELECT_SCENE, detail })
   )
 }
 

@@ -1,9 +1,9 @@
 "use client"
 
 import { useProjectContext } from "@/components/hooks/use-project-context"
-import ProjectLeftPanelEmpty from "@/components/ui/project-work/left-panel/empty"
 import ProjectLeftPanelItem from "./item"
 import { useChaptersList } from "@/components/hooks/queries/use-chapters-list"
+import { useCurrentEditor } from "@tiptap/react"
 
 export default function ProjectLeftPanelChaptersSection() {
 
@@ -14,7 +14,22 @@ export default function ProjectLeftPanelChaptersSection() {
       selectChapter
     } = useProjectContext()
 
+    const {editor} = useCurrentEditor()
+
     const { items: chapters, isLoading, error } = useChaptersList(project.id, currentLocale)
+
+    const onSelectChapter = (chapterId: string) => {
+
+      
+      if(currentChapterEdition?.chapterId) {
+        if(!editor) return;
+  
+        const content = editor.getJSON()
+        selectChapter(chapterId, content)
+      } 
+
+      selectChapter(chapterId)
+    }
 
     return (
       <div className="flex flex-col gap-2">
@@ -28,7 +43,7 @@ export default function ProjectLeftPanelChaptersSection() {
             isActive={
               currentChapterEdition?.chapterId === chapter.id
             }
-            onSelect={selectChapter}
+            onSelect={() => onSelectChapter(chapter.id)}
           />
         ))}
       </div>

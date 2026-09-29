@@ -2,6 +2,7 @@
 import { useProjectContext } from "@/components/hooks/use-project-context"
 import ProjectLeftPanelItem from "./item"
 import { useScenesList } from "@/components/hooks/queries/use-scenes-list"
+import fireEvent from "@/lib/constants/custom-events"
 
 export default function ProjectLeftPanelScenesSection() {
 
@@ -16,6 +17,11 @@ export default function ProjectLeftPanelScenesSection() {
       return null
     }
 
+    const onSelectScene  = (sceneId: string) => {
+      fireEvent.selectScene({sceneId})
+      selectScene(sceneId)
+    } 
+
     return (
       <div className="flex flex-col gap-2">
         {scenes.map((scene) => (
@@ -28,7 +34,7 @@ export default function ProjectLeftPanelScenesSection() {
             isActive={
               currentChapterEdition.sceneId === scene.id
             }
-            onSelect={selectScene}
+            onSelect={() => onSelectScene(scene.id)}
           />
         ))}
       </div>

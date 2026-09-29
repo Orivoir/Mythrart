@@ -1,4 +1,5 @@
 import { CreateEbookResponseAPI } from "@/app/types/api/ebook"
+import { JSONContent } from "@tiptap/react"
 
 export type ChapterEdition = {
   chapterId: string | null
@@ -13,7 +14,7 @@ export type ProjectContextValue = {
   /**
    * @description Update the current edition chapter in the project
    */
-  selectChapter: (chapterId: string) => void
+  selectChapter: (chapterId: string, newContent?: JSONContent) => void
   
   /**
    * @description Update the current locale in the project

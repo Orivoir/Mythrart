@@ -1,7 +1,7 @@
 import { afterAll, beforeEach, expect, test } from "vitest"
 import { NextRequest } from "next/server"
 
-import { GET } from "@/app/api/chapters/[id]/scenes/routes"
+import { GET } from "@/app/api/chapters/[id]/scenes/route"
 import type { PaginatedScenesAPI, ResponseErrorAPI } from "@/app/types/api/scene"
 import { CollaborationRole } from "@mythrart/database"
 import { HTTP_ERRORS } from "@/lib/constants/http-code"

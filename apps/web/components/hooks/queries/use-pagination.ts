@@ -21,10 +21,15 @@ export function usePagination({
         setCurrentPage(Math.max(1, page))
     }, [])
 
+    const reset = useCallback(() => {
+        setCurrentPage(initialPage)
+    }, [initialPage])
+
     return {
         currentPage,
         next,
         previous,
         goTo,
+        reset
     }
 }

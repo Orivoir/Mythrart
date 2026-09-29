@@ -1,5 +1,5 @@
 import type { ApiErrorResponse } from "@/lib/errors"
-import type { EbookEntityType } from "@mythrart/database"
+import type { EbookEntityRelationType, EbookEntityType } from "@mythrart/database"
 
 export interface EbookEntityResponseAPI {
     id: string
@@ -12,8 +12,26 @@ export interface EbookEntityResponseAPI {
     updatedAt: number
 }
 
+export interface EbookEntityRelationSummaryAPI {
+    id: string
+    type: EbookEntityRelationType
+    direction: "from" | "to"
+    relatedEntity: {
+        id: string
+        name: string
+        slug: string
+        type: EbookEntityType
+    }
+    createdAt: number
+    updatedAt: number
+}
+
+export interface EbookEntityWithRelationsResponseAPI extends EbookEntityResponseAPI {
+    relations: EbookEntityRelationSummaryAPI[]
+}
+
 export interface PaginatedEbookEntitiesAPI {
-    items: EbookEntityResponseAPI[]
+    items: EbookEntityWithRelationsResponseAPI[]
     page: number
     pageSize: number
     totalPages: number

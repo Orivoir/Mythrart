@@ -1,47 +1,46 @@
 import EditorToolbarLayout from "@/components/ui/project-work/layout/editor/toolbar"
 import { EditorToolbarGroup } from "@/components/ui/project-work/layout/editor/toolbar-group"
-
+import {
+  UndoAction,
+  RedoAction,
+  BoldAction,
+  ItalicAction,
+  UnderlineAction,
+  StrikethroughAction,
+  ListAction,
+  ListIndentAction,
+  LinkAction
+} from "./actions"
 export default function EditorToolbar() {
 
   return (
     <EditorToolbarLayout>
+
       <EditorToolbarGroup>
         {/* Action Text style */}
         <></>
       </EditorToolbarGroup>
 
       <EditorToolbarGroup>
-        {/* Action Undo */}
-        <></>
-        {/* Action Redo */}
-        <></>
+        <UndoAction />
+        <RedoAction />
       </EditorToolbarGroup>
 
       <EditorToolbarGroup>
-        {/* Action Bold */}
-        <></>
-        {/* Action Italic */}
-        <></>
-        {/* Action underline */}
-        <></>
-        {/* Action Strikethrough */}
-        <></>
+        <BoldAction />
+        <ItalicAction />
+        <UnderlineAction />
+        <StrikethroughAction />
       </EditorToolbarGroup>
 
       <EditorToolbarGroup>
-        {/* Action Bullet list */}
-        <></>
-        {/* Action ordered list */}
-        <></>
-        {/* Action List Indent */}
-        <></>
+        <ListAction type="unordered" />
+        <ListAction type="ordered" />
+        <ListIndentAction />
       </EditorToolbarGroup>
 
       <EditorToolbarGroup>
-        {/* Action Link */}
-        <></>
-        {/* Action Image */}
-        <></>
+        <LinkAction />
         {/* Action Mention */}
         <></>
         {/* Action Blockquote */}

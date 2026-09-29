@@ -21,8 +21,6 @@ export const GET = withApiHandler(async (
 
     const { id } = await params
 
-    console.log(id)
-
     const ebook = await ensureEbookPermission(id, userId, CollaborationPermission.EBOOK_READ)
 
     return NextResponse.json<CreateEbookResponseAPI>(mapEbookToResponse(ebook))

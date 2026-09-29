@@ -285,5 +285,45 @@
     },
     "ProjectChapterItem": {
         "ButtonMoreOptions": "More options"
+    },
+    "Editor": {
+        "Toolbar": {
+            "Undo": {
+                "AriaLabel": "Undo last action",
+                "Title": "Undo"
+            },
+            "Redo": {
+                "AriaLabel": "Redo last action",
+                "Title": "Redo"
+            },
+            "Bold": {
+                "AriaLabel": "Bold text",
+                "Title": "Bold text"
+            },
+            "Italic": {
+                "AriaLabel": "Italicize text",
+                "Title": "Italic text"
+            },
+            "Underline": {
+                "AriaLabel": "Underline text",
+                "Title": "Underline text"
+            },
+            "Strikethrough": {
+                "AriaLabel": "Strikethrough text",
+                "Title": "Strikethrough text"
+            },
+            "OrderedList": {
+                "AriaLabel": "Insert ordered list",
+                "Title": "Insert ordered list"
+            },
+            "UnorderedList": {
+                "AriaLabel": "Insert unordered list",
+                "Title": "Insert unordered list"
+            },
+            "ListIndent": {
+                "AriaLabel": "Increase list indent",
+                "Title": "Increase list indent"
+            }
+        }
     }
 }

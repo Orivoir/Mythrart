@@ -26,8 +26,6 @@ export function useAvatar({ image, email, alt }: UseAvatarProps) {
     [initial],
   )
 
-  console.log(generatedUrl)
-
   const src =
     source === "image"
       ? image

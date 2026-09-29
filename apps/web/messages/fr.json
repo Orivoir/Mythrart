@@ -285,5 +285,54 @@
     },
     "ProjectChapterItem": {
         "ButtonMoreOptions": "Plus d'options"
+    },
+    "Editor": {
+        "Toolbar": {
+            "Undo": {
+                "AriaLabel": "Annuler la dernière action",
+                "Title": "Annuler"
+            },
+            "Redo": {
+                "AriaLabel": "Rétablir la dernière action",
+                "Title": "Rétablir"
+            },
+            "Bold": {
+                "AriaLabel": "Mettre le texte en gras",
+                "Title": "Texte en gras"
+            },
+            "Italic": {
+                "AriaLabel": "Mettre le texte en italique",
+                "Title": "Texte en italique"
+            },
+            "Underline": {
+                "AriaLabel": "Souligner le texte",
+                "Title": "Texte souligné"
+            },
+            "Strikethrough": {
+                "AriaLabel": "Barré le texte",
+                "Title": "Texte barré"
+            },
+            "OrderedList": {
+                "AriaLabel": "Insérer une liste ordonnée",
+                "Title": "Insérer une liste ordonnée"
+            },
+            "UnorderedList": {
+                "AriaLabel": "Insérer une liste à puces",
+                "Title": "Insérer une liste à puces"
+            },
+            "ListIndent": {
+                "AriaLabel": "Indenter un élément de la liste",
+                "Title": "Indenter l'élément de liste"
+            },
+            "Link": {
+                "AriaLabel": "Insérer un lien",
+                "Title": "Insérer un lien",
+                "UrlLabel": "entrez une adresse",
+                "UrlPlaceholder": "https://example.com",
+                "Remove": "Supprimer",
+                "Cancel": "Annuler",
+                "Apply": "Valider"
+            }
+        }
     }
 }

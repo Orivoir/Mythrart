@@ -55,7 +55,6 @@ export {
   UploadHandshakeStatus,
   EbookEntityRelationType,
   EbookEntityType,
-
   PrismaClient
 } from "./app/generated/prisma/index.js"
 
@@ -66,6 +65,7 @@ export type {
   EbookCustomRole,
   EbookEntityRelation,
   EbookTheme,
+  EbookEntity
 } from "./app/generated/prisma/index.js"
 
 // expose type Prisma

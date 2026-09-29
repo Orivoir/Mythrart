@@ -17,14 +17,27 @@ async function safeDelete(model: {
 }
 
 export default async function resetDb(): Promise<void> {
-  await safeDelete(prisma.chapterAssetReference)
-  await safeDelete(prisma.uploadHandshake)
-  await safeDelete(prisma.snapshotFile)
-  await safeDelete(prisma.snapshot)
-  await safeDelete(prisma.chapter)
-  await safeDelete(prisma.asset)
-  await safeDelete(prisma.ebook)
-  await safeDelete(prisma.account)
-  await safeDelete(prisma.verificationToken)
-  await safeDelete(prisma.user)
+
+  const tables = [
+    prisma.chapterAssetReference,
+    prisma.uploadHandshake,
+    prisma.snapshotFile,
+    prisma.snapshot,
+    prisma.chapter,
+    prisma.asset,
+    prisma.ebook,
+    prisma.account,
+    prisma.verificationToken,
+    prisma.user,
+    prisma.scene,
+    prisma.ebookCollaborator,
+    prisma.ebookTheme,
+    prisma.ebookType,
+    prisma.chapterLocale,
+    prisma.ebookCustomRole,
+    prisma.ebookEntityRelation,
+    prisma.writingGoal,
+  ]
+
+  await Promise.all(tables.map(safeDelete))
 }
