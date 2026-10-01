@@ -333,6 +333,15 @@
                 "Cancel": "Annuler",
                 "Apply": "Valider"
             }
+        },
+        "Header": {
+            "Chapter": {
+                "PreviousButtonAriaLabel": "Chapitre précédent",
+                "Title": "Chapitre"
+            }
+        },
+        "Content": {
+            "Placeholder": "Commencez à écrire votre histoire ..."
         }
     }
 }

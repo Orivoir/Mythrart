@@ -1,11 +1,11 @@
 "use client"
 
 import { CreateEbookResponseAPI } from "@/app/types/api/ebook"
+import { UpdateChapterRequestAPI } from "@/app/types/api/chapter"
 
-import { useMemo, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import type { JSONContent } from "@tiptap/react"
 import { useUpdateChapter } from "@/components/hooks/queries/use-update-chapter"
-
 
 import { ProjectContext } from "./ProjectContext"
 import type {
@@ -17,7 +17,6 @@ export function ProjectProvider({
   children,
   workingIn,
 }: ProjectProviderProps) {
-
   const [project, setProject] = useState(workingIn)
 
   const [currentChapterEdition, setCurrentChapterEdition] =
@@ -30,60 +29,89 @@ export function ProjectProvider({
 
   const { mutate: updateChapterMutation } = useUpdateChapter()
 
-  const selectChapter = (chapterId: string, newContent?: JSONContent) => {
+  const updateCurrentChapter = useCallback(
+    (mutation: UpdateChapterRequestAPI) => {
+      if (!currentChapterEdition.chapterId) {
+        return
+      }
 
-    if(chapterId === currentChapterEdition?.chapterId) {
-      return
-    }
-
-    if(newContent && currentChapterEdition?.chapterId) {
       updateChapterMutation({
-        chapterId: currentChapterEdition?.chapterId,
+        chapterId: currentChapterEdition.chapterId,
         data: {
-          content: newContent,
-          locale: currentLocale
+          ...mutation,
+          locale: mutation.locale ?? currentLocale,
         },
       })
-    }
+    },
+    [
+      currentChapterEdition.chapterId,
+      currentLocale,
+      updateChapterMutation,
+    ],
+  )
 
-    setCurrentChapterEdition({
-      chapterId,
-      sceneId: null,
-    })
-  }
-
-  const selectScene = (sceneId: string | null) => {
-    setCurrentChapterEdition((current) => {
-      if (!current) {
-        return current
+  const selectChapter = useCallback(
+    (chapterId: string, newContent?: JSONContent) => {
+      if (chapterId === currentChapterEdition.chapterId) {
+        return
       }
 
-      return {
-        ...current,
-        sceneId,
+      if (newContent && currentChapterEdition.chapterId) {
+        updateCurrentChapter({
+          content: newContent,
+        })
       }
-    })
-  }
 
-  const selectProject = (project: CreateEbookResponseAPI) => {
-    setProject(project)
-  }
+      setCurrentChapterEdition({
+        chapterId,
+        sceneId: null,
+      })
+    },
+    [
+      currentChapterEdition.chapterId,
+      updateCurrentChapter,
+    ],
+  )
 
-  const selectLocale = (locale: string) => {
+  const selectScene = useCallback((sceneId: string | null) => {
+    setCurrentChapterEdition((current) => ({
+      ...current,
+      sceneId,
+    }))
+  }, [])
+
+  const selectProject = useCallback(
+    (project: CreateEbookResponseAPI) => {
+      setProject(project)
+    },
+    [],
+  )
+
+  const selectLocale = useCallback((locale: string) => {
     setCurrentLocale(locale)
-  }
+  }, [])
 
   const value = useMemo(
     () => ({
       project,
       currentChapterEdition,
       currentLocale,
+      updateCurrentChapter,
       selectChapter,
       selectLocale,
       selectScene,
       selectProject,
     }),
-    [project, currentChapterEdition, currentLocale],
+    [
+      project,
+      currentChapterEdition,
+      currentLocale,
+      updateCurrentChapter,
+      selectChapter,
+      selectLocale,
+      selectScene,
+      selectProject,
+    ],
   )
 
   return (

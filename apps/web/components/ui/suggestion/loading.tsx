@@ -2,6 +2,7 @@
 
 import ItemSkeleton from "./item-skeleton"
 import { Text } from "@/components/ui/Typography"
+import GranularLoading from "@/components/ui/granular-loading"
 
 export default function LoadingSuggestion() {
 
@@ -9,7 +10,7 @@ export default function LoadingSuggestion() {
     <div className="flex flex-col gap-3 bg-soft-blue p-2 rounded">
 
       <div className="flex items-center gap-2 p-2 bg-muted/10 rounded-sm">
-        <LoadingIcon />
+        <GranularLoading />
         <Text>Chargement des entités...</Text>
       </div>
 
@@ -19,23 +20,5 @@ export default function LoadingSuggestion() {
         <ItemSkeleton />
       </div>
     </div>
-  )
-}
-
-import { motion } from "framer-motion"
-import { LoaderCircle } from "lucide-react"
-
-export function LoadingIcon() {
-  return (
-    <motion.div
-      animate={{ rotate: 360 }}
-      transition={{
-        duration: 1,
-        repeat: Infinity,
-        ease: "linear",
-      }}
-    >
-      <LoaderCircle className="size-5 text-accent" />
-    </motion.div>
   )
 }

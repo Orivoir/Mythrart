@@ -2,16 +2,14 @@ import { afterAll, beforeEach, expect, test } from "vitest"
 import { NextRequest } from "next/server"
 
 import { POST } from "@/app/api/scenes/routes"
-import { DELETE, GET, PUT } from "@/app/api/scenes/[id]/routes"
+import { DELETE, GET, PUT } from "@/app/api/scenes/[id]/route"
 import type {
     CreateSceneResponseAPI,
     DeleteSceneResponseAPI,
     SceneResponseAPI,
     UpdateSceneResponseAPI,
 } from "@/app/types/api/scene"
-import type { ResponseErrorAPI } from "@/app/types/api/ebook"
 import { CollaborationRole } from "@mythrart/database"
-import { HTTP_ERRORS } from "@/lib/constants/http-code"
 import {
     createEbookThemeFixture,
     createEbookTypeFixture,

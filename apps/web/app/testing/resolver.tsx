@@ -10,7 +10,7 @@ export default function Resolver() {
 
   const { data: project, isLoading, error } = useProject(PROJECT_ID_FIXTURE)
 
-  if(isLoading || !project) {
+  if(isLoading && !error) {
 
     return (
       <div>
@@ -29,6 +29,15 @@ export default function Resolver() {
         <pre>
           {JSON.stringify(error, null, 2)}
         </pre>
+      </div>
+    )
+  }
+
+  if(!project) {
+    return (
+      <div>
+        <h1>No Project Found</h1>
+        <p>The requested project could not be found.</p>
       </div>
     )
   }

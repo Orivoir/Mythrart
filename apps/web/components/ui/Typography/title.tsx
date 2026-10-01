@@ -11,6 +11,7 @@ export function Title({
   className?: string
   variant?: "default" | "success" | "warning" | "muted" | "accent",
   isBrand?: boolean
+  isEditable?: boolean
 }) {
 
   const brandClassName = isBrand ? "font-brand" : ""

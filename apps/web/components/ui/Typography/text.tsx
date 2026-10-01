@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils"
+import { withUnderline } from "./with-underline"
 
-export function Text({
+function BaseText({
   children,
   className,
   variant = "default"
@@ -23,3 +24,7 @@ export function Text({
     </p>
   )
 }
+
+const Text = withUnderline(BaseText)
+
+export {Text}

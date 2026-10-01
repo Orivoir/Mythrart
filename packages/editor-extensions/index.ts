@@ -3,7 +3,6 @@ import type { Extensions } from "@tiptap/core"
 import CharacterCount from "@tiptap/extension-character-count"
 import FileHandler from "@tiptap/extension-file-handler"
 import FindAndReplace from "@tiptap/extension-find-and-replace"
-import Placeholder from "@tiptap/extension-placeholder"
 import {
   FontFamily,
   FontSize,
@@ -11,12 +10,11 @@ import {
 } from "@tiptap/extension-text-style"
 import StarterKit from "@tiptap/starter-kit"
 
-import { EntityMention } from "./custom/entity-mention"
 import { AssetImage } from "./custom/asset-image"
+import { SaveShortcut } from "./custom/save-shortcut"
 
 export const extensions: Extensions = [
   StarterKit,
-  Placeholder,
   CharacterCount,
   TextStyle,
   FontFamily,
@@ -38,3 +36,5 @@ export function addExtensions(
 
 export type { JSONContent } from "@tiptap/core"
 export {EntityMention} from "./custom/entity-mention"
+export {Placeholder} from "@tiptap/extension-placeholder"
+export {SaveShortcut} from "./custom/save-shortcut"

@@ -3,11 +3,12 @@ import type {
   UpdateChapterRequestAPI,
   UpdateChapterResponseAPI,
 } from "@/app/types/api/chapter"
+import fireEvent from "@/lib/constants/custom-events"
 import { QUERY_KEY_CHAPTER } from "./use-chapter"
 
 async function updateChapter(
   chapterId: string,
-  data: UpdateChapterRequestAPI,
+  data: UpdateChapterRequestAPI
 ): Promise<UpdateChapterResponseAPI> {
   const response = await fetch(`/api/chapters/${chapterId}`, {
     method: "PUT",
@@ -24,7 +25,15 @@ async function updateChapter(
   return response.json()
 }
 
-export function useUpdateChapter() {
+export interface UseUpdateChapterOptions {
+  onSuccess?: (chapter: UpdateChapterResponseAPI) => void;
+  onError?: (error: Error) => void;
+}
+
+export function useUpdateChapter({
+  onSuccess,
+  onError = () =>  {},
+}: UseUpdateChapterOptions = {}) {
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -41,6 +50,17 @@ export function useUpdateChapter() {
         [QUERY_KEY_CHAPTER, chapter.id, chapter.locale],
         chapter,
       )
+
+      if(onSuccess) {
+        onSuccess(chapter)
+      }
     },
+    onError,
+    onMutate: () => {
+      fireEvent.cloudSaveStart()
+    },
+    onSettled: () => {
+      fireEvent.cloudSaveFinish()
+    }
   })
 }

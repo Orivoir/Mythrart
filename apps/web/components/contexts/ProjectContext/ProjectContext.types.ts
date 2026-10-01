@@ -1,3 +1,4 @@
+import { UpdateChapterRequestAPI } from "@/app/types/api/chapter"
 import { CreateEbookResponseAPI } from "@/app/types/api/ebook"
 import { JSONContent } from "@tiptap/react"
 
@@ -10,6 +11,10 @@ export type ProjectContextValue = {
   project: CreateEbookResponseAPI
   currentChapterEdition: ChapterEdition | null
   currentLocale: string
+
+  updateCurrentChapter: (
+    mutation: UpdateChapterRequestAPI
+  ) => void
 
   /**
    * @description Update the current edition chapter in the project

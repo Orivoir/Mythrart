@@ -5,8 +5,8 @@ import type { PaginatedScenesAPI } from "@/app/types/api/scene"
 import { usePagination } from "./use-pagination"
 
 async function fetchScenes(
-    chapterId: string,
-    page: number,
+    chapterId?: string,
+    page?: number,
 ): Promise<PaginatedScenesAPI> {
     const params = new URLSearchParams({
         page: String(page),

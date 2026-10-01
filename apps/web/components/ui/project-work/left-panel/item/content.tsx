@@ -18,7 +18,7 @@ export default function ProjectLeftPanelItemContent({
 }: ProjectLeftPanelItemContentProps) {
 
   const titleText = type === "chapter" ? `Chapitre ${position}` : (
-    `${position}. ${title}`
+    `${position + 1}. ${title}`
   );
 
   return (

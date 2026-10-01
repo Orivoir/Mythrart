@@ -4,6 +4,7 @@ import { PUT } from "@/app/api/chapters/[id]/route"
 import type { ResponseErrorAPI } from "@/app/types/api/ebook"
 import type { UpdateChapterResponseAPI } from "@/app/types/api/chapter"
 import { MAX_LENGTH } from "@/lib/constants/limits"
+import prisma from "../../helpers/prisma"
 
 import {
     type ChapterFixture,
@@ -47,6 +48,12 @@ test("PUT /api/chapters/:id updates an owned chapter title and content", async (
 })
 
 test("PUT /api/chapters/:id updates content without changing the title", async () => {
+    const baselineUpdatedAt = new Date("2000-01-01T00:00:00.000Z")
+    await prisma.chapter.update({
+        where: { id: fixture.chapterId },
+        data: { updatedAt: baselineUpdatedAt },
+    })
+
     const request = chapterRequest({
         chapterId: fixture.chapterId,
         method: "PUT",
@@ -61,6 +68,7 @@ test("PUT /api/chapters/:id updates content without changing the title", async (
     expect(body.position).toBe(0)
     expect(body.title).toBe("Original chapter")
     expect(body.content).toEqual({ blocks: ["content only"] })
+    expect(body.updatedAt).toBeGreaterThan(baselineUpdatedAt.getTime())
 })
 
 test("PUT /api/chapters/:id allows an author collaborator with scoped chapter access", async () => {

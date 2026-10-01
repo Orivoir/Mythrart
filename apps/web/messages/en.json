@@ -323,7 +323,25 @@
             "ListIndent": {
                 "AriaLabel": "Increase list indent",
                 "Title": "Increase list indent"
+            },
+            "Link": {
+                "AriaLabel": "Insert a link",
+                "Title": "Insert a link",
+                "UrlLabel": "enter an address",
+                "UrlPlaceholder": "https://example.com",
+                "Remove": "Remove",
+                "Cancel": "Cancel",
+                "Apply": "Apply"
             }
+        },
+        "Header": {
+            "Chapter": {
+                "PreviousButtonAriaLabel": "Previous chapter",
+                "Title": "Chapter"
+            }
+        },
+        "Content": {
+            "Placeholder": "Start writing your story..."
         }
     }
 }

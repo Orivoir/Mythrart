@@ -51,8 +51,12 @@ export const PUT = withApiHandler(async (
             data: parsed.title
                 ? {
                     title: parsed.title,
+                    updatedAt: new Date(),
                 }
-                : {},
+                : {
+                    // Keep the parent chapter timestamp in sync with locale-only edits.
+                    updatedAt: new Date(),
+                },
             select: {
                 id: true,
                 ebookId: true,
