@@ -2,7 +2,7 @@
 
 import type { Editor } from "@tiptap/react"
 import { useCurrentEditor, useEditorState } from "@tiptap/react"
-import { useEffect, useState } from "react"
+import { useCallback, useSyncExternalStore } from "react"
 
 function getActivePageEditor(editor: Editor): Editor | null {
   const storage = editor.storage as unknown as Record<string, unknown>
@@ -19,38 +19,43 @@ export function useTiptapEditor(providedEditor?: Editor | null): {
   const { editor: coreEditor } = useCurrentEditor()
   const mainEditor = providedEditor ?? coreEditor
 
-  const [storageEditor, setStorageEditor] = useState<Editor | null>(null)
+  const subscribe = useCallback(
+    (onChange: () => void) => {
+      if (!mainEditor) return () => {}
 
-  useEffect(() => {
-    if (!mainEditor) {
-      setStorageEditor(null)
-      return
-    }
+      let watched: Editor | null = null
+      const watchDestroy = () => {
+        const active = getActivePageEditor(mainEditor)
+        if (active === watched) return
+        watched?.off("destroy", onChange)
+        watched = active
+        watched?.on("destroy", onChange)
+      }
+      const updateHandler = () => {
+        watchDestroy()
+        onChange()
+      }
 
-    const updateHandler = () =>
-      setStorageEditor(getActivePageEditor(mainEditor))
+      watchDestroy()
+      mainEditor.on("update", updateHandler)
+      mainEditor.on("selectionUpdate", updateHandler)
 
-    updateHandler()
+      return () => {
+        mainEditor.off("update", updateHandler)
+        mainEditor.off("selectionUpdate", updateHandler)
+        watched?.off("destroy", onChange)
+      }
+    },
+    [mainEditor]
+  )
 
-    mainEditor.on("update", updateHandler)
-    mainEditor.on("selectionUpdate", updateHandler)
-
-    return () => {
-      mainEditor.off("update", updateHandler)
-      mainEditor.off("selectionUpdate", updateHandler)
-    }
+  const getSnapshot = useCallback(() => {
+    if (!mainEditor) return null
+    const active = getActivePageEditor(mainEditor)
+    return active && !active.isDestroyed ? active : null
   }, [mainEditor])
 
-  useEffect(() => {
-    if (!storageEditor) return
-
-    const handleDestroy = () => setStorageEditor(null)
-
-    storageEditor.on("destroy", handleDestroy)
-    return () => {
-      storageEditor.off("destroy", handleDestroy)
-    }
-  }, [storageEditor])
+  const storageEditor = useSyncExternalStore(subscribe, getSnapshot, () => null)
 
   const editorState = useEditorState({
     editor: storageEditor ?? mainEditor,

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useSyncExternalStore } from "react"
 import { useAudioVisualizer } from "./use-audio-visualizer"
 import { useMediaRecorder } from "./use-media-recorder"
 import {
@@ -22,6 +22,8 @@ type UseVoiceRecorderOptions = {
   onStream?: (stream: MediaStream | null) => void
 }
 
+const subscribeNoop = () => () => {}
+
 /** Coordinates recording availability, elapsed time, and media controls. */
 export function useVoiceRecorder({
   disabled,
@@ -33,7 +35,12 @@ export function useVoiceRecorder({
 }: UseVoiceRecorderOptions) {
   const { levels, start: startVisualizer, stop: stopVisualizer } =
     useAudioVisualizer()
-  const [localDisabled, setLocalDisabled] = useState(true)
+  const isSupported = useSyncExternalStore(
+    subscribeNoop,
+    isVoiceRecordingSupported,
+    () => false
+  )
+  const localDisabled = !isSupported
   const [elapsedTime, setElapsedTime] = useState(0)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const isDisabled = disabled || localDisabled
@@ -52,20 +59,6 @@ export function useVoiceRecorder({
     }
   }
 
-  useEffect(() => {
-    if (!isVoiceRecordingSupported()) {
-      setLocalDisabled(true)
-      onNoCompatible?.()
-      return
-    }
-
-    setLocalDisabled(false)
-
-    return () => {
-      cleanup()
-    }
-  }, [onNoCompatible])
-
   const {
     cleanup,
     isRecording,
@@ -82,6 +75,19 @@ export function useVoiceRecorder({
     onRecordingStart: startTimer,
     onRecordingStop: stopTimer,
   })
+
+
+  useEffect(() => {
+    // Read directly: `isSupported` is still the server value on the hydration commit.
+    if (!isVoiceRecordingSupported()) {
+      onNoCompatible?.()
+      return
+    }
+
+    return () => {
+      cleanup()
+    }
+  }, [onNoCompatible, cleanup])
 
   function handleClick() {
     if (isRecording) {

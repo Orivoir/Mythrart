@@ -342,6 +342,10 @@
         },
         "Content": {
             "Placeholder": "Commencez à écrire votre histoire ..."
+        },
+        "Metadata": {
+            "Characters": "caractères",
+            "Words": "mots"
         }
     }
 }

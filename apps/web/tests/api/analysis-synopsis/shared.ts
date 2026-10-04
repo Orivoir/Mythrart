@@ -1,6 +1,4 @@
 import { randomUUID } from "node:crypto"
-
-import { AssetReferenceType } from "@mythrart/database"
 import { NextRequest } from "next/server"
 
 import prisma from "../../helpers/prisma"

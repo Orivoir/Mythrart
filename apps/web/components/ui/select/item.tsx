@@ -1,5 +1,6 @@
 import * as SelectPrimitive from "@radix-ui/react-select"
 import { Check } from "lucide-react"
+import Image from "next/image"
 
 import type { SelectOption } from "./types"
 
@@ -38,7 +39,7 @@ export function SelectItem({
         `}
       >
         {option.image && (
-          <img
+          <Image
             src={option.image}
             alt=""
             className="

@@ -13,7 +13,6 @@ import {
     createEbookTypeFixture,
     createUserFixture,
 } from "../helpers/factories"
-import prisma from "../helpers/prisma"
 import resetDb from "../helpers/reset-db"
 
 let userId = ""

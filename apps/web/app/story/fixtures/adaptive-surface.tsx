@@ -116,7 +116,7 @@ function BasicSurface({ open, onOpenChange }: BasicSurfaceProps) {
                 <span className="text-sm">{activity}</span>
 
                 <span className="text-xs text-muted-foreground">
-                  Aujourd'hui
+                  Aujourd&apos;hui
                 </span>
               </div>
             ))}
@@ -276,7 +276,7 @@ function NestedSurface() {
               </h4>
 
               <p className="mt-1 text-sm text-muted-foreground">
-                Cette surface est rendue à l'intérieur de la surface
+                Cette surface est rendue à l&apos;intérieur de la surface
                 principale.
               </p>
             </div>

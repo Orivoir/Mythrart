@@ -1,5 +1,7 @@
 import {useCurrentEditor} from "@tiptap/react"
 import {useEffect, useState} from "react"
+import {HelperText} from "@/components/ui/Typography"
+import {useTranslations} from "next-intl"
 
 export default function ProjectWorkEditorMetadata() {
 
@@ -7,6 +9,7 @@ export default function ProjectWorkEditorMetadata() {
 
   const [characters, setCharacters] = useState(0)
   const [words, setWords] = useState(0)
+  const t = useTranslations("Editor.Metadata")
 
   const onUpdate = () => {
 
@@ -30,9 +33,13 @@ export default function ProjectWorkEditorMetadata() {
   }, [editor])
 
   return (
-    <div className="my-6 mx-3">
-      <p>Characters: {characters}</p>
-      <p>Words: {words}</p>
+    <div className="my-6 ml-6">
+      <div className="flex flex-row gap-6">
+        <HelperText>{characters} {t("Characters")}</HelperText>
+        <HelperText>{words} {t("Words")}</HelperText>
+      </div>
+
+
     </div>
   )
 }

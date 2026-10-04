@@ -4,7 +4,7 @@ import { useChapter } from "@/components/hooks/queries/use-chapter"
 export default function ChapterTabContent() {
     const {
         currentChapterEdition,
-        currentLocale,
+        currentLocale
     } = useProjectContext()
 
     const chapterId = currentChapterEdition?.chapterId ?? null
@@ -27,15 +27,11 @@ export default function ChapterTabContent() {
         return <>Unable to load chapter</>
     }
 
-    const { title, locale, createdAt, position, updatedAt } = chapter
+    // const { title, locale, createdAt, position, updatedAt } = chapter
 
     return (
     <div>
-        <h3>{title}</h3>
-
-        <p>
-            Locale: {locale}
-        </p>
+        foobar
     </div>
     )
 }

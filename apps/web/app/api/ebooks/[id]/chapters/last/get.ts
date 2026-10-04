@@ -91,7 +91,6 @@ export const GET = withApiHandler(async (
   const localizedTitle = chapter.locales[0]?.title || chapter.title
 
   const {
-    locales,
     ...baseChapter
   } = chapter
 

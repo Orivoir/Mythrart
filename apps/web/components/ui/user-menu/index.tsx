@@ -12,10 +12,8 @@ import { UserMenuContent } from "./content"
 import { UserMenuIdentity } from "./identity"
 import { UserMenuAction } from "./action"
 
-interface UserMenuContextValue {}
-
 const UserMenuContext =
-  createContext<UserMenuContextValue | null>(null)
+  createContext<{} | null>(null)
 
 export function useUserMenu() {
   const context = useContext(UserMenuContext)

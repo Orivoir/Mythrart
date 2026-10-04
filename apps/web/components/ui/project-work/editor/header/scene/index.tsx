@@ -4,6 +4,7 @@ import {useProjectContext} from "@/components/hooks/use-project-context"
 import {Chip} from "@/components/ui/chip"
 import { HelperText } from "@/components/ui/Typography"
 import NavSceneButton from "./nav-scene-button"
+import {Skeleton} from "@radix-ui/themes"
 
 export default function SceneHeader() {
 
@@ -19,7 +20,9 @@ export default function SceneHeader() {
   if(!currentChapterEdition?.sceneId) return null
 
   if(!scenesList || !scene) {
-    return <>Loading..</>
+    return (
+      <Skeleton height="28px" width="170px" />
+    )
   }
 
   const {totalItems} = scenesList

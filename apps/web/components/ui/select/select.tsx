@@ -3,6 +3,7 @@
 import * as SelectPrimitive from "@radix-ui/react-select"
 import { ChevronDown } from "lucide-react"
 import { useState } from "react"
+import Image from "next/image"
 
 import { cn } from "@/lib/utils"
 
@@ -74,7 +75,7 @@ export function Select({
         {selectedOption ? (
           <span className="flex min-w-0 flex-1 items-center gap-3">
             {selectedOption.image && (
-              <img
+              <Image
                 src={selectedOption.image}
                 alt=""
                 className="

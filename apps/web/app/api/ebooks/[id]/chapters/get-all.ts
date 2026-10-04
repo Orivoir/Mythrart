@@ -101,7 +101,7 @@ export const GET = withApiHandler(async (
 
     const itemsParsed = chapters.map((chapter) => {
         const localizedTitle = chapter.locales[0]?.title || chapter.title
-        const { locales, ...baseChapter } = chapter
+        const { ...baseChapter } = chapter
 
         return {
             ...mapModelTimestamps(baseChapter),

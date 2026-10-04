@@ -22,29 +22,9 @@ export default function SaveState({
 
   const {
     data: lastChapter,
-    isLoading: isLastChapterLoading,
-    refetch: refetchLastChapter,
+    isLoading: isLastChapterLoading
+
   } = useLastChapter(projectId, "en") // locale ui is diff of work locale
-
-  const onSavingStart = () => {
-    console.log("Saving started")
-    setIsSaving(true)
-  }
-
-  const onSavingFinish = async () => {
-    await refetchLastChapter()
-    setIsSaving(false)
-  }
-
-  useSaveCloud({
-    callback: onSavingStart,
-    type: "start",
-  })
-
-  useSaveCloud({
-    callback: onSavingFinish,
-    type: "finish",
-  })
 
   const dateLocale = locale === "fr" ? fr : enUS
 

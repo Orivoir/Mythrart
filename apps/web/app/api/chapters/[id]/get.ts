@@ -6,7 +6,6 @@ import { getAuthenticatedUserIdFromHeaders } from "@/lib/auth"
 import { canManageChapterByPermission } from "@/lib/authorization"
 import { HTTP_ERRORS } from "@/lib/constants/http-code"
 import { ApiException, withApiHandler } from "@/lib/errors"
-import { getRequestLocale } from "@/lib/request-locale"
 import { CollaborationPermission, prisma } from "@mythrart/database"
 
 export const GET = withApiHandler(async (

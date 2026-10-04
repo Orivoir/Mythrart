@@ -8,9 +8,7 @@ import type {
     DeleteSceneEntityResponseAPI,
     PaginatedSceneEntitiesAPI,
 } from "@/app/types/api/scene-entity"
-import type { ResponseErrorAPI } from "@/app/types/api/ebook"
 import { CollaborationRole, EbookEntityType } from "@mythrart/database"
-import { HTTP_ERRORS } from "@/lib/constants/http-code"
 import {
     createEbookThemeFixture,
     createEbookTypeFixture,
