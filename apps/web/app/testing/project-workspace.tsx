@@ -95,7 +95,7 @@ export default function ProjectWorkspace() {
             <div className="min-h-0 flex-1 overflow-y-auto px-24 py-6">
               <ProjectWorkEditorHeader />
 
-              <EditorContent editor={editor} />
+              <EditorContent editor={editor} spellCheck={false} />
             </div>
 
 

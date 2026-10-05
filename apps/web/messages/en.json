@@ -347,5 +347,36 @@
             "Characters": "characters",
             "Words": "words"
         }
+    },
+    "Workspace": {
+        "RightPanel": {
+            "Context": {
+                "Chapter": {
+                    "Form": {
+                        "PositionLabel": "Order",
+                        "PositionHelperText": "of {totalItems} chapters"
+                    },
+                    "Empty": {
+                        "Title": "No chapter selected",
+                        "Description": "Select a chapter from the left panel to see its details here."
+                    },
+                    "Loading": {
+                        "Label": "Loading chapter..."
+                    },
+                    "UpdateDate": {
+                        "Label": "Last updated"
+                    }
+                },
+                "Scene": {
+                    "Empty": {
+                        "Title": "No scene selected",
+                        "Description": "Select a scene from the left panel to see its details here."
+                    },
+                    "Loading": {
+                        "Label": "Loading scene..."
+                    }
+                }
+            }
+        }
     }
 }

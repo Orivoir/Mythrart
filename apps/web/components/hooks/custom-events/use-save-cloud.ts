@@ -1,4 +1,3 @@
-import { useEffect } from "react"
 import useCustomEventListener from "../useCustomEventListener"
 import {
   EVENT_NAME_CLOUD_SAVE_FINISH,
@@ -16,8 +15,6 @@ export default function useSaveCloud(
 
   const eventName =
     type === "start" ? EVENT_NAME_WORK_MODE_START : EVENT_NAME_CLOUD_SAVE_FINISH
-
-  console.log("listener added for: ", eventName)
 
   const {removeListener} = useCustomEventListener(eventName, callback)
   

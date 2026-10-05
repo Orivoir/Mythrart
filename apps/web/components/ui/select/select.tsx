@@ -78,6 +78,8 @@ export function Select({
               <Image
                 src={selectedOption.image}
                 alt=""
+                width={40}
+                height={40}
                 className="
                   size-10 shrink-0 rounded-md object-cover
                 "

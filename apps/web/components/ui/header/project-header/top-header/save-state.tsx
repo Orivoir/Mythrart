@@ -2,14 +2,13 @@
 
 import { useState } from "react"
 import { useLocale } from "next-intl"
-import { formatDistanceToNow } from "date-fns"
-import { fr, enUS } from "date-fns/locale"
 import { motion } from "framer-motion"
 import { CloudUpload } from "lucide-react"
 import { Skeleton } from "@radix-ui/themes"
 
 import { useLastChapter } from "@/components/hooks/queries/use-last-chapter"
 import useSaveCloud from "@/components/hooks/custom-events/use-save-cloud"
+import { usePrettyDistanceDate } from "@/hooks/use-pretty-distance-date"
 
 export default function SaveState({
   projectId,
@@ -26,7 +25,8 @@ export default function SaveState({
 
   } = useLastChapter(projectId, "en") // locale ui is diff of work locale
 
-  const dateLocale = locale === "fr" ? fr : enUS
+
+  const prettyUpdatedAt = usePrettyDistanceDate(lastChapter?.updatedAt ?? 0)
 
   if (isLastChapterLoading) {
     return (
@@ -50,14 +50,6 @@ export default function SaveState({
   if (!lastChapter) {
     return null
   }
-
-  const prettyUpdatedAt = formatDistanceToNow(
-    new Date(lastChapter.updatedAt),
-    {
-      addSuffix: true,
-      locale: dateLocale,
-    },
-  )
 
   return (
     <div

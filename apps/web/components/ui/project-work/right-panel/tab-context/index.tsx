@@ -1,8 +1,9 @@
 import LayoutTab from "@/components/ui/project-work/layout/tab"
 import * as Accordion from "@radix-ui/react-accordion"
 import AccordionItem from "@/components/ui/accordion-item"
-import { BookOpen, FileText, BarChart3, Sparkles } from "lucide-react"
 import ChapterTabContent from "@/components/ui/project-work/right-panel/tab-context/chapter"
+import SceneTabContent from "@/components/ui/project-work/right-panel/tab-context/scene"
+import { BookOpen, FileText, BarChart3, Sparkles } from "lucide-react"
 
 export default function ProjectWorkRightPanelTabContext() {
 
@@ -26,7 +27,7 @@ export default function ProjectWorkRightPanelTabContext() {
           title="Scène en cours"
           icon={<FileText className="size-5 text-primary" />}
         >
-          <>Scene content</>
+          <SceneTabContent />
         </AccordionItem>
 
         <AccordionItem

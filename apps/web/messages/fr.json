@@ -347,5 +347,40 @@
             "Characters": "caractères",
             "Words": "mots"
         }
+    },
+    "Workspace": {
+        "RightPanel": {
+            "Context": {
+                "Chapter": {
+                    "Form": {
+                        "PositionLabel": "Position",
+                        "PositionHelperText": "sur {totalItems} chapitres"
+                    },
+                    "Empty": {
+                        "Title": "Aucun chapitre sélectionné",
+                        "Description": "Sélectionnez un chapitre dans le panneau de gauche pour voir ses détails ici."
+                    },
+                    "Loading": {
+                        "Label": "Chargement du chapitre..."
+                    },
+                    "UpdateDate": {
+                        "Label": "Dernière modification"
+                    }
+                },
+                "Scene": {
+                    "Empty": {
+                        "Title": "Aucune scène sélectionnée",
+                        "Description": "Sélectionnez une scène dans le panneau de gauche pour voir ses détails ici."
+                    },
+                    "Loading": {
+                        "Label": "Chargement de la scène..."
+                    },
+                    "Form": {
+                        "PositionLabel": "Position",
+                        "PositionHelperText": "sur {totalItems} scènes"
+                    }
+                }
+            }
+        }
     }
 }

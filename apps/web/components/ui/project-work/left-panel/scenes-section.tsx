@@ -20,7 +20,7 @@ export default function ProjectLeftPanelScenesSection() {
     const onSelectScene  = (sceneId: string) => {
       fireEvent.selectScene({sceneId})
       selectScene(sceneId)
-    } 
+    }
 
     return (
       <div className="flex flex-col gap-2">
