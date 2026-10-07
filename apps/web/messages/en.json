@@ -378,5 +378,85 @@
                 }
             }
         }
+    },
+    "Dashboard": {
+        "Empty": {
+            "Title": "No projects yet",
+            "Description": "Start writing your next story, let your imagination run wild.",
+            "CreateProject": "Create a project",
+            "Features": {
+                "Network": {
+                    "Title": "Relations & entities",
+                    "Description": "Characters, locations, and relationships in your universe."
+                },
+                "ChartNoAxesCombined": {
+                    "Title": "Writing reports",
+                    "Description": "Track your progress and analyze your writing."
+                },
+                "Brain": {
+                    "Title": "AI analysis",
+                    "Description": "Summaries, coherence, and intelligent suggestions."
+                },
+                "BookOpen": {
+                    "Title": "Advanced organization",
+                    "Description": "Chapters, scenes, and goals all in one place."
+                },
+                "SearchCheck": {
+                    "Title": "Inconsistency detection",
+                    "Description": "Spot contradictions and forgotten changes."
+                },
+                "Users": {
+                    "Title": "Collaboration",
+                    "Description": "Work together on your projects and manuscripts."
+                }
+            },
+            "Banner": {
+                "Title": "Getting Started with Mythrart",
+                "Describe": "Learn how to organize your story, create your chapters, and make the most of all your tools.",
+                "Label": "Getting Started Guide",
+                "Actions": {
+                    "Main": {
+                        "Label": "Read the Guide"
+                    },
+                    "Second": {
+                        "Label": "Watch the Demo"
+                    }
+                }
+
+            }
+        },
+        "SEO-Articles": {
+            "Title": "Up Next",
+            "Relationship": {
+                "Title": "Relationship & entities",
+                "Description": "Characters, locations, and relationships in your universe.",
+                "LinkTitle": "See the article on entities"
+            },
+            "AnalysisAI": {
+                "Title": "I assistance",
+                "Description": "Get unobtrusive feedback and suggestions on your stories.",
+                "LinkTitle": "See the article on AI assistance"
+            },
+            "WritingReports": {
+                "Title": "Writing reports",
+                "Description": "Track your progress and analyze your writing.",
+                "LinkTitle": "See the article on writing reports"
+            }
+        },
+        "Item": {
+            "Cover": {
+                "Fallback": "Failed to load cover"
+            },
+            "Updated": {
+                "Label": "Updated"
+            },
+            "Metadata": {
+                "Chapters": "{count} chapters",
+                "Scenes": "{count} scenes",
+                "Locales": "{count} languages",
+                "Collaborators": "{count} collaborators",
+                "Assets": "{count} files"
+            }
+        }
     }
 }

@@ -10,6 +10,7 @@ export const EVENT_NAME_WORK_MODE_START = `${PREFIX_CUSTOM_EVENT}work-mode-start
 export const EVENT_NAME_SELECT_SCENE = `${PREFIX_CUSTOM_EVENT}select-scene`
 export const EVENT_NAME_CLOUD_SAVE_START = `${PREFIX_CUSTOM_EVENT}cloud-save-start`
 export const EVENT_NAME_CLOUD_SAVE_FINISH = `${PREFIX_CUSTOM_EVENT}cloud-save-finish`
+export const EVENT_NAME_DRAWER_COLLAPSE_CHANGE = `${PREFIX_CUSTOM_EVENT}drawer-collapse-change`
 
 export type DetailType = Record<string, unknown>
 
@@ -56,6 +57,9 @@ const fireEvent = {
   ),
   cloudSaveFinish: (detail: DetailType = {}) => (
     emitEvent({ eventName: EVENT_NAME_CLOUD_SAVE_FINISH, detail })
+  ),
+  drawerCollapseChange: (detail: DetailType = {}) => (
+    emitEvent({ eventName: EVENT_NAME_DRAWER_COLLAPSE_CHANGE, detail })
   )
 }
 

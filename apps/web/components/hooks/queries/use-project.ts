@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query"
 
-import type { CreateEbookResponseAPI } from "@/app/types/api/ebook"
+import type { GetEbookResponseAPI } from "@/app/types/api/ebook"
 
 export const QUERY_KEY_PROJECT = "ebook"
 
 async function fetchProject(
     ebookId: string,
-): Promise<CreateEbookResponseAPI> {
+): Promise<GetEbookResponseAPI> {
     const response = await fetch(`/api/ebooks/${ebookId}`)
 
     if (!response.ok) {

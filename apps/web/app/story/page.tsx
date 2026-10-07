@@ -16,12 +16,14 @@ import SelectFixtures from "./fixtures/select"
 import FileUploadFixtures from "./fixtures/file-upload"
 import CreateProjectStepTwoFixture from "./fixtures/create-project-step-two"
 import CreateProjectCompositionFixture from "./fixtures/composition-create-project"
+import { Container } from "@/components/ui/layout/container"
+import PromoBannerFixture from "./fixtures/promo-banner"
 
 export default function StoryPage() {
 
   return (
     <main className="min-h-screen bg-background p-8">
-      <div className="mx-auto max-w-5xl space-y-12">
+      <Container withCollapse>
 
         <header>
           <h1 className="text-2xl font-semibold">
@@ -67,7 +69,9 @@ export default function StoryPage() {
 
         <CreateProjectCompositionFixture />
 
-      </div>
+        <PromoBannerFixture />
+
+      </Container>
     </main>
   )
 }

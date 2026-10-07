@@ -382,5 +382,85 @@
                 }
             }
         }
+    },
+    "Dashboard": {
+        "Empty": {
+            "Title": "Aucun projet pour le moment",
+            "Description": "Commencez à écrire votre prochaine histoire, laissez libre cours à votre imagination.",
+            "CreateProject": "Créer un projet",
+            "Features": {
+                "Network": {
+                    "Title": "Relations & entités",
+                    "Description": "Personnages, lieux et relations de votre univers."
+                },
+                "ChartNoAxesCombined": {
+                    "Title": "Rapports d'écriture",
+                    "Description": "Suivez votre progression et analysez votre écriture."
+                },
+                "Brain": {
+                    "Title": "Analyse IA",
+                    "Description": "Résumés, cohérence et suggestions intelligentes."
+                },
+                "BookOpen": {
+                    "Title": "Organisation avancée",
+                    "Description": "Chapitres, scènes et objectifs réunis au même endroit."
+                },
+                "SearchCheck": {
+                    "Title": "Détection d'incohérences",
+                    "Description": "Repérez les contradictions et changements oubliés."
+                },
+                "Users": {
+                    "Title": "Collaboration",
+                    "Description": "Travaillez ensemble sur vos projets et vos manuscrits."
+                }
+            },
+            "Banner": {
+                "Title": "Bien démarrer avec Mythrart",
+                "Describe": "Découvrez comment organiser votre histoire, créer vos chapitres et exploiter tous vos outils.",
+                "Label": "Guide de démarrage",
+                "Actions": {
+                    "Main": {
+                        "Label": "Lire le guide"
+                    },
+                    "Second": {
+                        "Label": "Voir la démo"
+                    }
+                }
+
+            }
+        },
+        "SEO-Articles": {
+            "Title": "à découvrir ensuite",
+            "Relationship": {
+                "Title": "Relations & entités",
+                "Description": "Personnages, lieux et relations de votre univers.",
+                "LinkTitle": "Voir l'articles sur les entités"
+            },
+            "AnalysisAI": {
+                "Title": "Assistance IA",
+                "Description": "Obtenez des retours et suggestions non intrusifs sur vos récits.",
+                "LinkTitle": "Voir l'article sur l'assistance IA"
+            },
+            "WritingReports": {
+                "Title": "Rapports d'écriture",
+                "Description": "Suivez votre progression et analysez votre écriture.",
+                "LinkTitle": "Voir l'article sur les rapports d'écriture"
+            }
+        },
+        "Item": {
+            "Cover": {
+                "Fallback": "Impossible de charger la couverture"
+            },
+            "Updated": {
+                "Label": "Modifié"
+            },
+            "Metadata": {
+                "Chapters": "{count} chapitres",
+                "Scenes": "{count} scènes",
+                "Locales": "{count} langues",
+                "Collaborators": "{count} collaborateurs",
+                "Assets": "{count} fichiers"
+            }
+        }
     }
 }

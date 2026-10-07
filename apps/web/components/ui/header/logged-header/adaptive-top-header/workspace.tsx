@@ -18,6 +18,8 @@ import type { SuggestionsData } from "@/components/ui/suggestion-ressource/types
 
 import { useTopNavItems } from "./nav-items"
 import { UserAvatarMenu } from "./user-avatar-menu"
+import { Separator } from "@/components/ui/Separator"
+import fireEvent from "@/lib/constants/custom-events"
 
 export type WorkspaceTopHeaderProps = {
   mode: "quick" | "workspace"
@@ -25,7 +27,6 @@ export type WorkspaceTopHeaderProps = {
   subscription?: Subscription
   notificationsCount?: number
   suggestions?: SuggestionsData
-  onNewProject?: () => void
   onNotificationsClick?: () => void
 }
 
@@ -35,7 +36,6 @@ export function WorkspaceTopHeader({
   subscription,
   notificationsCount = 0,
   suggestions = [],
-  onNewProject,
   onNotificationsClick,
 }: WorkspaceTopHeaderProps) {
   const pathname = usePathname()
@@ -48,72 +48,78 @@ export function WorkspaceTopHeader({
     : topNavItems
 
   return (
-    <header
-      className="
-        sticky
-        top-0
-        z-30
-        flex
-        h-16
-        w-full
-        items-center
-        gap-4
-        border-b
-        border-border
-        bg-background
-        px-4
-        md:px-6
-      "
+  <header
+    className="
+      sticky
+      top-0
+      z-30
+      flex
+      h-16
+      w-full
+      items-center
+      gap-4
+      border-b
+      border-border
+      bg-background
+      px-4
+      md:px-6
+    "
+  >
+    <AppLink
+      href="/dashboard"
+      mutedOnHover={false}
+      className="shrink-0"
     >
-      <AppLink
-        href="/dashboard"
-        mutedOnHover={false}
-        className="shrink-0"
-      >
-        <BrandName size="sm" />
-      </AppLink>
+      <BrandName size="sm" />
+    </AppLink>
 
-      <nav
-        aria-label={t("NavAriaLabel")}
-        className="flex shrink-0 items-center gap-1"
-      >
-        {items.map((item) => (
-          <NavigationItem
-            key={item.href}
-            icon={item.icon}
-            label={item.label}
-            href={item.href}
-            active={pathname === item.href}
-            withTitle={!isQuick}
-          />
-        ))}
-      </nav>
+    <Separator
+      orientation="vertical"
+      className="h-12 mt-2"
+    />
 
-      <div className={isQuick ? "max-w-sm flex-1" : "max-w-xl flex-1"}>
-        <FloatingSearch suggestions={suggestions} />
-      </div>
-
-      <div className="flex shrink-0 items-center gap-2">
-        <ButtonWithIcon
-          type="button"
-          icon={Plus}
-          iconPosition="left"
-          iconSize="sm"
-          onClick={onNewProject}
-        >
-          {t("NewProject")}
-        </ButtonWithIcon>
-
-        <Notification
-          count={notificationsCount}
-          onClick={onNotificationsClick}
+    <nav
+      aria-label={t("NavAriaLabel")}
+      className="flex shrink-0 items-center gap-1"
+    >
+      {items.map((item) => (
+        <NavigationItem
+          key={item.href}
+          icon={item.icon}
+          label={item.label}
+          href={item.href}
+          active={pathname === item.href}
+          withTitle={!isQuick}
         />
+      ))}
+    </nav>
 
-        <UserAvatarMenu
-          user={user}
-          subscription={subscription}
-        />
-      </div>
-    </header>
+
+    <div className={isQuick ? "max-w-sm flex-1" : "max-w-xl flex-1"}>
+      <FloatingSearch suggestions={suggestions} />
+    </div>
+
+    <div className="flex shrink-0 items-center gap-2">
+      <ButtonWithIcon
+        type="button"
+        icon={Plus}
+        iconPosition="left"
+        iconSize="lg"
+        onClick={() => fireEvent.createNewProject()}
+      >
+        {t("NewProject")}
+      </ButtonWithIcon>
+
+      <Notification
+        count={notificationsCount}
+        onClick={onNotificationsClick}
+      />
+
+      <UserAvatarMenu
+        user={user}
+        subscription={subscription}
+      />
+    </div>
+  </header>
   )
 }

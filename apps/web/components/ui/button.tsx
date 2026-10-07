@@ -89,7 +89,7 @@ const sizeStyles: Record<ButtonSize, string> = {
     "h-12 rounded-sm px-8 text-base",
 
   full:
-    "h-12 w-full rounded-sm px-8 text-base",
+    "h-14 w-full rounded-sm px-8 text-base",
 
   icon:
     "size-10 rounded full"

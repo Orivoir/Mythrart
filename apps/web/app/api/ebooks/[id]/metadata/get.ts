@@ -1,18 +1,19 @@
-import type { GetEbookResponseAPI, ResponseErrorAPI } from "@/app/types/api/ebook"
+import type { ResponseErrorAPI } from "@/app/types/api/ebook"
 import { NextRequest, NextResponse } from "next/server"
 
 import { getAuthenticatedUserIdFromHeaders } from "@/lib/auth"
 import { HTTP_ERRORS } from "@/lib/constants/http-code"
 import { ApiException, withApiHandler } from "@/lib/errors"
-import { CollaborationPermission, prisma } from "@mythrart/database"
+import { CollaborationPermission } from "@mythrart/database"
 
-import { ensureEbookPermission } from "../[id]/entities/utils"
-import { mapEbookDetailToResponse } from "../utils"
+import { ensureEbookPermission } from "../entities/utils"
+import { getEbookMetadata } from "./shared"
+import type { EbookMetadataResponseAPI } from "./types"
 
 export const GET = withApiHandler(async (
     request: NextRequest,
     { params }: { params: Promise<{ id: string }> },
-): Promise<NextResponse<GetEbookResponseAPI | ResponseErrorAPI>> => {
+): Promise<NextResponse<EbookMetadataResponseAPI | ResponseErrorAPI>> => {
     const userId = getAuthenticatedUserIdFromHeaders(request.headers)
 
     if (!userId) {
@@ -23,10 +24,7 @@ export const GET = withApiHandler(async (
 
     await ensureEbookPermission(id, userId, CollaborationPermission.EBOOK_READ)
 
-    const ebook = await prisma.ebook.findUniqueOrThrow({
-        where: { id },
-        include: { ebookType: true, ebookTheme: true },
-    })
-
-    return NextResponse.json<GetEbookResponseAPI>(mapEbookDetailToResponse(ebook))
+    return NextResponse.json<EbookMetadataResponseAPI>(
+        await getEbookMetadata(id, userId),
+    )
 })

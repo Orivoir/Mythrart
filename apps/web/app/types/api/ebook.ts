@@ -1,5 +1,8 @@
 import type { ApiErrorResponse } from "@/lib/errors"
 
+import type { EbookTypeResponseAPI } from "./ebook-type"
+import type { EbookThemeResponseAPI } from "./theme"
+
 export interface EbookResponseAPI {
     id: string;
     title: string;
@@ -30,6 +33,11 @@ export interface CreateEbookResponseAPI extends EbookResponseAPI {
     updatedAt: number;
 }
 
+export interface GetEbookResponseAPI extends EbookResponseAPI {
+    type: EbookTypeResponseAPI;
+    theme: EbookThemeResponseAPI;
+}
+
 export type UpdateEbookRequestAPI = CreateEbookRequestAPI
 
 export interface UpdateEbookResponseAPI extends EbookResponseAPI {}
@@ -38,6 +46,13 @@ export type DeleteEbookRequestAPI = Record<string, never>
 
 export interface DeleteEbookResponseAPI {
     success: boolean;
+}
+
+export interface EbookCoverResponseAPI {
+    url: string
+    isDefault: boolean
+    width: number
+    height: number
 }
 
 export type ResponseErrorAPI = ApiErrorResponse

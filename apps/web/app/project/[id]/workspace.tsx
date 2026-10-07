@@ -24,10 +24,19 @@ import type { JSONContent } from "@tiptap/react"
 import type { ChapterEdition } from "@/components/contexts/ProjectContext/ProjectContext.types"
 
 export default function ProjectWorkspace() {
-  const project = useWorkMode() 
 
-  const {currentChapterEdition} = useProjectContext()
+  /**
+   * disable header logged, appears workspace header
+   * and get project from the workspace context
+   */
+  const project = useWorkMode()
 
+  const {currentChapterEdition, currentLocale} = useProjectContext()
+
+  /**
+   * keep a mutable reference to the current chapter edition
+   * because dynamique tiptap extension are memoized
+   */
   const currentChapterEditionRef = useRef<ChapterEdition | undefined>(currentChapterEdition)
   currentChapterEditionRef.current = currentChapterEdition
 
@@ -56,19 +65,15 @@ export default function ProjectWorkspace() {
     immediatelyRender: false,
   })
 
-  // because: useProjectContext => currentLocale is currently static fixtured value
-  const FIXTURE_LOCALE_CHAPTER = "en"
-
   const { data: chapter } = useChapter(
     currentChapterEdition?.chapterId,
-    FIXTURE_LOCALE_CHAPTER
+    currentLocale
   )
 
   const providerValue = useMemo(
     () => ({ editor }),
     [editor],
   )
-
 
   useEffect(() => {
 
@@ -117,4 +122,5 @@ export default function ProjectWorkspace() {
       </ProjectWorkLayoutRoot>
     </EditorContext.Provider>
   )
+
 }

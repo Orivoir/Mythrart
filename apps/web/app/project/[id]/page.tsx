@@ -1,22 +1,22 @@
-
 import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
-
 import { authOptions } from "@/lib/auth"
-import { Container } from "@/components/ui/layout/container"
-import Dashboard from "./dashboard"
+import Project from "./project"
 
-export default async function DashboardPage() {
+export default async function ProjectPage({params}: {
+  params: Promise<{id: string}>
+}) {
+
   const session = await getServerSession(authOptions)
 
   if (!session) {
     redirect("/auth/login")
   }
 
-  return (
-    <Container withCollapse>
-      <Dashboard />
-    </Container>
-  )
-}
+  const {id} = await params
 
+  return (
+    <Project id={id} />
+  )
+
+}
