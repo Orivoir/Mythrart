@@ -9,14 +9,17 @@ interface CreateUserFixtureOptions {
 }
 
 export async function createUserFixture({ plan = PlanType.free }: CreateUserFixtureOptions = {}) {
-  const idSuffix = Date.now()
+  const idSuffix = `${Date.now()}-${randomUUID()}`
 
   return prisma.user.create({
     data: {
       email: `fixture-${idSuffix}@example.com`,
-      name: "Fixture User",
+      firstName: "Fixture",
+      lastName: "User",
+      username: `fixture-${idSuffix}`,
       emailVerified: new Date(),
       stripeCustomerId: `cus_fixture_${idSuffix}`,
+      termsAcceptedAt: new Date(),
       plan,
     },
   })

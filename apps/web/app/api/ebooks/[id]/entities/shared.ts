@@ -6,30 +6,44 @@ import type {
 import { prisma } from "@mythrart/database"
 
 export const ebookEntityWithRelationsInclude = {
-  relationsFrom: {
-    include: {
-      toEntity: {
-        select: {
-          id: true,
-          name: true,
-          slug: true,
-          type: true,
+    relationsFrom: {
+        include: {
+            toEntity: {
+                select: {
+                    id: true,
+                    name: true,
+                    slug: true,
+                    type: true,
+                },
+            },
+            states: {
+                select: {
+                    type: true,
+                    chapterId: true,
+                    sceneId: true,
+                },
+            },
         },
-      },
     },
-  },
-  relationsTo: {
-    include: {
-      fromEntity: {
-        select: {
-          id: true,
-          name: true,
-          slug: true,
-          type: true,
+    relationsTo: {
+        include: {
+            fromEntity: {
+                select: {
+                    id: true,
+                    name: true,
+                    slug: true,
+                    type: true,
+                },
+            },
+            states: {
+                select: {
+                    type: true,
+                    chapterId: true,
+                    sceneId: true,
+                },
+            },
         },
-      },
     },
-  },
 } satisfies Prisma.EbookEntityInclude
 
 export type EbookEntityWithRelations = Prisma.EbookEntityGetPayload<{

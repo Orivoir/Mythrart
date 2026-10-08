@@ -55,30 +55,39 @@ export async function setupChapterFixture(): Promise<ChapterFixture> {
     await resetDb()
 
     const owner = await createUserFixture()
-
+  
     const otherOwner = await prisma.user.create({
         data: {
             email: `other-${owner.id}@example.com`,
-            name: "Other Fixture User",
+            firstName: "Other Fixture",
+            lastName: "User",
+            username: `other-${owner.id}`,
             emailVerified: new Date(),
+            termsAcceptedAt: new Date(),
             stripeCustomerId: `cus_other_${owner.id}`,
         },
-    })
+        })
 
     const authorCollaborator = await prisma.user.create({
-        data: {
-            email: `author-${owner.id}@example.com`,
-            name: "Author Collaborator",
-            emailVerified: new Date(),
-            stripeCustomerId: `cus_author_${owner.id}`,
-        },
+    data: {
+        email: `author-${owner.id}@example.com`,
+        firstName: "Author",
+        lastName: "Collaborator",
+        username: `author-${owner.id}`,
+        emailVerified: new Date(),
+        termsAcceptedAt: new Date(),
+        stripeCustomerId: `cus_author_${owner.id}`,
+    },
     })
 
     const proofreaderCollaborator = await prisma.user.create({
         data: {
             email: `proofreader-${owner.id}@example.com`,
-            name: "Proofreader Collaborator",
+            firstName: "Proofreader",
+            lastName: "Collaborator",
+            username: `proofreader-${owner.id}`,
             emailVerified: new Date(),
+            termsAcceptedAt: new Date(),
             stripeCustomerId: `cus_proofreader_${owner.id}`,
         },
     })

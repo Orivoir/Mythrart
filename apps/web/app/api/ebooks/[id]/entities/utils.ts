@@ -33,7 +33,11 @@ export function mapEntityWithRelationsToResponse(
         relations: [
             ...relationsFrom.map((relation) => ({
                 id: relation.id,
-                type: relation.type,
+                states: relation.states.map((state) => ({
+                    type: state.type,
+                    chapterId: state.chapterId,
+                    sceneId: state.sceneId,
+                })),
                 direction: "from" as const,
                 relatedEntity: relation.toEntity,
                 createdAt: relation.createdAt.getTime(),
@@ -41,7 +45,11 @@ export function mapEntityWithRelationsToResponse(
             })),
             ...relationsTo.map((relation) => ({
                 id: relation.id,
-                type: relation.type,
+                states: relation.states.map((state) => ({
+                    type: state.type,
+                    chapterId: state.chapterId,
+                    sceneId: state.sceneId,
+                })),
                 direction: "to" as const,
                 relatedEntity: relation.fromEntity,
                 createdAt: relation.createdAt.getTime(),

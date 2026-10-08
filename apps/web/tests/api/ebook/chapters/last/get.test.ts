@@ -66,14 +66,16 @@ beforeEach(async () => {
 
     const owner = await createUserFixture()
     ownerId = owner.id
-
     const collaborator = await prisma.user.create({
-        data: {
-            email: `collaborator-${owner.id}@example.com`,
-            name: "Chapter Access Collaborator",
-            emailVerified: new Date(),
-            stripeCustomerId: `cus_collaborator_${owner.id}`,
-        },
+    data: {
+        email: `collaborator-${owner.id}@example.com`,
+        firstName: "Chapter Access",
+        lastName: "Collaborator",
+        username: `collaborator-${owner.id}`,
+        emailVerified: new Date(),
+        termsAcceptedAt: new Date(),
+        stripeCustomerId: `cus_collaborator_${owner.id}`,
+    },
     })
     collaboratorId = collaborator.id
 

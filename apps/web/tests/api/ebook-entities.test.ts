@@ -115,7 +115,11 @@ beforeEach(async () => {
             ebookId,
             fromEntityId: createdEntityId,
             toEntityId: camelotEntityId,
-            type: EbookEntityRelationType.LOCATION,
+            states: {
+                create: {
+                    type: EbookEntityRelationType.LOCATION,
+                },
+            },
         },
     })
 })
@@ -220,7 +224,13 @@ test("GET /api/ebooks/:id/entities returns paginated entities", async () => {
 
     expect(arthur?.relations).toHaveLength(1)
     expect(arthur?.relations[0]).toMatchObject({
-        type: EbookEntityRelationType.LOCATION,
+        states: [
+            {
+                type: EbookEntityRelationType.LOCATION,
+                chapterId: null,
+                sceneId: null,
+            },
+        ],
         direction: "from",
         relatedEntity: {
             id: camelotEntityId,
@@ -232,7 +242,13 @@ test("GET /api/ebooks/:id/entities returns paginated entities", async () => {
 
     expect(camelot?.relations).toHaveLength(1)
     expect(camelot?.relations[0]).toMatchObject({
-        type: EbookEntityRelationType.LOCATION,
+        states: [
+            {
+                type: EbookEntityRelationType.LOCATION,
+                chapterId: null,
+                sceneId: null,
+            },
+        ],
         direction: "to",
         relatedEntity: {
             id: createdEntityId,
