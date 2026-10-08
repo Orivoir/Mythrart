@@ -1,20 +1,26 @@
 model Chapter {
   id        String   @id @default(cuid())
-  title  String
-  position Int
+  title     String
+  position  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  ebookId   String
-  ebook     Ebook    @relation(fields: [ebookId], references: [id])
+  ebookId String
+  ebook   Ebook  @relation(fields: [ebookId], references: [id])
 
-  assetReferences ChapterAssetReference[]
-  collaboratorAccess EbookCollaboratorChapterAccess[]
+  assetReferences      ChapterAssetReference[]
+  collaboratorAccess   EbookCollaboratorChapterAccess[]
+  explorerPublications ExplorerPublicationChapter[]
+
+  wordsCount      Int @default(0)
+  charactersCount Int @default(0)
 
   scenes Scene[]
 
+  entityRelationStates EbookEntityRelationState[] @relation("RelationStateChapter")
+
   locales ChapterLocale[]
 
-  @@index([ebookId])
   @@unique([ebookId, position])
+  @@index([ebookId])
 }

@@ -86,3 +86,89 @@ enum EbookEntityRelationType {
   EMPLOYEE
   OTHER
 }
+
+enum UserDeletionReason {
+  USER_REQUEST
+  FAIR_PLAY
+  TERMS_VIOLATION
+  ADMIN
+  OTHER
+}
+
+enum SceneStatus {
+  PLANNED
+  COMPLETED
+}
+
+enum AssetStatus {
+  ACTIVE
+  TRASHED
+}
+
+enum EbookInvitationStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  EXPIRED
+  CANCELED
+}
+
+enum NotificationIntent {
+  WELCOME
+
+  INVITATION_PROJECT
+  INVITATION_ACCEPTED
+  INVITATION_DECLINED
+
+  PROJECT_FIRED
+  PROJECT_UPDATED
+
+  BILLING
+  NEWS
+}
+
+enum WritingReportAnalysis {
+  RHYTHM
+  COHERENCE
+  COMPRESSION
+  TRANSLATION
+  INTENSITY
+}
+
+enum WritingReportStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum ExportFormat {
+  PDF
+  EPUB
+  DOCX
+  HTML
+  TXT
+  MD
+}
+
+enum ExportJobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum ExplorerPublicationReason {
+  SHOWCASE
+  READING_FEEDBACK
+  TRANSLATION
+  PROOFREADING
+  BETA_READING
+}
+
+enum ExplorerPublicationStatus {
+  DRAFT
+  PUBLISHED
+  CLOSED
+  ARCHIVED
+}

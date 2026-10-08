@@ -1,0 +1,25 @@
+model Notification {
+  id String @id @default(cuid())
+
+  receivedByUserId String
+  receivedByUser   User   @relation("NotificationReceivedBy", fields: [receivedByUserId], references: [id], onDelete: Cascade)
+
+  sentByUserId String?
+  sentByUser   User?   @relation("NotificationSentBy", fields: [sentByUserId], references: [id], onDelete: SetNull)
+
+  // Nature de la notification
+  intent NotificationIntent
+
+  // Ressource permettant éventuellement une action
+  resourceId String?
+
+  readAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@index([receivedByUserId, createdAt])
+  @@index([receivedByUserId, readAt])
+  @@index([sentByUserId])
+  @@index([intent])
+  @@index([resourceId])
+}

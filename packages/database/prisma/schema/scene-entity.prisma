@@ -1,6 +1,6 @@
 model SceneEntity {
-  sceneId  String
-  scene    Scene @relation(fields: [sceneId], references: [id], onDelete: Cascade)
+  sceneId String
+  scene   Scene  @relation(fields: [sceneId], references: [id], onDelete: Cascade)
 
   entityId String
   entity   EbookEntity @relation(fields: [entityId], references: [id], onDelete: Cascade)

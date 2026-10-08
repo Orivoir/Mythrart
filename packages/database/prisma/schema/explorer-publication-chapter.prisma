@@ -1,0 +1,16 @@
+model ExplorerPublicationChapter {
+  id String @id @default(cuid())
+
+  publicationId String
+  publication   ExplorerPublication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+
+  chapterId String
+  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  locales String[]
+
+  createdAt DateTime @default(now())
+
+  @@unique([publicationId, chapterId])
+  @@index([chapterId])
+}

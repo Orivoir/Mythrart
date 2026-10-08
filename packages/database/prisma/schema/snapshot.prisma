@@ -1,16 +1,19 @@
 model Snapshot {
-  id        String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  ebookId   String
-  ebook     Ebook    @relation("EbookSnapshots", fields: [ebookId], references: [id])
+  ebookId String
+  ebook   Ebook  @relation("EbookSnapshots", fields: [ebookId], references: [id], onDelete: Cascade)
 
-  version   Int
+  version Int
 
-  file      SnapshotFile?
+  file SnapshotFile?
 
   createdAt DateTime @default(now())
 
   currentForEbook Ebook? @relation("EbookCurrentSnapshot")
+
+  writingReports       WritingReport[]
+  explorerPublications ExplorerPublication[]
 
   // status using for Worker job queue
   // to know if the snapshot is ready to be used or not
@@ -21,16 +24,16 @@ model Snapshot {
 }
 
 model SnapshotFile {
-  id          String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  snapshotId  String   @unique
-  snapshot    Snapshot @relation(fields: [snapshotId], references: [id])
+  snapshotId String   @unique
+  snapshot   Snapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
 
-  key         String   @unique
-  bucket      String
+  key    String @unique
+  bucket String
 
-  sizeBytes   Int
-  mimeType    String
+  sizeBytes Int
+  mimeType  String
 
-  createdAt   DateTime @default(now())
+  createdAt DateTime @default(now())
 }

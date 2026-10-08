@@ -1,0 +1,18 @@
+model ExplorerPublicationRating {
+  id String @id @default(cuid())
+
+  publicationId String
+  publication   ExplorerPublication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  rating Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([publicationId, userId])
+  @@index([publicationId])
+  @@index([userId])
+}

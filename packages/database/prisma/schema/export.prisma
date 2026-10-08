@@ -1,0 +1,28 @@
+model ExportEbook {
+  id String @id @default(cuid())
+
+  ebookId String
+  ebook   Ebook  @relation(fields: [ebookId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  format ExportFormat
+  status ExportJobStatus @default(PENDING)
+
+  assetId String?
+  asset   Asset?  @relation(fields: [assetId], references: [id], onDelete: SetNull)
+
+  error String?
+
+  createdAt   DateTime  @default(now())
+  startedAt   DateTime?
+  completedAt DateTime?
+  expiresAt   DateTime?
+
+  @@index([ebookId])
+  @@index([userId])
+  @@index([status])
+  @@index([expiresAt])
+  @@index([assetId])
+}

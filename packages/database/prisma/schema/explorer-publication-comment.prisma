@@ -1,0 +1,17 @@
+model ExplorerPublicationComment {
+  id String @id @default(cuid())
+
+  publicationId String
+  publication   ExplorerPublication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  content String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([publicationId])
+  @@index([authorId])
+}

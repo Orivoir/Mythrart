@@ -1,30 +1,60 @@
 model User {
-  id        String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  email         String   @unique
+  // Identity
+  email       String? @unique
+  phoneNumber String? @unique
+
   emailVerified DateTime?
-  name          String?
+  phoneVerified DateTime?
 
-  stripeCustomerId String? @unique
+  firstName String?
+  lastName  String?
+  username  String? @unique
 
+  // Account deletion
+  reasonDeleted UserDeletionReason?
+
+  // Legals
+  termsAcceptedAt DateTime?
+
+  // Billing
+  stripeCustomerId   String?            @unique
   subscriptionStatus SubscriptionStatus @default(none)
-  plan               PlanType @default(free)
+  plan               PlanType           @default(free)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // Authentication
   accounts Account[]
-  ebooks   Ebook[]
-  assets   Asset[]
-  writingGoals WritingGoal[]
-  uploadHandshakes UploadHandshake[]
-  ebookCollaborations EbookCollaborator[]
-  createdCustomRoles EbookCustomRole[] @relation("CustomRoleCreatedBy")
+
+  // Mythrart resources
+  ebooks Ebook[]
+
+  notificationsSent     Notification[] @relation("NotificationSentBy")
+  notificationsReceived Notification[] @relation("NotificationReceivedBy")
+
+  ebookInvitationsSent     EbookInvitation[] @relation("EbookInvitationSender")
+  ebookInvitationsReceived EbookInvitation[] @relation("EbookInvitationRecipient")
+
+  assets                      Asset[]
+  writingGoals                WritingGoal[]
+  uploadHandshakes            UploadHandshake[]
+  ebookCollaborations         EbookCollaborator[]
+  ebookExports                ExportEbook[]
+  writingReports              WritingReport[]
+  notificationPreferences     UserNotificationPreference?  @relation("NotificationPreferenceUser")
+  createdCustomRoles          EbookCustomRole[]            @relation("CustomRoleCreatedBy")
+  deletedAssets               Asset[]                      @relation("AssetDeletedBy")
+  explorerPublicationComments ExplorerPublicationComment[]
+  explorerPublicationRatings  ExplorerPublicationRating[]
 }
 
 model Account {
-  id                String  @id @default(cuid())
-  userId            String
+  id     String @id @default(cuid())
+  userId String
+
   type              String
   provider          String
   providerAccountId String
@@ -40,4 +70,17 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model UserNotificationPreference {
+  id String @id @default(cuid())
+
+  userId String @unique
+  user   User   @relation("NotificationPreferenceUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  marketingEmailConsentAt DateTime?
+  marketingPushConsentAt  DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

@@ -2,7 +2,7 @@ model ChapterAssetReference {
   id String @id @default(cuid())
 
   assetId String
-  asset   Asset @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  asset   Asset  @relation(fields: [assetId], references: [id], onDelete: Cascade)
 
   chapterId String
   chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)

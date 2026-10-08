@@ -1,0 +1,32 @@
+model WritingReport {
+  id String @id @default(cuid())
+
+  ebookId String
+  ebook   Ebook  @relation(fields: [ebookId], references: [id], onDelete: Cascade)
+
+  snapshotId String
+  snapshot   Snapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
+
+  createdByUserId String
+  createdByUser   User   @relation(fields: [createdByUserId], references: [id], onDelete: Cascade)
+
+  startChapterId String
+  startSceneId   String?
+  endChapterId   String
+  endSceneId     String?
+
+  locales  String[]
+  analyses WritingReportAnalysis[]
+
+  status WritingReportStatus @default(PENDING)
+
+  result Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([ebookId])
+  @@index([snapshotId])
+  @@index([createdByUserId])
+  @@index([status])
+}

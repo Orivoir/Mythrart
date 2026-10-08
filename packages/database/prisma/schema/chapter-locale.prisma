@@ -1,10 +1,10 @@
 model ChapterLocale {
-  id       String @id @default(cuid())
+  id String @id @default(cuid())
 
-  locale   String // fr, en, de, es...
+  locale String // fr, en, de, es...
 
-  title    String
-  content  Json
+  title   String?
+  content Json
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

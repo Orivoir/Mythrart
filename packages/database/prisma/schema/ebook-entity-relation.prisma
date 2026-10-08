@@ -2,7 +2,7 @@ model EbookEntityRelation {
   id String @id @default(cuid())
 
   ebookId String
-  ebook   Ebook @relation(fields: [ebookId], references: [id], onDelete: Cascade)
+  ebook   Ebook  @relation(fields: [ebookId], references: [id], onDelete: Cascade)
 
   fromEntityId String
   fromEntity   EbookEntity @relation("EntityRelationFrom", fields: [fromEntityId], references: [id], onDelete: Cascade)
@@ -10,13 +10,34 @@ model EbookEntityRelation {
   toEntityId String
   toEntity   EbookEntity @relation("EntityRelationTo", fields: [toEntityId], references: [id], onDelete: Cascade)
 
-  type EbookEntityRelationType
+  states EbookEntityRelationState[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([ebookId, fromEntityId, toEntityId, type])
+  @@unique([ebookId, fromEntityId, toEntityId])
   @@index([ebookId])
   @@index([fromEntityId])
   @@index([toEntityId])
+}
+
+model EbookEntityRelationState {
+  id String @id @default(cuid())
+
+  relationId String
+  relation   EbookEntityRelation @relation(fields: [relationId], references: [id], onDelete: Cascade)
+
+  type EbookEntityRelationType
+
+  chapterId String?
+  chapter   Chapter? @relation("RelationStateChapter", fields: [chapterId], references: [id], onDelete: SetNull)
+
+  sceneId String?
+  scene   Scene?  @relation("RelationStateScene", fields: [sceneId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+
+  @@index([relationId])
+  @@index([chapterId])
+  @@index([sceneId])
 }

@@ -1,0 +1,21 @@
+model WritingGoal {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  ebookId String? @unique
+  ebook   Ebook?  @relation(fields: [ebookId], references: [id], onDelete: Cascade)
+
+  title String?
+
+  targetWords Int?
+  targetDate  DateTime?
+
+  // progression = SUM(ChapterLocale.wordsCount)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}

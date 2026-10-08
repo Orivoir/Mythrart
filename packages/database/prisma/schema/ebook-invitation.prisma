@@ -1,0 +1,28 @@
+model EbookInvitation {
+  id String @id @default(cuid())
+
+  ebookId String
+  ebook   Ebook  @relation(fields: [ebookId], references: [id], onDelete: Cascade)
+
+  invitedByUserId String
+  invitedBy       User   @relation("EbookInvitationSender", fields: [invitedByUserId], references: [id], onDelete: Cascade)
+
+  invitedUserId String
+  invitedUser   User   @relation("EbookInvitationRecipient", fields: [invitedUserId], references: [id], onDelete: Cascade)
+
+  role         CollaborationRole?
+  customRoleId String?
+  customRole   EbookCustomRole?   @relation("InvitationCustomRole", fields: [customRoleId], references: [id], onDelete: SetNull)
+
+  status EbookInvitationStatus @default(PENDING)
+
+  expiresAt DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([ebookId])
+  @@index([invitedByUserId])
+  @@index([customRoleId])
+  @@index([status])
+}

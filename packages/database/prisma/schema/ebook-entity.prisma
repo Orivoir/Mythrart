@@ -1,13 +1,13 @@
 model EbookEntity {
-  id          String @id @default(cuid())
+  id String @id @default(cuid())
 
-  ebookId     String
-  ebook       Ebook  @relation(fields: [ebookId], references: [id], onDelete: Cascade)
+  ebookId String
+  ebook   Ebook  @relation(fields: [ebookId], references: [id], onDelete: Cascade)
 
-  name        String
-  slug        String
+  name String
+  slug String
 
-  type        EbookEntityType
+  type EbookEntityType
 
   description String?
 
@@ -16,8 +16,8 @@ model EbookEntity {
 
   scenes SceneEntity[]
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([ebookId, slug])
   @@index([ebookId])

@@ -1,12 +1,12 @@
 model EbookType {
-  id          String  @id @default(cuid())
+  id String @id @default(cuid())
 
   name        String
   slug        String  @unique
   description String?
 
-  ebooks      Ebook[]
+  ebooks Ebook[]
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
