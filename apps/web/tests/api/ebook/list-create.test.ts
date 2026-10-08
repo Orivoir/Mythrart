@@ -1,6 +1,6 @@
 import { afterAll, beforeEach, expect, test } from "vitest"
 
-import { GET, POST } from "@/app/api/ebooks/routes"
+import { GET, POST } from "@/app/api/ebooks/route"
 import type {
     CreateEbookResponseAPI,
     PaginatedEbooksAPI,

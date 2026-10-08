@@ -1,7 +1,7 @@
 import { afterAll, beforeEach, expect, test } from "vitest"
 import { NextRequest } from "next/server"
 
-import { POST } from "@/app/api/ebooks/routes"
+import { POST } from "@/app/api/ebooks/route"
 import type { ResponseErrorAPI } from "@/app/types/api/ebook"
 import { MAX_LENGTH } from "@/lib/constants/limits"
 
