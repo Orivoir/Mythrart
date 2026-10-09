@@ -55,19 +55,52 @@ export {
   UploadHandshakeStatus,
   EbookEntityRelationType,
   EbookEntityType,
-  PrismaClient  
+  SnapshotStatus,
+  AssetStatus,
+  SceneStatus,
+  EbookInvitationStatus,
+  NotificationIntent,
+  WritingReportAnalysis,
+  WritingReportStatus,
+  ExportFormat,
+  ExportJobStatus,
+  ExplorerPublicationReason,
+  ExplorerPublicationStatus,
+  PrismaClient
 } from "./app/generated/prisma/index.js"
 
 // expose type schemas
 export type {
   Chapter,
+  ChapterLocale,
   EbookCollaborator,
+  EbookCollaboratorChapterAccess,
   EbookCustomRole,
+  EbookInvitation,
   EbookType,
+  EbookGenre,
+  EbookGenreAssignment,
   EbookEntityRelation,
+  EbookEntityRelationState,
   EbookTheme,
   EbookEntity,
-  Snapshot  
+  Scene,
+  SceneEntity,
+  Asset,
+  ChapterAssetReference,
+  UploadHandshake,
+  Snapshot,
+  SnapshotFile,
+  WritingGoal,
+  Notification,
+  UserNotificationPreference,
+  WritingReport,
+  ExportEbook,
+  ExplorerPublication,
+  ExplorerPublicationChapter,
+  ExplorerPublicationComment,
+  ExplorerPublicationRating,
+  Ebook
 } from "./app/generated/prisma/index.js"
 
 // expose type Prisma

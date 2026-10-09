@@ -46,11 +46,16 @@ export async function createPersistedExportFixture(
   coverAssetMatchesChapterImage = true,
 ) {
   const bucket = getIntegrationBucketName()
+  const uniqueId = randomUUID()
 
   const owner = await prisma.user.create({
     data: {
-      email: `${emailPrefix}owner@example.test`,
-      name: "Export Test Owner",
+      email: `${emailPrefix}${uniqueId}@example.test`,
+      firstName: "Export",
+      lastName: "Test Owner",
+      username: `export-test-${uniqueId}`,
+      emailVerified: new Date(),
+      termsAcceptedAt: new Date(),
     },
   })
 
@@ -58,7 +63,17 @@ export async function createPersistedExportFixture(
   const ebookTheme = await createEbookThemeFixture()
 
   const assetIds = new Map<string, string>()
-  const assets = new Map<string, { id: string; key: string }>()
+  const assets = new Map<
+    string,
+    {
+      id: string
+      key: string
+      bucket: string
+      fileName: string
+      mimeType: string
+      sizeBytes: number
+    }
+  >()
 
   for (const [index, fixtureAsset] of tipTapAssetFixtures.entries()) {
     const asset = await createAsset(
@@ -72,13 +87,19 @@ export async function createPersistedExportFixture(
     assets.set(fixtureAsset.id, asset)
   }
 
+  const firstFixtureAsset = tipTapAssetFixtures[0]
+
+  if (!firstFixtureAsset) {
+    throw new Error("At least one asset fixture is required")
+  }
+
   const coverAsset = coverAssetMatchesChapterImage
-    ? assets.get(tipTapAssetFixtures[0].id)
+    ? assets.get(firstFixtureAsset.id)
     : await createAsset(
         owner.id,
         "standalone-cover.png",
         "image/png",
-        4,
+        tipTapAssetFixtures.length + 1,
       )
 
   if (!coverAsset) {
@@ -97,6 +118,11 @@ export async function createPersistedExportFixture(
   })
 
   for (const fixtureChapter of tipTapChapterFixtures) {
+    const content = replaceImageAssetIds(
+      fixtureChapter.content,
+      assetIds,
+    )
+
     const chapter = await prisma.chapter.create({
       data: {
         ebookId: ebook.id,
@@ -106,30 +132,25 @@ export async function createPersistedExportFixture(
           create: {
             locale: "en",
             title: fixtureChapter.title,
-            content: replaceImageAssetIds(
-              fixtureChapter.content,
-              assetIds,
-            ) as Prisma.InputJsonValue,
+            content: content as Prisma.InputJsonValue,
+            wordsCount: 0,
+            charactersCount: 0,
           },
         },
       },
     })
 
-    const assetId = assetIds.get(
-      tipTapAssetFixtures[fixtureChapter.position].id,
-    )
+    const referencedAssetIds = collectImageAssetIds(content)
 
-    if (!assetId) {
-      throw new Error("Chapter image asset was not created")
+    for (const assetId of referencedAssetIds) {
+      await prisma.chapterAssetReference.create({
+        data: {
+          chapterId: chapter.id,
+          assetId,
+          type: "CONTENT_IMAGE",
+        },
+      })
     }
-
-    await prisma.chapterAssetReference.create({
-      data: {
-        chapterId: chapter.id,
-        assetId,
-        type: "CONTENT_IMAGE",
-      },
-    })
   }
 
   return {
@@ -157,19 +178,14 @@ export async function createEbookThemeFixture() {
       name: "Classique",
       slug: `classique-integration-test-${randomUUID()}`,
       description: "Integration test ebook theme",
-
       backgroundColor: "#ffffff",
       textColor: "#374151",
-
       textFont: "Inter",
       titleFont: "Inter",
       subtitleFont: "Inter",
-
       headingColor: "#1e3a5f",
-
       fontSize: "16px",
       lineHeight: "1.6",
-
       paragraphSpacing: "1rem",
       headingSpacing: "1.5rem",
     },
@@ -219,21 +235,65 @@ export async function deletePersistedExportFixtures(
 
     const ebookIds = ebooks.map((ebook) => ebook.id)
 
-    await prisma.chapter.deleteMany({
-      where: {
-        ebookId: {
-          in: ebookIds,
+    if (ebookIds.length > 0) {
+      const snapshots = await prisma.snapshot.findMany({
+        where: {
+          ebookId: {
+            in: ebookIds,
+          },
         },
-      },
-    })
+        include: {
+          file: {
+            select: {
+              key: true,
+              bucket: true,
+            },
+          },
+        },
+      })
 
-    await prisma.ebook.deleteMany({
-      where: {
-        id: {
-          in: ebookIds,
+      for (const snapshot of snapshots) {
+        if (snapshot.file?.key) {
+          createdObjectKeys.add(snapshot.file.key)
+        }
+      }
+
+      await deleteUploadedObjects(bucket)
+
+      await prisma.snapshotFile.deleteMany({
+        where: {
+          snapshotId: {
+            in: snapshots.map((snapshot) => snapshot.id),
+          },
         },
-      },
-    })
+      })
+
+      await prisma.snapshot.deleteMany({
+        where: {
+          id: {
+            in: snapshots.map((snapshot) => snapshot.id),
+          },
+        },
+      })
+
+      await prisma.chapter.deleteMany({
+        where: {
+          ebookId: {
+            in: ebookIds,
+          },
+        },
+      })
+
+      await prisma.ebook.deleteMany({
+        where: {
+          id: {
+            in: ebookIds,
+          },
+        },
+      })
+    }
+
+    await deleteUploadedObjects(bucket)
 
     await prisma.asset.deleteMany({
       where: {
@@ -250,8 +310,12 @@ export async function deletePersistedExportFixtures(
         },
       },
     })
+  } else {
+    await deleteUploadedObjects(bucket)
   }
+}
 
+async function deleteUploadedObjects(bucket: string): Promise<void> {
   for (const key of createdObjectKeys) {
     await s3.send(
       new DeleteObjectCommand({
@@ -271,9 +335,7 @@ async function createAsset(
   index: number,
 ) {
   const bucket = getIntegrationBucketName()
-
   const body = createTestImageBuffer(mimeType, index)
-
   const key = `integration/export/${ownerId}/${fileName}`
 
   await s3.send(
@@ -287,7 +349,7 @@ async function createAsset(
 
   createdObjectKeys.add(key)
 
-  return await prisma.asset.create({
+  return prisma.asset.create({
     data: {
       ownerId,
       key,
@@ -299,6 +361,10 @@ async function createAsset(
     select: {
       id: true,
       key: true,
+      bucket: true,
+      fileName: true,
+      mimeType: true,
+      sizeBytes: true,
     },
   })
 }
@@ -342,7 +408,7 @@ function createPngBuffer(index: number): Buffer {
 }
 
 /**
- * Minimal valid JPEG.
+ * Minimal JPEG fixture.
  */
 function createJpegBuffer(): Buffer {
   return Buffer.from(
@@ -374,9 +440,39 @@ function replaceImageAssetIds(
 
   return {
     ...content,
-    attrs,
-    content: content.content?.map((child) =>
-      replaceImageAssetIds(child, assetIds),
-    ),
+    ...(content.attrs ? { attrs } : {}),
+    ...(content.content
+      ? {
+          content: content.content.map((child) =>
+            replaceImageAssetIds(child, assetIds),
+          ),
+        }
+      : {}),
   }
 }
+
+/**
+ * Collects the persisted asset IDs used by image nodes in TipTap content.
+ * The returned IDs are deduplicated because a chapter may reuse an image.
+ */
+function collectImageAssetIds(content: JSONContent): string[] {
+  const assetIds = new Set<string>()
+
+  function visit(node: JSONContent): void {
+    if (
+      node.type === "image" &&
+      typeof node.attrs?.assetId === "string"
+    ) {
+      assetIds.add(node.attrs.assetId)
+    }
+
+    for (const child of node.content ?? []) {
+      visit(child)
+    }
+  }
+
+  visit(content)
+
+  return [...assetIds]
+}
+

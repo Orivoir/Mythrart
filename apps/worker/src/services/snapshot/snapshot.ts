@@ -22,7 +22,7 @@ export async function generate({ebookId}: SnapshotJobData): Promise<SnapshotJobR
    * file snapshot-v{version}.json from s3 bucket. 
    */
 
-  const ebook = await loadRequirements(ebookId)
+  const ebook = await loadRequirements(ebookId, "with-content-assets", "all")
 
   const nextVersion = (ebook.currentSnapshot?.version ?? 0) + 1
 
@@ -123,20 +123,31 @@ export async function generate({ebookId}: SnapshotJobData): Promise<SnapshotJobR
 }
 
 function getChapterData(chapter: Requirements["chapters"][number]) {
-  const localized = chapter.locales[0]
-
   return {
     id: chapter.id,
-    title: localized?.title || chapter.title,
-    content: localized?.content || {},
+    title: chapter.title,
     position: chapter.position,
-    createdAt: chapter.createdAt
+    locales: chapter.locales.map((locale) => ({
+      locale: locale.locale,
+      title: locale.title,
+      content: locale.content,
+      wordsCount: locale.wordsCount,
+      charactersCount: locale.charactersCount,
+    })),
+    assets: chapter.assetReferences.map((reference) => ({
+      assetId: reference.asset.id,
+      key: reference.asset.key,
+      bucket: reference.asset.bucket,
+      fileName: reference.asset.fileName,
+      mimeType: reference.asset.mimeType,
+      sizeBytes: reference.asset.sizeBytes,
+    })),
+    createdAt: chapter.createdAt,
   }
 }
 
 function getSnapshotEbookData(ebook: Requirements) {
-
-  const {id, title, subtitle, shortDescription, createdAt} = ebook
+  const { id, title, subtitle, shortDescription, createdAt } = ebook
 
   return {
     id,
@@ -144,14 +155,18 @@ function getSnapshotEbookData(ebook: Requirements) {
     subtitle,
     shortDescription,
     createdAt,
-    coverImage: ebook.coverAsset ? {
-      assetId: ebook.coverAsset.id,
-      key: ebook.coverAsset.key,
-      bucket: ebook.coverAsset.bucket,
-    }  : null
+    coverImage: ebook.coverAsset
+      ? {
+          assetId: ebook.coverAsset.id,
+          key: ebook.coverAsset.key,
+          bucket: ebook.coverAsset.bucket,
+          fileName: ebook.coverAsset.fileName,
+          mimeType: ebook.coverAsset.mimeType,
+          sizeBytes: ebook.coverAsset.sizeBytes,
+        }
+      : null,
   }
 }
-
 function getSnapshotMetadata(version: number) {
   return {
     generatedAt: new Date().getTime(),

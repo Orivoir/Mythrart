@@ -9,6 +9,9 @@ model ChapterLocale {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  wordsCount      Int @default(0)
+  charactersCount Int @default(0)
+
   chapterId String
   chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 

@@ -12,9 +12,6 @@ model Chapter {
   collaboratorAccess   EbookCollaboratorChapterAccess[]
   explorerPublications ExplorerPublicationChapter[]
 
-  wordsCount      Int @default(0)
-  charactersCount Int @default(0)
-
   scenes Scene[]
 
   entityRelationStates EbookEntityRelationState[] @relation("RelationStateChapter")

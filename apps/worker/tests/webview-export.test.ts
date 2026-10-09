@@ -123,7 +123,9 @@ async function createEbookFixture(
   const owner = await prisma.user.create({
     data: {
       email: `${TEST_EMAIL_PREFIX}owner@example.test`,
-      name: "WebView Export Owner",
+      username: "WebView Export Owner",
+      firstName: "WebView",
+      lastName: "Export Owner"
     },
   })
   const assetIds = new Map<string, string>()

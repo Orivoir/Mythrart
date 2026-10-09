@@ -12,8 +12,17 @@ import { generate } from "./../../src/services/snapshot/index.js"
 
 import {
   createEbookTypeFixture,
-  createEbookThemeFixture
+  createEbookThemeFixture,
 } from "./../helpers/persisted-export-fixture.js"
+
+type SnapshotAsset = {
+  assetId: string
+  key: string
+  bucket: string
+  fileName: string
+  mimeType: string
+  sizeBytes: number
+}
 
 type SnapshotPayload = {
   formatVersion: number
@@ -27,36 +36,29 @@ type SnapshotPayload = {
     subtitle: string | null
     shortDescription: string | null
     createdAt: string
-    coverImage: {
-      assetId: string
-      key: string
-      bucket: string
-    } | null
+    coverImage: SnapshotAsset | null
   }
   chapters: Array<{
     id: string
     title: string
-    content: Prisma.JsonValue
     position: number
     createdAt: string
+    locales: Array<{
+      locale: string
+      title: string | null
+      content: Prisma.JsonValue
+      wordsCount: number
+      charactersCount: number
+    }>
+    assets: SnapshotAsset[]
   }>
 }
 
 type EbookFixture = {
   ownerId: string
   ebookId: string
-  coverAsset: {
-    id: string
-    key: string
-    bucket: string
-  }
-  chapters: Array<{
-    id: string
-    title: string
-    content: Prisma.JsonValue
-    position: number
-    createdAt: Date
-  }>
+  coverAsset: SnapshotAsset
+  chapters: SnapshotPayload["chapters"]
   ebookCreatedAt: Date
   title: string
   subtitle: string | null
@@ -88,18 +90,43 @@ async function createEbookFixture(): Promise<EbookFixture> {
   const owner = await prisma.user.create({
     data: {
       email: `${TEST_EMAIL_PREFIX}${faker.string.alphanumeric(10).toLowerCase()}@example.test`,
-      name: faker.person.fullName(),
+      firstName: faker.person.firstName(),
+      lastName: faker.person.lastName(),
+      username: `${TEST_EMAIL_PREFIX}${faker.string.alphanumeric(12).toLowerCase()}`,
+      emailVerified: new Date(),
+      termsAcceptedAt: new Date(),
     },
   })
+
+  const bucket = getBucketName()
+
+  const coverAssetData = {
+    key: `covers/${faker.string.alphanumeric(20)}.webp`,
+    bucket,
+    fileName: `${faker.system.fileName()}.webp`,
+    mimeType: "image/webp",
+    sizeBytes: faker.number.int({ min: 1_000, max: 500_000 }),
+  }
 
   const coverAsset = await prisma.asset.create({
     data: {
       ownerId: owner.id,
-      key: `covers/${faker.string.alphanumeric(20)}.webp`,
-      bucket: getBucketName(),
-      fileName: `${faker.system.fileName()}.webp`,
-      mimeType: "image/webp",
-      sizeBytes: faker.number.int({ min: 1_000, max: 500_000 }),
+      ...coverAssetData,
+    },
+  })
+
+  const contentAssetData = {
+    key: `content/${faker.string.alphanumeric(20)}.jpg`,
+    bucket,
+    fileName: `${faker.system.fileName()}.jpg`,
+    mimeType: "image/jpeg",
+    sizeBytes: faker.number.int({ min: 1_000, max: 500_000 }),
+  }
+
+  const contentAsset = await prisma.asset.create({
+    data: {
+      ownerId: owner.id,
+      ...contentAssetData,
     },
   })
 
@@ -122,28 +149,61 @@ async function createEbookFixture(): Promise<EbookFixture> {
 
   const ebook = await prisma.ebook.create({ data })
 
-  const chapterOneContent: Prisma.JsonValue = {
-    type: "doc",
-    blocks: [
-      {
-        type: "paragraph",
-        text: faker.lorem.paragraph(),
-      },
-    ],
-  }
-
-  const chapterTwoContent: Prisma.JsonValue = {
-    type: "doc",
-    blocks: [
-      {
-        type: "paragraph",
-        text: faker.lorem.paragraph(),
-      },
-    ],
-  }
-
   const chapterOneTitle = faker.lorem.sentence({ min: 2, max: 5 })
   const chapterTwoTitle = faker.lorem.sentence({ min: 2, max: 5 })
+
+  const chapterOneEnglishContent: Prisma.JsonValue = {
+    type: "doc",
+    content: [
+      {
+        type: "paragraph",
+        content: [
+          {
+            type: "text",
+            text: faker.lorem.paragraph(),
+          },
+        ],
+      },
+      {
+        type: "image",
+        attrs: {
+          assetId: contentAsset.id,
+          alt: faker.lorem.words(3),
+          title: faker.lorem.words(4),
+        },
+      },
+    ],
+  }
+
+  const chapterOneFrenchContent: Prisma.JsonValue = {
+    type: "doc",
+    content: [
+      {
+        type: "paragraph",
+        content: [
+          {
+            type: "text",
+            text: faker.lorem.paragraph(),
+          },
+        ],
+      },
+    ],
+  }
+
+  const chapterTwoEnglishContent: Prisma.JsonValue = {
+    type: "doc",
+    content: [
+      {
+        type: "paragraph",
+        content: [
+          {
+            type: "text",
+            text: faker.lorem.paragraph(),
+          },
+        ],
+      },
+    ],
+  }
 
   const chapterOne = await prisma.chapter.create({
     data: {
@@ -151,11 +211,22 @@ async function createEbookFixture(): Promise<EbookFixture> {
       title: chapterOneTitle,
       position: 0,
       locales: {
-        create: {
-          locale: "en",
-          title: chapterOneTitle,
-          content: chapterOneContent,
-        },
+        create: [
+          {
+            locale: "en",
+            title: chapterOneTitle,
+            content: chapterOneEnglishContent,
+            wordsCount: 0,
+            charactersCount: 0,
+          },
+          {
+            locale: "fr",
+            title: faker.lorem.sentence({ min: 2, max: 5 }),
+            content: chapterOneFrenchContent,
+            wordsCount: 0,
+            charactersCount: 0,
+          },
+        ],
       },
     },
   })
@@ -169,34 +240,93 @@ async function createEbookFixture(): Promise<EbookFixture> {
         create: {
           locale: "en",
           title: chapterTwoTitle,
-          content: chapterTwoContent,
+          content: chapterTwoEnglishContent,
+          wordsCount: 0,
+          charactersCount: 0,
         },
       },
     },
   })
 
+  await prisma.chapterAssetReference.create({
+    data: {
+      assetId: contentAsset.id,
+      chapterId: chapterOne.id,
+      type: "CONTENT_IMAGE",
+    },
+  })
+
+  const snapshotAsset = (
+    asset: {
+      id: string
+      key: string
+      bucket: string
+      fileName: string
+      mimeType: string
+      sizeBytes: number
+    },
+  ): SnapshotAsset => ({
+    assetId: asset.id,
+    key: asset.key,
+    bucket: asset.bucket,
+    fileName: asset.fileName,
+    mimeType: asset.mimeType,
+    sizeBytes: asset.sizeBytes,
+  })
+
   return {
     ownerId: owner.id,
     ebookId: ebook.id,
-    coverAsset: {
-      id: coverAsset.id,
-      key: coverAsset.key,
-      bucket: coverAsset.bucket,
-    },
+    coverAsset: snapshotAsset(coverAsset),
     chapters: [
       {
         id: chapterOne.id,
         title: chapterOne.title,
-        content: chapterOneContent,
         position: chapterOne.position,
-        createdAt: chapterOne.createdAt,
+        createdAt: chapterOne.createdAt.toISOString(),
+        locales: [
+          {
+            locale: "en",
+            title: chapterOneTitle,
+            content: chapterOneEnglishContent,
+            wordsCount: 0,
+            charactersCount: 0,
+          },
+          {
+            locale: "fr",
+            title: (
+              await prisma.chapterLocale.findUniqueOrThrow({
+                where: {
+                  chapterId_locale: {
+                    chapterId: chapterOne.id,
+                    locale: "fr",
+                  },
+                },
+                select: { title: true },
+              })
+            ).title,
+            content: chapterOneFrenchContent,
+            wordsCount: 0,
+            charactersCount: 0,
+          },
+        ],
+        assets: [snapshotAsset(contentAsset)],
       },
       {
         id: chapterTwo.id,
         title: chapterTwo.title,
-        content: chapterTwoContent,
         position: chapterTwo.position,
-        createdAt: chapterTwo.createdAt,
+        createdAt: chapterTwo.createdAt.toISOString(),
+        locales: [
+          {
+            locale: "en",
+            title: chapterTwoTitle,
+            content: chapterTwoEnglishContent,
+            wordsCount: 0,
+            charactersCount: 0,
+          },
+        ],
+        assets: [],
       },
     ],
     ebookCreatedAt: ebook.createdAt,
@@ -234,6 +364,7 @@ async function deleteFixtureData(bucket: string): Promise<void> {
   const ownerIds = owners.map((owner) => owner.id)
 
   if (ownerIds.length === 0) {
+    await deleteUploadedObjects(bucket)
     return
   }
 
@@ -307,6 +438,8 @@ async function deleteFixtureData(bucket: string): Promise<void> {
     })
   }
 
+  await deleteUploadedObjects(bucket)
+
   await prisma.asset.deleteMany({
     where: {
       ownerId: {
@@ -324,7 +457,10 @@ async function deleteFixtureData(bucket: string): Promise<void> {
   })
 }
 
-async function loadSnapshotFromS3(bucket: string, key: string): Promise<SnapshotPayload> {
+async function loadSnapshotFromS3(
+  bucket: string,
+  key: string,
+): Promise<SnapshotPayload> {
   const response = await s3.send(
     new GetObjectCommand({
       Bucket: bucket,
@@ -396,26 +532,16 @@ describe("snapshot generate service integration", () => {
 
     expect(s3Json.formatVersion).toBe(1)
     expect(s3Json.metadata.version).toBe(createdSnapshot.version)
+
     expect(s3Json.ebook).toEqual({
       id: fixture.ebookId,
       title: fixture.title,
       subtitle: fixture.subtitle,
       shortDescription: fixture.shortDescription,
       createdAt: fixture.ebookCreatedAt.toISOString(),
-      coverImage: {
-        assetId: fixture.coverAsset.id,
-        key: fixture.coverAsset.key,
-        bucket: fixture.coverAsset.bucket,
-      },
+      coverImage: fixture.coverAsset,
     })
-    expect(s3Json.chapters).toEqual(
-      fixture.chapters.map((chapter) => ({
-        id: chapter.id,
-        title: chapter.title,
-        content: chapter.content,
-        position: chapter.position,
-        createdAt: chapter.createdAt.toISOString(),
-      })),
-    )
+
+    expect(s3Json.chapters).toEqual(fixture.chapters)
   })
 })
