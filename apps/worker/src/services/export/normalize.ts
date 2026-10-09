@@ -1,4 +1,3 @@
-import type {Requirements} from "./../utils.js"
 import type {Prisma} from "@mythrart/database"
 
 export interface NormalizedChapter {
@@ -30,20 +29,36 @@ export interface NormalizedEbook {
   chapters: NormalizedChapter[]
 }
 
-type ChapterWithContentAssets = Requirements["chapters"][number] & {
-  assetReferences: Array<{
-    asset: {
-      id: string
-      key: string
-      bucket: string
-    }
+interface ExportSourceAsset {
+  id: string
+  key: string
+  bucket: string
+}
+
+// Shape shared by the database loader (`Requirements`) and the snapshot loader.
+export interface ExportSource {
+  id: string
+  title: string
+  subtitle: string | null
+  shortDescription: string | null
+  createdAt: Date
+  coverAsset: ExportSourceAsset | null
+  chapters: Array<{
+    id: string
+    title: string
+    position: number
+    createdAt: Date
+    locales: Array<{
+      locale: string
+      title: string | null
+      content: Prisma.JsonValue
+    }>
+    assetReferences: Array<{asset: ExportSourceAsset}>
   }>
 }
 
-type ContentAssetReference = ChapterWithContentAssets["assetReferences"][number]
-
-// Exporters should only ever read this shape, never the raw Prisma result with its per-locale nesting.
-export default function normalizeExportData(ebook: Requirements): NormalizedEbook {
+// Exporters should only ever read this shape, never the raw source with its per-locale nesting.
+export default function normalizeExportData(ebook: ExportSource, locale: string): NormalizedEbook {
   const {id, title, subtitle, shortDescription, createdAt} = ebook
 
   return {
@@ -57,40 +72,40 @@ export default function normalizeExportData(ebook: Requirements): NormalizedEboo
       key: ebook.coverAsset.key,
       bucket: ebook.coverAsset.bucket,
     } : null,
-    assets: ebook.chapters.flatMap((chapter) => {
-      if (!hasContentAssets(chapter)) {
-        return []
-      }
-
-      const assetReferences = chapter.assetReferences as ContentAssetReference[]
-
-      return assetReferences.map(({ asset }) => ({
-        id: asset.id,
-        key: asset.key,
-        bucket: asset.bucket,
-      }))
-    }),
-    chapters: ebook.chapters.map(normalizeChapter),
+    assets: uniqueAssets(ebook),
+    chapters: ebook.chapters.map((chapter) => normalizeChapter(chapter, locale)),
   }
 }
 
-function normalizeChapter(chapter: Requirements["chapters"][number]): NormalizedChapter {
-  const localized = chapter.locales[0]
+function uniqueAssets(ebook: ExportSource): NormalizedEbook["assets"] {
+  const byId = new Map<string, NormalizedEbook["assets"][number]>()
+
+  for (const chapter of ebook.chapters) {
+    for (const { asset } of chapter.assetReferences) {
+      if (!byId.has(asset.id)) {
+        byId.set(asset.id, { id: asset.id, key: asset.key, bucket: asset.bucket })
+      }
+    }
+  }
+
+  return [...byId.values()]
+}
+
+function normalizeChapter(chapter: ExportSource["chapters"][number], locale: string): NormalizedChapter {
+  const localized = chapter.locales.find((entry) => entry.locale === locale)
+
+  if (!localized) {
+    throw new Error(`Chapter ${chapter.id} has no translation for locale "${locale}"`)
+  }
 
   return {
     id: chapter.id,
-    title: localized?.title ?? chapter.title,
+    title: localized.title ?? chapter.title,
 
     // Should validate chapter content against the TipTap document schema
     // const content = tipTapDocumentSchema.parse(localized?.content)
-    content: localized?.content ?? null,
+    content: localized.content ?? null,
     position: chapter.position,
     createdAt: chapter.createdAt,
   }
-}
-
-function hasContentAssets(
-  chapter: Requirements["chapters"][number],
-): chapter is ChapterWithContentAssets {
-  return "assetReferences" in chapter && chapter.assetReferences.every((reference) => "asset" in reference)
 }

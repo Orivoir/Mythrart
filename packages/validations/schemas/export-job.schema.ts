@@ -7,6 +7,8 @@ export const createExportJobRequestSchema = z.object({
   format: z.enum(exportFormats, {
     message: "format must be one of: txt, pdf, epub, docx, markdown, webview",
   }),
+  locale: z.string().trim().min(1, "locale is required"),
+  snapshotId: z.string().trim().min(1, "snapshotId must not be empty").optional(),
 })
 
 export type ExportJobData = z.infer<typeof createExportJobRequestSchema>

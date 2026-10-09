@@ -200,6 +200,7 @@ export async function loadNormalizedPersistedEbook(
 ) {
   return normalizeExportData(
     await loadRequirements(ebookId, "with-content-assets"),
+    "en",
   )
 }
 

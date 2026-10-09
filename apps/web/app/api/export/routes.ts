@@ -10,17 +10,17 @@ import { createExportJobRequestSchema } from "@mythrart/validations"
 import type { JobCreatedResponse } from "@/app/types/api/job"
 
 export const POST = withApiHandler(async (
-    request: NextRequest,
+request: NextRequest,
 ): Promise<NextResponse<JobCreatedResponse>> => {
-
   const userId = getAuthenticatedUserIdFromHeaders(request.headers)
 
   if (!userId) {
-      throw new ApiException(HTTP_ERRORS.UNAUTHORIZED)
+    throw new ApiException(HTTP_ERRORS.UNAUTHORIZED)
   }
 
   const requestBody = await parseApiJsonObject(request)
-  const { ebookId, format } = createExportJobRequestSchema.parse(requestBody)
+  const { ebookId, format, snapshotId, locale } =
+  createExportJobRequestSchema.parse(requestBody)
 
   const canCreateExport = await hasEbookPermissionForUser({
     ebookId,
@@ -33,7 +33,12 @@ export const POST = withApiHandler(async (
     throw new ApiException(HTTP_ERRORS.NOT_FOUND)
   }
 
-  const exportJobId = await enqueueExportJob({ ebookId, format })
+  const exportJobId = await enqueueExportJob({
+    ebookId,
+    format,
+    locale,
+    snapshotId
+  })
 
   return NextResponse.json({ jobId: exportJobId }, { status: 202 })
 })

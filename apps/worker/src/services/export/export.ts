@@ -1,8 +1,9 @@
 import type { ExportJobData, ExportJobResult } from "../../validations/export.job.js"
 import { loadRequirements } from "../utils.js"
-import normalizeExportData from "./normalize.js"
+import normalizeExportData, { type ExportSource } from "./normalize.js"
+import { loadSnapshotSource } from "./snapshot-source.js"
 
-export async function exportEbook({ ebookId, format }: ExportJobData): Promise<ExportJobResult> {
+export async function exportEbook({ ebookId, format, locale, snapshotId }: ExportJobData): Promise<ExportJobResult> {
   /**
    * TODO: implement actual export logic.
    *
@@ -25,9 +26,11 @@ export async function exportEbook({ ebookId, format }: ExportJobData): Promise<E
    * This placeholder intentionally does not perform the real workflow.
    */
 
-  const ebook = await loadRequirements(ebookId)
+  const source: ExportSource = snapshotId
+    ? await loadSnapshotSource(ebookId, snapshotId)
+    : await loadRequirements(ebookId, "with-content-assets", locale)
 
-  const normalized = normalizeExportData(ebook)
+  const normalized = normalizeExportData(source, locale)
 
   void normalized
   void format

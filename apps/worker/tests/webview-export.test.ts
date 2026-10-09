@@ -197,7 +197,7 @@ async function createEbookFixture(
 
 async function exportPersistedEbook(ebookId: string): Promise<string> {
   const requirements = await loadRequirements(ebookId, "with-content-assets")
-  const normalizedEbook = normalizeExportData(requirements)
+  const normalizedEbook = normalizeExportData(requirements, "en")
   const exportedFile = await new WebviewExporter(testExtensions).export(normalizedEbook)
 
   expect(exportedFile.fileName).toMatch(/\.html$/)
