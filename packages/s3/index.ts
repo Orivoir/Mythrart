@@ -158,4 +158,13 @@ export async function isValidPermanentObject({ key }: { key: string}): Promise<{
 }
 
 export {getSignedUrl} from "@aws-sdk/s3-request-presigner"
-export * from "@aws-sdk/client-s3"
+export {
+  GetObjectCommand,
+  PutObjectCommand,
+  HeadObjectCommand,
+  CopyObjectCommand,
+  DeleteObjectCommand,
+  CreateBucketCommand,
+  HeadBucketCommand,
+  S3Client
+} from "@aws-sdk/client-s3"

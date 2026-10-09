@@ -102,7 +102,7 @@ export function UserAvatarMenu({
               <Avatar
                 image={user.image ?? undefined}
                 email={user.email}
-                alt={user.name}
+                alt={user.username ?? "Your profile image"}
                 size="md"
               />
             ) : (

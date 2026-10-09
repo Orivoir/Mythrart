@@ -56,7 +56,7 @@ export const GET = withApiHandler(async (
         id: chapter.id,
         ebookId: chapter.ebookId,
         position: chapter.position,
-        title: selectedLocale.title,
+        title: selectedLocale.title ?? chapter.title, // Title of chapter can be no translated
         locale: selectedLocale.locale,
         content: selectedLocale.content,
         createdAt: chapter.createdAt.getTime(),

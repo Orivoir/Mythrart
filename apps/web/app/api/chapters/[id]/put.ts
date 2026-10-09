@@ -109,7 +109,7 @@ export const PUT = withApiHandler(async (
         id: chapterUpdated.chapter.id,
         ebookId: chapterUpdated.chapter.ebookId,
         position: chapterUpdated.chapter.position,
-        title: chapterUpdated.chapterLocale.title,
+        title: chapterUpdated.chapterLocale.title ?? chapterUpdated.chapter.title, // Title of chapter can be not translated
         locale: chapterUpdated.chapterLocale.locale,
         content: chapterUpdated.chapterLocale.content,
         createdAt: chapterUpdated.chapter.createdAt.getTime(),

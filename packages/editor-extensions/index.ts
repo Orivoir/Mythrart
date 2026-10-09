@@ -11,7 +11,6 @@ import {
 import StarterKit from "@tiptap/starter-kit"
 
 import { AssetImage } from "./custom/asset-image"
-import { SaveShortcut } from "./custom/save-shortcut"
 
 export const extensions: Extensions = [
   StarterKit,

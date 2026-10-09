@@ -7,7 +7,9 @@ export interface Subscription {
 
 export interface User {
   id: string;
-  name: string;
+  username?: string;
+  firstName?: string;
+  lastName?: string;
   email: string;
   image?: string | null | undefined;
   plan: PlanType;

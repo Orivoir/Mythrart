@@ -28,9 +28,13 @@ import {
 
 const user: User = {
   id: "user-1",
-  name: "Samuel",
+  username: "John.Doe",
+  firstName: "John",
+  lastName: "Doe", 
   email: "samuel@example.com",
   image: undefined,
+  plan: "premium",
+  subscriptionStatus: "active",
 }
 
 const subscription: Subscription = {

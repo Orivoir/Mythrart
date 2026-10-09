@@ -13,7 +13,7 @@ export default async function Header() {
     <HeaderSwitcher
         user={{
           id: session.user?.id ?? "<no-defined>",
-          name: session.user?.name ?? "<no-defined>",
+          username: session.user?.username ?? "<no-defined>",
           email: session.user?.email ?? "<no-defined>",
           image: session.user?.image,
           plan: session.user?.plan ?? "free",

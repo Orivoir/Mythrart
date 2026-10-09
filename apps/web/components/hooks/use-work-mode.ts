@@ -13,7 +13,7 @@ export function useWorkMode() {
       return
     }
 
-    fired.workModeStart(project)
+    fired.workModeStart({...project})
 
   }, [project])
 

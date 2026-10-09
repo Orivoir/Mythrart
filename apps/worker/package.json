@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "tsc",
-    "start": "node index.js",
+    "build": "node build.mjs",
+    "start": "node dist/index.js",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run",
     "test:unit": "vitest run tests/unit",
@@ -43,6 +43,7 @@
     "@types/escape-html": "^1.0.4",
     "@types/html-to-docx": "^1.8.1",
     "@types/node": "^20.19.43",
+    "esbuild": "^0.28.2",
     "jszip": "^3.10.1",
     "pdfjs-dist": "^5.0.0",
     "pino-pretty": "^13.1.3",

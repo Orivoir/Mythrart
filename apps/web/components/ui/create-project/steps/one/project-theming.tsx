@@ -23,7 +23,7 @@ export function ProjectTheming({
 
   const options = themes.map((theme) => ({
     value: theme.id,
-    label: theme.name + (theme.author && `- ${t("theme.by")} ${theme.author.name || t("theme.anonymous")}`),
+    label: theme.name + (theme.author && `- ${t("theme.by")} ${theme.author.username || t("theme.anonymous")}`),
     description: theme.shortDescribe,
     image: theme.cover,
   }))

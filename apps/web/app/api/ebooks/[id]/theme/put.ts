@@ -8,7 +8,8 @@ import { normalizeStringValue } from "@/lib/normalize-string-value"
 import { CollaborationPermission, prisma } from "@mythrart/database"
 import { UpdateEbookThemeSchema } from "@mythrart/validations"
 
-import { ensureEbookPermission, generateSlug, mapThemeToResponse } from "./utils"
+import { ensureEbookPermission, mapThemeToResponse } from "./utils"
+import generateSlug from "slugify"
 
 export const PUT = withApiHandler(async (
     request: NextRequest,
@@ -66,7 +67,7 @@ export const PUT = withApiHandler(async (
         throw new ApiException(HTTP_ERRORS.NOT_FOUND)
     }
 
-    let slug = parsed.slug ? generateSlug(parsed.slug) : undefined
+    let slug = parsed.slug ? generateSlug(parsed.slug, { lower: true, strict: true }) : undefined
     if (slug && slug !== existingTheme.slug) {
         const existingSlug = await prisma.ebookTheme.findUnique({
             where: {

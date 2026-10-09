@@ -40,7 +40,7 @@ export function HeaderSwitcher(props: HeaderSwitcherProps) {
     <LoggedHeader
       user={{
         id: props.user?.id ?? "<no-defined>",
-        name: props.user?.name ?? "<no-defined>",
+        username: props.user?.username ?? "<no-defined>",
         email: props.user?.email ?? "<no-defined>",
         image: props.user?.image,
         plan: props.user?.plan ?? "free",

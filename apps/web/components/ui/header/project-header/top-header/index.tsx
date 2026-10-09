@@ -66,7 +66,7 @@ export function ProjectTopHeader({
         <UserAvatarMenu user={{
           email: user.email || "sample@gmail.com",
           id: user.id,
-          name: user.name || "John doe",
+          username: user.username || "John doe",
           image: user.image,
           plan: user.plan ?? "free",
           subscriptionStatus: user.subscriptionStatus ?? "none"

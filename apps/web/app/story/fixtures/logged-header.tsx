@@ -8,9 +8,13 @@ import { LoggedHeader } from "@/components/ui/header/logged-header"
 
 const user: User = {
   id: "user-1",
-  name: "Samuel",
+  username: "Samuel",
   email: "samuel@example.com",
   image: undefined,
+  firstName: "John",
+  lastName: "Doe",
+  plan: "premium",
+  subscriptionStatus: "active",
 }
 
 const subscription: Subscription = {

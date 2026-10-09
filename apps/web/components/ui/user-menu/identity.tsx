@@ -79,13 +79,13 @@ export function UserMenuIdentity({
       <Avatar
         image={user.image ?? undefined}
         email={user.email}
-        alt={user.name}
+        alt={user.username ?? "Your profile image"}
         size="lg"
       />
 
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-semibold">
-          {user.name}
+          {user.username}
         </p>
 
         <p className="truncate text-xs text-muted-foreground">

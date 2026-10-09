@@ -1,20 +1,26 @@
-import type { PlanType, SubscriptionStatus } from "@mythrart/database"
-import type { DefaultSession } from "next-auth"
+import type { User } from "@mythrart/database"
+
+type SessionUser = Pick<
+  User,
+  | "id"
+  | "email"
+  | "firstName"
+  | "lastName"
+  | "username"
+  | "plan"
+  | "subscriptionStatus"
+  | "image"
+>
 
 declare module "next-auth" {
   interface Session {
-    user?: DefaultSession["user"] & {
-      plan: PlanType
-      subscriptionStatus: SubscriptionStatus
-      id: string;
-    }
+    user?: SessionUser
   }
 }
 
 declare module "next-auth/jwt" {
   interface JWT {
-    plan?: PlanType
-    subscriptionStatus?: SubscriptionStatus
+    plan?: User["plan"]
+    subscriptionStatus?: User["subscriptionStatus"]
   }
 }
-
