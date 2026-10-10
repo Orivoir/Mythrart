@@ -1,0 +1,31 @@
+{
+  "name": "@mythrart/epub",
+  "version": "1.0.0",
+  "description": "Shared epub generator between Mythrart apps",
+  "type": "module",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": {
+      "types": "./index.ts",
+      "import": "./index.ts",
+      "default": "./index.ts"
+    }
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "vitest run tests/integration"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@tiptap/core": "3.31.3",
+    "jszip": "^3.10.1"
+  },
+  "devDependencies": {
+    "@xmldom/xmldom": "^0.9.12",
+    "vitest": "^4.1.11"
+  }
+}
