@@ -1,7 +1,7 @@
 
 import { describe, expect, it } from "vitest"
 import { DOMParser } from "@xmldom/xmldom"
-import { createContainerXml } from "../../document/container"
+import { createContainerXml } from "../../../document/container"
 
 describe("createContainerXml", () => {
   it("generates a valid EPUB container document", () => {

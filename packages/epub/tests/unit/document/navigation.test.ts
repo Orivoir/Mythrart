@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest"
 import { DOMParser } from "@xmldom/xmldom"
-import { createNavigationXhtml } from "../../document/navigation"
-import { EpubError } from "../../errors"
-import type { EpubBook } from "../../types"
+import { createNavigationXhtml } from "../../../document/navigation"
+import { EpubError } from "../../../errors"
+import type { EpubBook } from "../../../types"
 
 function makeBook(overrides: Partial<EpubBook> = {}): EpubBook {
   const baseBook: EpubBook = {

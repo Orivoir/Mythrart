@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest"
 import { DOMParser } from "@xmldom/xmldom"
-import { createCoverXhtml } from "../../document/cover"
-import { EpubError } from "../../errors"
-import type { EpubBook } from "../../types"
+import { createCoverXhtml } from "../../../document/cover"
+import { EpubError } from "../../../errors"
+import type { EpubBook } from "../../../types"
 
 
 const svg = `<?xml version="1.0" encoding="UTF-8"?>

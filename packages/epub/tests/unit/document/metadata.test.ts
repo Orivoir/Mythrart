@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest"
 import { DOMParser } from "@xmldom/xmldom"
-import { createMetadataXml } from "../../document/metadata"
-import { EpubError } from "../../errors"
-import type { EpubBook } from "../../types"
+import { createMetadataXml } from "../../../document/metadata"
+import { EpubError } from "../../../errors"
+import type { EpubBook } from "../../../types"
 
 const OPF_NAMESPACE = "http://www.idpf.org/2007/opf"
 const DC_NAMESPACE = "http://purl.org/dc/elements/1.1/"

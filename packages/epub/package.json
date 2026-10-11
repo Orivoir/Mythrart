@@ -25,6 +25,8 @@
     "jszip": "^3.10.1"
   },
   "devDependencies": {
+    "@faker-js/faker": "^10.6.0",
+    "@types/node": "^20.19.43",
     "@xmldom/xmldom": "^0.9.12",
     "vitest": "^4.1.11"
   }

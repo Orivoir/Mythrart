@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
-import { createSpine } from "../../document/spine"
-import type { EpubBook } from "../../types"
+import { createSpine } from "../../../document/spine"
+import type { EpubBook } from "../../../types"
 
 function makeBook(overrides: Partial<EpubBook> = {}): EpubBook {
   const baseBook: EpubBook = {

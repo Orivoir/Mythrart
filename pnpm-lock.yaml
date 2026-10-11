@@ -588,6 +588,12 @@ importers:
         specifier: ^3.10.1
         version: 3.10.1
     devDependencies:
+      '@faker-js/faker':
+        specifier: ^10.6.0
+        version: 10.6.0
+      '@types/node':
+        specifier: ^20.19.43
+        version: 20.19.43
       '@xmldom/xmldom':
         specifier: ^0.9.12
         version: 0.9.12

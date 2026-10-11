@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
-import { EpubError } from "../../errors"
-import { normalizeIsbn13 } from "../../utils/normalize-isbn13"
+import { EpubError } from "../../../errors"
+import { normalizeIsbn13 } from "../../../utils/normalize-isbn13"
 
 describe("normalizeIsbn13", () => {
   it("removes spaces and hyphens and returns a normalized ISBN-13", () => {
