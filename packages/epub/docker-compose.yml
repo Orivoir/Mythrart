@@ -1,0 +1,17 @@
+services:
+  epubcheck:
+    image: mythrart-epubcheck:5.4.0
+    build:
+      context: ./tools/epubcheck
+      dockerfile: Dockerfile
+      args:
+        EPUBCHECK_VERSION: "5.4.0"
+
+    # Le validateur n'a pas besoin d'accéder au réseau.
+    network_mode: none
+
+    # Réduire les privilèges du conteneur.
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL

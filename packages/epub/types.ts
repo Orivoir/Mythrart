@@ -67,3 +67,8 @@ export interface EpubResource {
   data: Uint8Array
   mimeType: string
 }
+
+export interface EpubArchiveFile {
+  path: string
+  data: string | Uint8Array
+}

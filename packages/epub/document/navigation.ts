@@ -4,13 +4,10 @@ import { escapeXml } from "../utils/escape-xml"
 import { getTocLabel } from "../utils/locale-nav"
 import { createLandmarks } from "./landmarks"
 import { XHTML_NAMESPACE, EPUB_NAMESPACE } from "../constants"
+import { createChapterHref } from "../utils/chapter-href"
 
 function normalizeText(value: string): string {
   return value.trim()
-}
-
-function createChapterHref(chapterId: string): string {
-  return `chapters/${encodeURIComponent(chapterId)}.xhtml`
 }
 
 export function createNavigationXhtml(book: EpubBook): string {

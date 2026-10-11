@@ -2,6 +2,7 @@
 import { describe, expect, it } from "vitest"
 import { DOMParser } from "@xmldom/xmldom"
 import { createContainerXml } from "../../../document/container"
+import { PACKAGE_DOCUMENT_PATH } from "../../../constants"
 
 describe("createContainerXml", () => {
   it("generates a valid EPUB container document", () => {
@@ -37,7 +38,7 @@ describe("createContainerXml", () => {
 
     expect(rootfile.localName).toBe("rootfile")
     expect(rootfile.getAttribute("full-path")).toBe(
-      "OEBPS/package.opf",
+      PACKAGE_DOCUMENT_PATH,
     )
     expect(rootfile.getAttribute("media-type")).toBe(
       "application/oebps-package+xml",
