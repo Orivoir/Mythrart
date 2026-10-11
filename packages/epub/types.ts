@@ -62,3 +62,8 @@ export interface EpubGenerationResult {
   mimeType: "application/epub+zip"
 }
 
+export interface EpubResource {
+  path: string
+  data: Uint8Array
+  mimeType: string
+}

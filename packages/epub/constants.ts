@@ -15,3 +15,16 @@ export const DC_IDENTIFIER = "pub-id"
 
 export const ISBN_ONIX_SCHEME = "onix:codelist5"
 export const ISBN_13_CODE = "15"
+
+export const IMAGE_MEDIA_TYPES_BY_EXTENSION = {
+  ".gif": "image/gif",
+  ".jpeg": "image/jpeg",
+  ".jpg": "image/jpeg",
+  ".png": "image/png",
+  ".svg": "image/svg+xml",
+  ".webp": "image/webp",
+} as const
+
+export const SUPPORTED_IMAGE_MEDIA_TYPES = new Set<string>(
+  Object.values(IMAGE_MEDIA_TYPES_BY_EXTENSION),
+)
