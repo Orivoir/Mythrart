@@ -9,10 +9,7 @@ export function validateAsset(asset: EpubAsset): EpubResource {
   const mimeType = normalizeText(asset.mimeType)
 
   if (!id) {
-    throw new EpubError(
-      "Invalid EPUB asset ID",
-      "INVALID_ASSET",
-    )
+    throw new EpubError("Invalid EPUB asset ID", "INVALID_ASSET")
   }
 
   if (
@@ -35,10 +32,7 @@ export function validateAsset(asset: EpubAsset): EpubResource {
   }
 
   if (!(asset.data instanceof Uint8Array)) {
-    throw new EpubError(
-      `Invalid EPUB asset data: ${fileName}`,
-      "INVALID_ASSET",
-    )
+    throw new EpubError(`Invalid EPUB asset data: ${fileName}`, "INVALID_ASSET")
   }
 
   return {

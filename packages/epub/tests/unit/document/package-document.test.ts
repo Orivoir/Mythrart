@@ -133,4 +133,44 @@ describe("createPackageDocument", () => {
       ),
     ).toThrow(EpubError)
   })
+
+  it("throws when two chapters produce the same manifest item id", () => {
+    expect(() =>
+      createPackageDocument(
+        makeBook({
+          chapters: [
+            {
+              id: "duplicate",
+              title: "First chapter",
+              position: 1,
+              content: { type: "doc", content: [] },
+            },
+            {
+              id: "duplicate",
+              title: "Second chapter",
+              position: 2,
+              content: { type: "doc", content: [] },
+            },
+          ],
+        }),
+      ),
+    ).toThrow("Duplicate EPUB manifest item id: chapter-duplicate")
+  })
+
+  it("throws when a chapter title is missing", () => {
+    expect(() =>
+      createPackageDocument(
+        makeBook({
+          chapters: [
+            {
+              id: "chapter-without-title",
+              title: "   ",
+              position: 1,
+              content: { type: "doc", content: [] },
+            },
+          ],
+        }),
+      ),
+    ).toThrow("Invalid EPUB chapter at index 0")
+  })
 })

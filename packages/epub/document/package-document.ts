@@ -1,4 +1,3 @@
-
 import type { EpubBook } from "../types"
 import { EpubError } from "../errors"
 import { escapeXml } from "../utils/escape-xml"
@@ -48,17 +47,10 @@ function createManifest(book: EpubBook): string {
     const fileName = normalizeText(book.coverImage.fileName)
 
     if (!fileName) {
-      throw new EpubError(
-        "Invalid EPUB cover image filename",
-        "INVALID_ASSET",
-      )
+      throw new EpubError("Invalid EPUB cover image filename", "INVALID_ASSET")
     }
 
-    addItem(
-      "cover",
-      "cover.xhtml",
-      "application/xhtml+xml",
-    )
+    addItem("cover", "cover.xhtml", "application/xhtml+xml")
 
     addItem(
       "cover-image",
@@ -82,23 +74,14 @@ function createManifest(book: EpubBook): string {
     const assetId = normalizeText(asset.id)
 
     if (!fileName || !assetId) {
-      throw new EpubError(
-        "Invalid EPUB asset metadata",
-        "INVALID_ASSET",
-      )
+      throw new EpubError("Invalid EPUB asset metadata", "INVALID_ASSET")
     }
 
-    addItem(
-      `asset-${assetId}`,
-      createImageHref(fileName),
-      asset.mimeType,
-    )
+    addItem(`asset-${assetId}`, createImageHref(fileName), asset.mimeType)
   }
 
   // Chapitres, dans l'ordre éditorial.
-  const chapters = [...book.chapters].sort(
-    (a, b) => a.position - b.position,
-  )
+  const chapters = [...book.chapters].sort((a, b) => a.position - b.position)
 
   for (let index = 0; index < chapters.length; index++) {
     const chapter = chapters[index]
@@ -112,11 +95,7 @@ function createManifest(book: EpubBook): string {
       )
     }
 
-    addItem(
-      `chapter-${id}`,
-      createChapterHref(id),
-      "application/xhtml+xml",
-    )
+    addItem(`chapter-${id}`, createChapterHref(id), "application/xhtml+xml")
   }
 
   return items.join("\n")

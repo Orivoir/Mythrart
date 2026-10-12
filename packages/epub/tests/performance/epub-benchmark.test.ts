@@ -34,8 +34,7 @@ import { escapeXml } from "../../utils/escape-xml"
 import type { EpubArchiveFile } from "../../types"
 
 const epub = aliceInWonderlandFixture
-const {book} = epub
-
+const { book } = epub
 
 const WARMUP_ITERATIONS = 2
 const DEFAULT_ITERATIONS = 20
@@ -134,227 +133,205 @@ async function measure(
 }
 
 describe("EPUB generator — performance benchmark", () => {
-  it(
-    "benchmarks renderers, documents, resources and archive generation",
-    async () => {
-      const firstChapter = [...book.chapters].sort(
-        (a, b) => a.position - b.position,
-      )[0]!
+  it("benchmarks renderers, documents, resources and archive generation", async () => {
+    const firstChapter = [...book.chapters].sort(
+      (a, b) => a.position - b.position,
+    )[0]!
 
-      const firstChapterHref = createChapterHref(firstChapter.id)
+    const firstChapterHref = createChapterHref(firstChapter.id)
 
-      const imageNode = requireNode(
-        firstChapter.content,
-        (node) => node.type === "image",
-        "image node",
-      )
+    const imageNode = requireNode(
+      firstChapter.content,
+      (node) => node.type === "image",
+      "image node",
+    )
 
-      const mentionNode = requireNode(
-        firstChapter.content,
-        (node) => node.type === "mention",
-        "mention node",
-      )
+    const mentionNode = requireNode(
+      firstChapter.content,
+      (node) => node.type === "mention",
+      "mention node",
+    )
 
-      const markedTextNode = requireNode(
-        firstChapter.content,
-        (node) =>
-          node.type === "text" &&
-          typeof node.text === "string" &&
-          Boolean(node.marks?.length),
-        "marked text node",
-      )
+    const markedTextNode = requireNode(
+      firstChapter.content,
+      (node) =>
+        node.type === "text" &&
+        typeof node.text === "string" &&
+        Boolean(node.marks?.length),
+      "marked text node",
+    )
 
-      const resources = createEpubResources(book)
+    const resources = createEpubResources(book)
 
-      const styles = readFileSync(
-        new URL("../../resources/styles.css", import.meta.url),
-        "utf8",
-      )
+    const styles = readFileSync(
+      new URL("../../resources/styles.css", import.meta.url),
+      "utf8",
+    )
 
-      // Prépare une archive comparable à celle produite par createEpub().
-      // Cette préparation est volontairement hors du chronométrage ZIP.
-      const archiveFiles: EpubArchiveFile[] = [
-        {
-          path: "META-INF/container.xml",
-          data: createContainerXml(),
-        },
-        {
-          path: "OEBPS/content.opf",
-          data: createPackageDocument(book),
-        },
-        {
-          path: "OEBPS/nav.xhtml",
-          data: createNavigationXhtml(book),
-        },
-        {
-          path: "OEBPS/cover.xhtml",
-          data: createCoverXhtml(book),
-        },
-        ...[...book.chapters]
-          .sort((a, b) => a.position - b.position)
-          .map((chapter) => ({
-            path: `OEBPS/${createChapterHref(chapter.id)}`,
-            data: renderChapter(chapter, book.language, book.assets),
-          })),
-        ...resources.map((resource) => ({
-          path: resource.path,
-          data: resource.data,
+    // Prépare une archive comparable à celle produite par createEpub().
+    // Cette préparation est volontairement hors du chronométrage ZIP.
+    const archiveFiles: EpubArchiveFile[] = [
+      {
+        path: "META-INF/container.xml",
+        data: createContainerXml(),
+      },
+      {
+        path: "OEBPS/content.opf",
+        data: createPackageDocument(book),
+      },
+      {
+        path: "OEBPS/nav.xhtml",
+        data: createNavigationXhtml(book),
+      },
+      {
+        path: "OEBPS/cover.xhtml",
+        data: createCoverXhtml(book),
+      },
+      ...[...book.chapters]
+        .sort((a, b) => a.position - b.position)
+        .map((chapter) => ({
+          path: `OEBPS/${createChapterHref(chapter.id)}`,
+          data: renderChapter(chapter, book.language, book.assets),
         })),
-        {
-          path: "OEBPS/styles.css",
-          data: styles,
+      ...resources.map((resource) => ({
+        path: resource.path,
+        data: resource.data,
+      })),
+      {
+        path: "OEBPS/styles.css",
+        data: styles,
+      },
+    ]
+
+    const results: BenchmarkResult[] = []
+
+    // ── Renderers ──────────────────────────────────────────────
+
+    results.push(
+      await measure("renderNode — document complet", () =>
+        renderNode(firstChapter.content, book.assets),
+      ),
+    )
+
+    results.push(
+      await measure("renderChildren", () =>
+        renderChildren(firstChapter.content, book.assets),
+      ),
+    )
+
+    results.push(
+      await measure("renderImage", () => renderImage(imageNode, book.assets)),
+    )
+
+    results.push(
+      await measure("renderMarks", () =>
+        renderMarks(
+          escapeXml(markedTextNode.text ?? ""),
+          markedTextNode.marks ?? [],
+        ),
+      ),
+    )
+
+    results.push(
+      await measure("renderMention", () => renderMention(mentionNode)),
+    )
+
+    results.push(
+      await measure("renderChapter — 1 chapitre", () =>
+        renderChapter(firstChapter, book.language, book.assets),
+      ),
+    )
+
+    results.push(
+      await measure("renderChapter — tous les chapitres", () =>
+        book.chapters.map((chapter) =>
+          renderChapter(chapter, book.language, book.assets),
+        ),
+      ),
+    )
+
+    // ── Documents ──────────────────────────────────────────────
+
+    results.push(
+      await measure("createContainerXml", () => createContainerXml()),
+    )
+
+    results.push(
+      await measure("createCoverXhtml", () => createCoverXhtml(book)),
+    )
+
+    results.push(
+      await measure("createLandmarks", () =>
+        createLandmarks(book, firstChapterHref),
+      ),
+    )
+
+    results.push(
+      await measure("createMetadataXml", () =>
+        createMetadataXml(book, new Date("2026-01-01T00:00:00.000Z")),
+      ),
+    )
+
+    results.push(
+      await measure("createNavigationXhtml", () => createNavigationXhtml(book)),
+    )
+
+    results.push(await measure("createSpine", () => createSpine(book)))
+
+    results.push(
+      await measure("createPackageDocument", () => createPackageDocument(book)),
+    )
+
+    // ── Resources ──────────────────────────────────────────────
+
+    results.push(
+      await measure("createEpubResources", () => createEpubResources(book)),
+    )
+
+    results.push(
+      await measure("isSupportedImageMediaType", () =>
+        isSupportedImageMediaType("image/jpeg"),
+      ),
+    )
+
+    results.push(
+      await measure("getImageMediaTypeFromFileName", () =>
+        getImageMediaTypeFromFileName("illustration.jpg"),
+      ),
+    )
+
+    // ── ZIP ────────────────────────────────────────────────────
+
+    results.push(
+      await measure(
+        "buildEpubArchive",
+        () => buildEpubArchive(archiveFiles),
+        FULL_GENERATION_ITERATIONS,
+      ),
+    )
+
+    // ── Full pipeline ─────────────────────────────────────────
+
+    let finalEpubSize = 0
+
+    results.push(
+      await measure(
+        "createEpub — pipeline complet",
+        async () => {
+          const result = await createEpub(epub)
+          finalEpubSize = result.data.byteLength
+          return result
         },
-      ]
+        FULL_GENERATION_ITERATIONS,
+      ),
+    )
 
-      const results: BenchmarkResult[] = []
-
-      // ── Renderers ──────────────────────────────────────────────
-
-      results.push(
-        await measure("renderNode — document complet", () =>
-          renderNode(firstChapter.content, book.assets),
-        ),
-      )
-
-      results.push(
-        await measure("renderChildren", () =>
-          renderChildren(firstChapter.content, book.assets),
-        ),
-      )
-
-      results.push(
-        await measure("renderImage", () =>
-          renderImage(imageNode, book.assets),
-        ),
-      )
-
-      results.push(
-        await measure("renderMarks", () =>
-          renderMarks(
-            escapeXml(markedTextNode.text ?? ""),
-            markedTextNode.marks ?? [],
-          ),
-        ),
-      )
-
-      results.push(
-        await measure("renderMention", () =>
-          renderMention(mentionNode),
-        ),
-      )
-
-      results.push(
-        await measure("renderChapter — 1 chapitre", () =>
-          renderChapter(firstChapter, book.language, book.assets),
-        ),
-      )
-
-      results.push(
-        await measure("renderChapter — tous les chapitres", () =>
-          book.chapters.map((chapter) =>
-            renderChapter(chapter, book.language, book.assets),
-          ),
-        ),
-      )
-
-      // ── Documents ──────────────────────────────────────────────
-
-      results.push(
-        await measure("createContainerXml", () =>
-          createContainerXml(),
-        ),
-      )
-
-      results.push(
-        await measure("createCoverXhtml", () =>
-          createCoverXhtml(book),
-        ),
-      )
-
-      results.push(
-        await measure("createLandmarks", () =>
-          createLandmarks(book, firstChapterHref),
-        ),
-      )
-
-      results.push(
-        await measure("createMetadataXml", () =>
-          createMetadataXml(book, new Date("2026-01-01T00:00:00.000Z")),
-        ),
-      )
-
-      results.push(
-        await measure("createNavigationXhtml", () =>
-          createNavigationXhtml(book),
-        ),
-      )
-
-      results.push(
-        await measure("createSpine", () =>
-          createSpine(book),
-        ),
-      )
-
-      results.push(
-        await measure("createPackageDocument", () =>
-          createPackageDocument(book),
-        ),
-      )
-
-      // ── Resources ──────────────────────────────────────────────
-
-      results.push(
-        await measure("createEpubResources", () =>
-          createEpubResources(book),
-        ),
-      )
-
-      results.push(
-        await measure("isSupportedImageMediaType", () =>
-          isSupportedImageMediaType("image/jpeg"),
-        ),
-      )
-
-      results.push(
-        await measure("getImageMediaTypeFromFileName", () =>
-          getImageMediaTypeFromFileName("illustration.jpg"),
-        ),
-      )
-
-      // ── ZIP ────────────────────────────────────────────────────
-
-      results.push(
-        await measure(
-          "buildEpubArchive",
-          () => buildEpubArchive(archiveFiles),
-          FULL_GENERATION_ITERATIONS,
-        ),
-      )
-
-      // ── Full pipeline ─────────────────────────────────────────
-
-      let finalEpubSize = 0
-
-      results.push(
-        await measure(
-          "createEpub — pipeline complet",
-          async () => {
-            const result = await createEpub(epub)
-            finalEpubSize = result.data.byteLength
-            return result
-          },
-          FULL_GENERATION_ITERATIONS,
-        ),
-      )
-
-      console.log("\n📊 Mythrart EPUB benchmark")
-      console.log(`Book: ${book.title}`)
-      console.log(`Chapters: ${book.chapters.length}`)
-      console.log(`Assets: ${resources.length}`)
-      console.log(`Archive entries: ${archiveFiles.length + 1}`)
-      console.log(`EPUB size: ${(finalEpubSize / 1024 / 1024).toFixed(2)} MiB`)
-      console.table(results)
-    },
-    180_000,
-  )
+    console.log("\n📊 Mythrart EPUB benchmark")
+    console.log(`Book: ${book.title}`)
+    console.log(`Chapters: ${book.chapters.length}`)
+    console.log(`Assets: ${resources.length}`)
+    console.log(`Archive entries: ${archiveFiles.length + 1}`)
+    console.log(`EPUB size: ${(finalEpubSize / 1024 / 1024).toFixed(2)} MiB`)
+    console.table(results)
+  }, 180_000)
 })

@@ -1,37 +1,39 @@
+import type { EpubTheme } from "../types"
 
-import type { EpubTheme } from "../types";
-
-function validateCssValue(
-  value: string,
-  property: string,
-): string {
-  const trimmed = value.trim();
+function validateCssValue(value: string, property: string): string {
+  const trimmed = value.trim()
 
   if (
     !trimmed ||
     /[;{}<>]/.test(trimmed) ||
     /url\s*\(|expression\s*\(/i.test(trimmed)
   ) {
-    throw new Error(`Invalid CSS value for ${property}`);
+    throw new Error(`Invalid CSS value for ${property}`)
   }
 
-  return trimmed;
+  return trimmed
 }
 
-export function createThemeStylesheet(
-  theme: EpubTheme,
-): string {
-
-  const backgroundColor = validateCssValue(theme.backgroundColor, "backgroundColor");
-  const textColor = validateCssValue(theme.textColor, "textColor");
-  const textFont = validateCssValue(theme.textFont, "textFont");
-  const titleFont = validateCssValue(theme.titleFont, "titleFont");
-  const subtitleFont = validateCssValue(theme.subtitleFont, "subtitleFont");
-  const headingColor = validateCssValue(theme.headingColor, "headingColor");
-  const fontSize = validateCssValue(theme.fontSize, "fontSize");
-  const lineHeight = validateCssValue(theme.lineHeight, "lineHeight");
-  const paragraphSpacing = validateCssValue(theme.paragraphSpacing, "paragraphSpacing");
-  const headingSpacing = validateCssValue(theme.headingSpacing, "headingSpacing");
+export function createThemeStylesheet(theme: EpubTheme): string {
+  const backgroundColor = validateCssValue(
+    theme.backgroundColor,
+    "backgroundColor",
+  )
+  const textColor = validateCssValue(theme.textColor, "textColor")
+  const textFont = validateCssValue(theme.textFont, "textFont")
+  const titleFont = validateCssValue(theme.titleFont, "titleFont")
+  const subtitleFont = validateCssValue(theme.subtitleFont, "subtitleFont")
+  const headingColor = validateCssValue(theme.headingColor, "headingColor")
+  const fontSize = validateCssValue(theme.fontSize, "fontSize")
+  const lineHeight = validateCssValue(theme.lineHeight, "lineHeight")
+  const paragraphSpacing = validateCssValue(
+    theme.paragraphSpacing,
+    "paragraphSpacing",
+  )
+  const headingSpacing = validateCssValue(
+    theme.headingSpacing,
+    "headingSpacing",
+  )
 
   return `
 /* Theme overrides */
@@ -69,5 +71,5 @@ h6 {
 p {
   margin-bottom: ${paragraphSpacing};
 }
-`.trim();
+`.trim()
 }

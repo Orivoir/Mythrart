@@ -7,7 +7,13 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "types": ["node", "vitest/globals"]
+    "types": ["node"]
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts"],
+  "exclude": [
+    "node_modules",
+    "tests",
+    "dist",
+    "coverage"
+  ]
 }

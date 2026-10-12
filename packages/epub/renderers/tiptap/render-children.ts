@@ -26,7 +26,5 @@ export function renderChildren(
     )
   }
 
-  return node.content
-    .map((child) => renderNode(child, assets))
-    .join("")
+  return node.content.map((child) => renderNode(child, assets)).join("")
 }

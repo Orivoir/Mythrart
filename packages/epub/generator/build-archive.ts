@@ -17,10 +17,7 @@ export async function buildEpubArchive(
   files: readonly EpubArchiveFile[],
 ): Promise<Uint8Array> {
   if (!Array.isArray(files)) {
-    throw new EpubError(
-      "Invalid EPUB archive files",
-      "INVALID_BOOK",
-    )
+    throw new EpubError("Invalid EPUB archive files", "INVALID_BOOK")
   }
 
   const zip = new JSZip()
@@ -36,15 +33,9 @@ export async function buildEpubArchive(
     if (
       !file ||
       typeof file.path !== "string" ||
-      !(
-        typeof file.data === "string" ||
-        file.data instanceof Uint8Array
-      )
+      !(typeof file.data === "string" || file.data instanceof Uint8Array)
     ) {
-      throw new EpubError(
-        "Invalid EPUB archive file entry",
-        "INVALID_BOOK",
-      )
+      throw new EpubError("Invalid EPUB archive file entry", "INVALID_BOOK")
     }
 
     validateArchivePath(file.path)

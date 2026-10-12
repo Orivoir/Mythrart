@@ -1,4 +1,3 @@
-
 import type { EpubArchiveFile } from "../../types"
 
 export function createArchiveFixture(): EpubArchiveFile[] {

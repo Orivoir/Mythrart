@@ -1,10 +1,5 @@
-
 import { describe, expect, it } from "vitest"
-import {
-  DOMParser,
-  type Document,
-  type Element,
-} from "@xmldom/xmldom"
+import { DOMParser, type Document, type Element } from "@xmldom/xmldom"
 
 import { renderChapter } from "../../../renderers/chapter"
 import type { EpubAsset, EpubChapter } from "../../../types"
@@ -91,10 +86,7 @@ function parseXhtml(xhtml: string): Document {
     },
   })
 
-  const document = parser.parseFromString(
-    xhtml,
-    "application/xhtml+xml",
-  )
+  const document = parser.parseFromString(xhtml, "application/xhtml+xml")
 
   expect(parseErrors).toEqual([])
   expect(document?.documentElement?.localName).toBe("html")
@@ -158,20 +150,13 @@ describe("renderChapter integration", () => {
       "img",
     ])
 
-    expect(sectionChildren[0].textContent).toBe(
-      "Integration test chapter",
-    )
+    expect(sectionChildren[0].textContent).toBe("Integration test chapter")
   })
 
   it("preserves nested formatting and mention text in the parsed DOM", () => {
-    const document = parseXhtml(
-      renderChapter(chapter, "en", assets),
-    )
+    const document = parseXhtml(renderChapter(chapter, "en", assets))
 
-    const paragraphs = document.getElementsByTagNameNS(
-      XHTML_NS,
-      "p",
-    )
+    const paragraphs = document.getElementsByTagNameNS(XHTML_NS, "p")
 
     expect(paragraphs.length).toBe(1)
 
@@ -179,32 +164,22 @@ describe("renderChapter integration", () => {
 
     expect(paragraph.textContent).toBe("Hello worldalice")
 
-    const strong = paragraph.getElementsByTagNameNS(
-      XHTML_NS,
-      "strong",
-    )
+    const strong = paragraph.getElementsByTagNameNS(XHTML_NS, "strong")
 
     expect(strong.length).toBe(1)
     expect(strong.item(0)?.textContent).toBe("world")
   })
 
   it("resolves image references to the expected relative path", () => {
-    const document = parseXhtml(
-      renderChapter(chapter, "en", assets),
-    )
+    const document = parseXhtml(renderChapter(chapter, "en", assets))
 
-    const images = document.getElementsByTagNameNS(
-      XHTML_NS,
-      "img",
-    )
+    const images = document.getElementsByTagNameNS(XHTML_NS, "img")
 
     expect(images.length).toBe(1)
 
     const image = images.item(0)!
 
-    expect(image.getAttribute("src")).toBe(
-      "../images/fixture-1.png",
-    )
+    expect(image.getAttribute("src")).toBe("../images/fixture-1.png")
     expect(image.getAttribute("alt")).toBe("Test illustration")
   })
 
@@ -214,19 +189,11 @@ describe("renderChapter integration", () => {
       title: 'A & B < "C"',
     }
 
-    const document = parseXhtml(
-      renderChapter(specialChapter, "en", assets),
-    )
+    const document = parseXhtml(renderChapter(specialChapter, "en", assets))
 
-    const title = document.getElementsByTagNameNS(
-      XHTML_NS,
-      "title",
-    ).item(0)
+    const title = document.getElementsByTagNameNS(XHTML_NS, "title").item(0)
 
-    const heading = document.getElementsByTagNameNS(
-      XHTML_NS,
-      "h1",
-    ).item(0)
+    const heading = document.getElementsByTagNameNS(XHTML_NS, "h1").item(0)
 
     expect(title?.textContent).toBe('A & B < "C"')
     expect(heading?.textContent).toBe('A & B < "C"')
@@ -255,9 +222,7 @@ describe("renderChapter with random chapters", () => {
 
   it("includes chapter metadata and a stylesheet for random content", () => {
     const randomChapter = createRandomChapterEpub()
-    const document = parseXhtml(
-      renderChapter(randomChapter, "en", assets),
-    )
+    const document = parseXhtml(renderChapter(randomChapter, "en", assets))
 
     const titles = document.getElementsByTagNameNS(XHTML_NS, "title")
     const headings = document.getElementsByTagNameNS(XHTML_NS, "h1")
@@ -279,14 +244,9 @@ describe("renderChapter with random chapters", () => {
 
   it("wraps random chapter content in a section", () => {
     const randomChapter = createRandomChapterEpub()
-    const document = parseXhtml(
-      renderChapter(randomChapter, "en", assets),
-    )
+    const document = parseXhtml(renderChapter(randomChapter, "en", assets))
 
-    const body = document.getElementsByTagNameNS(
-      XHTML_NS,
-      "body",
-    ).item(0)!
+    const body = document.getElementsByTagNameNS(XHTML_NS, "body").item(0)!
 
     const bodyChildren = getElementChildren(body)
 

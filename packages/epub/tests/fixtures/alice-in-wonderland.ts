@@ -49,7 +49,9 @@ function linkText(text: string, href: string): JSONContent {
 
 function textWithMarks(
   text: string,
-  marks: Array<{ type: "bold" | "italic" | "underline" | "strike" | "code" }> = [],
+  marks: Array<{
+    type: "bold" | "italic" | "underline" | "strike" | "code"
+  }> = [],
 ): JSONContent {
   return {
     type: "text",
@@ -147,9 +149,7 @@ const chapters: EpubChapter[] = chapterTitles.map((title, index) => {
       content: [
         {
           type: "paragraph",
-          content: [
-            { type: "text", text: faker.lorem.sentence() },
-          ],
+          content: [{ type: "text", text: faker.lorem.sentence() }],
         },
       ],
     })),

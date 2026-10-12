@@ -9,25 +9,19 @@ import { PACKAGE_DOCUMENT_PATH } from "../../../constants"
 import { createEpub } from "../../../generator/create-epub"
 import type { CreateEpubOptions } from "../../../types"
 
-const OCF_NAMESPACE =
-  "urn:oasis:names:tc:opendocument:xmlns:container"
+const OCF_NAMESPACE = "urn:oasis:names:tc:opendocument:xmlns:container"
 
-const OPF_NAMESPACE =
-  "http://www.idpf.org/2007/opf"
+const OPF_NAMESPACE = "http://www.idpf.org/2007/opf"
 
-const XHTML_NAMESPACE =
-  "http://www.w3.org/1999/xhtml"
+const XHTML_NAMESPACE = "http://www.w3.org/1999/xhtml"
 
-const EPUB_NAMESPACE =
-  "http://www.idpf.org/2007/ops"
+const EPUB_NAMESPACE = "http://www.idpf.org/2007/ops"
 
 const EPUB_MIME_TYPE = "application/epub+zip"
 
-const CHAPTER_ONE_HREF =
-  "chapters/chapter-ete.xhtml"
+const CHAPTER_ONE_HREF = "chapters/chapter-ete.xhtml"
 
-const CHAPTER_TWO_HREF =
-  "chapters/chapter-deux.xhtml"
+const CHAPTER_TWO_HREF = "chapters/chapter-deux.xhtml"
 
 const PNG_DATA = Uint8Array.from(
   Buffer.from(
@@ -46,14 +40,14 @@ function createBook(): CreateEpubOptions {
       language: "fr",
       createdAt: new Date("2026-01-15T10:30:00.000Z"),
       creator: "Auteur de test",
-  
+
       coverImage: {
         id: "cover-asset",
         fileName: "cover.png",
         mimeType: "image/png",
         data: PNG_DATA,
       },
-  
+
       assets: [
         {
           id: "illustration",
@@ -62,9 +56,9 @@ function createBook(): CreateEpubOptions {
           data: PNG_DATA,
         },
       ],
-  
+
       contributors: [],
-  
+
       // L'ordre d'entrée est volontairement différent de l'ordre attendu.
       chapters: [
         {
@@ -112,7 +106,7 @@ function createBook(): CreateEpubOptions {
             ],
           },
         },
-      ]
+      ],
     },
     theme: epubThemeFixture,
   }
@@ -138,9 +132,7 @@ function elementsByLocalName(
   node: Document | Element,
   localName: string,
 ): Element[] {
-  return Array.from(
-    node.getElementsByTagNameNS("*", localName),
-  )
+  return Array.from(node.getElementsByTagNameNS("*", localName))
 }
 
 function textContent(element: Element | null | undefined): string {
@@ -172,11 +164,7 @@ function resolveArchiveHref(
 }
 
 function getLocalZipEntries(data: Uint8Array) {
-  const view = new DataView(
-    data.buffer,
-    data.byteOffset,
-    data.byteLength,
-  )
+  const view = new DataView(data.buffer, data.byteOffset, data.byteLength)
 
   const decoder = new TextDecoder()
   const entries: Array<{
@@ -204,10 +192,7 @@ function getLocalZipEntries(data: Uint8Array) {
 
     entries.push({ name, compressionMethod })
 
-    offset =
-      nameEnd +
-      extraLength +
-      compressedSize
+    offset = nameEnd + extraLength + compressedSize
   }
 
   return entries
@@ -216,7 +201,7 @@ function getLocalZipEntries(data: Uint8Array) {
 describe("createEpub — intégration complète", () => {
   it("Generates a EPUB, with valid paths and references", async () => {
     const epub = createBook()
-    const {book} = epub
+    const { book } = epub
     const result = await createEpub(epub)
 
     // ---------------------------------------------------------
@@ -289,9 +274,7 @@ describe("createEpub — intégration complète", () => {
     const rootfiles = elementsByLocalName(container, "rootfile")
 
     expect(rootfiles).toHaveLength(1)
-    expect(rootfiles[0].getAttribute("full-path")).toBe(
-      PACKAGE_DOCUMENT_PATH,
-    )
+    expect(rootfiles[0].getAttribute("full-path")).toBe(PACKAGE_DOCUMENT_PATH)
     expect(rootfiles[0].getAttribute("media-type")).toBe(
       "application/oebps-package+xml",
     )
@@ -300,9 +283,7 @@ describe("createEpub — intégration complète", () => {
     // 5. Document OPF : métadonnées, manifeste et spine
     // ---------------------------------------------------------
 
-    const opfXml = await zip
-      .file("OEBPS/content.opf")!
-      .async("string")
+    const opfXml = await zip.file("OEBPS/content.opf")!.async("string")
 
     const opf = parseXml(opfXml, "content.opf")
 
@@ -317,21 +298,21 @@ describe("createEpub — intégration complète", () => {
     const languages = elementsByLocalName(opf, "language")
     const identifiers = elementsByLocalName(opf, "identifier")
 
-    expect(titles.some((element) =>
-      textContent(element) === book.title,
-    )).toBe(true)
+    expect(titles.some((element) => textContent(element) === book.title)).toBe(
+      true,
+    )
 
-    expect(creators.some((element) =>
-      textContent(element) === book.creator,
-    )).toBe(true)
+    expect(
+      creators.some((element) => textContent(element) === book.creator),
+    ).toBe(true)
 
-    expect(languages.some((element) =>
-      textContent(element) === book.language,
-    )).toBe(true)
+    expect(
+      languages.some((element) => textContent(element) === book.language),
+    ).toBe(true)
 
-    expect(identifiers.some((element) =>
-      textContent(element) === book.id,
-    )).toBe(true)
+    expect(
+      identifiers.some((element) => textContent(element) === book.id),
+    ).toBe(true)
 
     const manifests = elementsByLocalName(opf, "manifest")
     const spines = elementsByLocalName(opf, "spine")
@@ -353,17 +334,13 @@ describe("createEpub — intégration complète", () => {
       expect(href, `href absent pour ${id}`).toBeTruthy()
       expect(mediaType, `media-type absent pour ${id}`).toBeTruthy()
 
-      expect(
-        manifestById.has(id!),
-        `ID de manifeste dupliqué : ${id}`,
-      ).toBe(false)
+      expect(manifestById.has(id!), `ID de manifeste dupliqué : ${id}`).toBe(
+        false,
+      )
 
       manifestById.set(id!, item)
 
-      const resolved = resolveArchiveHref(
-        "OEBPS/content.opf",
-        href!,
-      )
+      const resolved = resolveArchiveHref("OEBPS/content.opf", href!)
 
       expect(
         resolved,
@@ -377,34 +354,24 @@ describe("createEpub — intégration complète", () => {
     }
 
     // Le manifeste doit déclarer la navigation EPUB 3.
-    const navItems = manifestItems.filter(
-      (item) => item.getAttribute("properties")
-        ?.split(/\s+/)
-        .includes("nav"),
+    const navItems = manifestItems.filter((item) =>
+      item.getAttribute("properties")?.split(/\s+/).includes("nav"),
     )
 
     expect(navItems).toHaveLength(1)
     expect(navItems[0].getAttribute("href")).toBe("nav.xhtml")
 
     // La couverture doit être identifiée comme image de couverture.
-    const coverImageItems = manifestItems.filter(
-      (item) => item.getAttribute("properties")
-        ?.split(/\s+/)
-        .includes("cover-image"),
+    const coverImageItems = manifestItems.filter((item) =>
+      item.getAttribute("properties")?.split(/\s+/).includes("cover-image"),
     )
 
     expect(coverImageItems).toHaveLength(1)
-    expect(coverImageItems[0].getAttribute("href")).toBe(
-      "images/cover.png",
-    )
-    expect(coverImageItems[0].getAttribute("media-type")).toBe(
-      "image/png",
-    )
+    expect(coverImageItems[0].getAttribute("href")).toBe("images/cover.png")
+    expect(coverImageItems[0].getAttribute("media-type")).toBe("image/png")
 
     // Chaque itemref du spine doit pointer vers un item déclaré.
-    const spineIds = spineRefs.map(
-      (item) => item.getAttribute("idref"),
-    )
+    const spineIds = spineRefs.map((item) => item.getAttribute("idref"))
 
     for (const idref of spineIds) {
       expect(
@@ -417,20 +384,15 @@ describe("createEpub — intégration complète", () => {
     expect(spineIds[0]).toBe("cover")
 
     // Les chapitres doivent suivre leur ordre éditorial.
-    const chapterManifestItems = manifestItems.filter(
-      (item) => item.getAttribute("href")?.startsWith("chapters/"),
+    const chapterManifestItems = manifestItems.filter((item) =>
+      item.getAttribute("href")?.startsWith("chapters/"),
     )
 
     expect(
       chapterManifestItems.map((item) => item.getAttribute("href")),
-    ).toEqual([
-      CHAPTER_ONE_HREF,
-      CHAPTER_TWO_HREF,
-    ])
+    ).toEqual([CHAPTER_ONE_HREF, CHAPTER_TWO_HREF])
 
-    const chapterSpineIds = spineIds.filter(
-      (id) => id!.startsWith("chapter-"),
-    )
+    const chapterSpineIds = spineIds.filter((id) => id!.startsWith("chapter-"))
 
     expect(chapterSpineIds).toEqual([
       "chapter-chapter-ete",
@@ -441,9 +403,7 @@ describe("createEpub — intégration complète", () => {
     // 6. Navigation : TOC et landmarks
     // ---------------------------------------------------------
 
-    const navXml = await zip
-      .file("OEBPS/nav.xhtml")!
-      .async("string")
+    const navXml = await zip.file("OEBPS/nav.xhtml")!.async("string")
 
     const nav = parseXml(navXml, "nav.xhtml")
 
@@ -453,7 +413,8 @@ describe("createEpub — intégration complète", () => {
     const navElements = elementsByLocalName(nav, "nav")
 
     const tocNav = navElements.find((element) =>
-      element.getAttributeNS(EPUB_NAMESPACE, "type")
+      element
+        .getAttributeNS(EPUB_NAMESPACE, "type")
         ?.split(/\s+/)
         .includes("toc"),
     )
@@ -462,9 +423,7 @@ describe("createEpub — intégration complète", () => {
 
     const tocLinks = elementsByLocalName(tocNav!, "a")
 
-    expect(
-      tocLinks.map((link) => link.getAttribute("href")),
-    ).toEqual([
+    expect(tocLinks.map((link) => link.getAttribute("href"))).toEqual([
       CHAPTER_ONE_HREF,
       CHAPTER_TWO_HREF,
     ])
@@ -475,7 +434,8 @@ describe("createEpub — intégration complète", () => {
     ])
 
     const landmarksNav = navElements.find((element) =>
-      element.getAttributeNS(EPUB_NAMESPACE, "type")
+      element
+        .getAttributeNS(EPUB_NAMESPACE, "type")
         ?.split(/\s+/)
         .includes("landmarks"),
     )
@@ -485,16 +445,18 @@ describe("createEpub — intégration complète", () => {
     const landmarkLinks = elementsByLocalName(landmarksNav!, "a")
 
     expect(
-      landmarkLinks.some((link) =>
-        link.getAttributeNS(EPUB_NAMESPACE, "type") === "cover" &&
-        link.getAttribute("href") === "cover.xhtml",
+      landmarkLinks.some(
+        (link) =>
+          link.getAttributeNS(EPUB_NAMESPACE, "type") === "cover" &&
+          link.getAttribute("href") === "cover.xhtml",
       ),
     ).toBe(true)
 
     expect(
-      landmarkLinks.some((link) =>
-        link.getAttributeNS(EPUB_NAMESPACE, "type") === "bodymatter" &&
-        link.getAttribute("href") === CHAPTER_ONE_HREF,
+      landmarkLinks.some(
+        (link) =>
+          link.getAttributeNS(EPUB_NAMESPACE, "type") === "bodymatter" &&
+          link.getAttribute("href") === CHAPTER_ONE_HREF,
       ),
     ).toBe(true)
 
@@ -502,9 +464,7 @@ describe("createEpub — intégration complète", () => {
     // 7. Couverture XHTML et chemin de son image
     // ---------------------------------------------------------
 
-    const coverXml = await zip
-      .file("OEBPS/cover.xhtml")!
-      .async("string")
+    const coverXml = await zip.file("OEBPS/cover.xhtml")!.async("string")
 
     const cover = parseXml(coverXml, "cover.xhtml")
 
@@ -513,13 +473,9 @@ describe("createEpub — intégration complète", () => {
     const coverImages = elementsByLocalName(cover, "img")
 
     expect(coverImages).toHaveLength(1)
-    expect(coverImages[0].getAttribute("src")).toBe(
-      "images/cover.png",
-    )
+    expect(coverImages[0].getAttribute("src")).toBe("images/cover.png")
 
-    expect(
-      archivePathSet.has("OEBPS/images/cover.png"),
-    ).toBe(true)
+    expect(archivePathSet.has("OEBPS/images/cover.png")).toBe(true)
 
     // ---------------------------------------------------------
     // 8. Chapitres XHTML : contenu, ordre et ressources
@@ -529,14 +485,9 @@ describe("createEpub — intégration complète", () => {
       .file(`OEBPS/${CHAPTER_ONE_HREF}`)!
       .async("string")
 
-    const firstChapter = parseXml(
-      firstChapterXml,
-      "premier chapitre",
-    )
+    const firstChapter = parseXml(firstChapterXml, "premier chapitre")
 
-    expect(firstChapter?.documentElement?.namespaceURI).toBe(
-      XHTML_NAMESPACE,
-    )
+    expect(firstChapter?.documentElement?.namespaceURI).toBe(XHTML_NAMESPACE)
 
     const firstChapterText = firstChapter?.documentElement?.textContent ?? ""
 
@@ -550,12 +501,13 @@ describe("createEpub — intégration complète", () => {
       "../images/illustration.png",
     )
 
-    const chapterStylesheets = elementsByLocalName(firstChapter, "link")
-      .filter((element) => element.getAttribute("rel") === "stylesheet")
+    const chapterStylesheets = elementsByLocalName(firstChapter, "link").filter(
+      (element) => element.getAttribute("rel") === "stylesheet",
+    )
 
     expect(
-      chapterStylesheets.some((element) =>
-        element.getAttribute("href") === "../styles.css",
+      chapterStylesheets.some(
+        (element) => element.getAttribute("href") === "../styles.css",
       ),
     ).toBe(true)
 
@@ -563,14 +515,9 @@ describe("createEpub — intégration complète", () => {
       .file(`OEBPS/${CHAPTER_TWO_HREF}`)!
       .async("string")
 
-    const secondChapter = parseXml(
-      secondChapterXml,
-      "deuxième chapitre",
-    )
+    const secondChapter = parseXml(secondChapterXml, "deuxième chapitre")
 
-    expect(secondChapter?.documentElement?.namespaceURI).toBe(
-      XHTML_NAMESPACE,
-    )
+    expect(secondChapter?.documentElement?.namespaceURI).toBe(XHTML_NAMESPACE)
     expect(secondChapter?.documentElement?.textContent).toContain(
       "Le second chapitre.",
     )
@@ -595,13 +542,13 @@ describe("createEpub — intégration complète", () => {
       (item) => item.getAttribute("media-type") === "image/png",
     )
 
-    expect(
-      imageItems.map((item) => item.getAttribute("href")),
-    ).toContain("images/cover.png")
+    expect(imageItems.map((item) => item.getAttribute("href"))).toContain(
+      "images/cover.png",
+    )
 
-    expect(
-      imageItems.map((item) => item.getAttribute("href")),
-    ).toContain("images/illustration.png")
+    expect(imageItems.map((item) => item.getAttribute("href"))).toContain(
+      "images/illustration.png",
+    )
 
     // ---------------------------------------------------------
     // 10. Feuille de style
@@ -616,9 +563,10 @@ describe("createEpub — intégration complète", () => {
     expect(typeof styles).toBe("string")
 
     expect(
-      manifestItems.some((item) =>
-        item.getAttribute("href") === "styles.css" &&
-        item.getAttribute("media-type") === "text/css",
+      manifestItems.some(
+        (item) =>
+          item.getAttribute("href") === "styles.css" &&
+          item.getAttribute("media-type") === "text/css",
       ),
     ).toBe(true)
 
@@ -654,9 +602,7 @@ describe("createEpub — intégration complète", () => {
       ]
 
       for (const element of elements) {
-        const href =
-          element.getAttribute("href") ??
-          element.getAttribute("src")
+        const href = element.getAttribute("href") ?? element.getAttribute("src")
 
         if (!href || href.startsWith("#")) {
           continue

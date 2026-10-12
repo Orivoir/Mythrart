@@ -1,4 +1,3 @@
-
 export function getLanguageCode(language: string): string {
   return language.trim().toLowerCase().split("-")[0]
 }
@@ -16,8 +15,7 @@ export function getTocLabel(language: string): string {
   return labels[getLanguageCode(language)] ?? "Contents"
 }
 
-export 
-function getLandmarkLabels(language: string): {
+export function getLandmarkLabels(language: string): {
   cover: string
   bodymatter: string
   title: string

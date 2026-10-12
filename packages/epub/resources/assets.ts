@@ -21,20 +21,14 @@ export function createEpubResources(
     ? normalizeText(book.coverImage.fileName)
     : undefined
 
-  const assets = [
-    ...(book.coverImage ? [book.coverImage] : []),
-    ...book.assets,
-  ]
+  const assets = [...(book.coverImage ? [book.coverImage] : []), ...book.assets]
 
   for (const asset of assets) {
     const id = normalizeText(asset.id)
     const fileName = normalizeText(asset.fileName)
 
     if (seenIds.has(id)) {
-      throw new EpubError(
-        `Duplicate EPUB asset ID: ${id}`,
-        "INVALID_ASSET",
-      )
+      throw new EpubError(`Duplicate EPUB asset ID: ${id}`, "INVALID_ASSET")
     }
 
     seenIds.add(id)

@@ -1,4 +1,3 @@
-
 import { describe, expect, it } from "vitest"
 import { DOMParser } from "@xmldom/xmldom"
 import { createContainerXml } from "../../../document/container"
@@ -37,9 +36,7 @@ describe("createContainerXml", () => {
     const rootfile = rootfiles[0].children[0]
 
     expect(rootfile.localName).toBe("rootfile")
-    expect(rootfile.getAttribute("full-path")).toBe(
-      PACKAGE_DOCUMENT_PATH,
-    )
+    expect(rootfile.getAttribute("full-path")).toBe(PACKAGE_DOCUMENT_PATH)
     expect(rootfile.getAttribute("media-type")).toBe(
       "application/oebps-package+xml",
     )

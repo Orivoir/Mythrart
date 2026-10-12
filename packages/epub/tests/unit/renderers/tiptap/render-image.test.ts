@@ -1,4 +1,3 @@
-
 import { readFileSync } from "node:fs"
 import { fileURLToPath } from "node:url"
 import path from "node:path"
@@ -81,9 +80,9 @@ describe("renderImage", () => {
       renderImage({ type: "paragraph" } as any, fixtureAssets),
     ).toThrow("Invalid TipTap image node")
 
-    expect(() =>
-      renderImage({ type: "image" } as any, fixtureAssets),
-    ).toThrow(EpubError)
+    expect(() => renderImage({ type: "image" } as any, fixtureAssets)).toThrow(
+      EpubError,
+    )
   })
 
   it("throws when assetId is missing or is not a string", () => {
@@ -118,9 +117,7 @@ describe("renderImage", () => {
       attrs: { assetId: "fixture-1" },
     } as any
 
-    const assets = [
-      { ...fixtureAssets[0], fileName: "   " },
-    ]
+    const assets = [{ ...fixtureAssets[0], fileName: "   " }]
 
     expect(() => renderImage(node, assets)).toThrow(EpubError)
     expect(() => renderImage(node, assets)).toThrow(
@@ -134,9 +131,7 @@ describe("renderImage", () => {
       attrs: { assetId: "fixture-1" },
     } as any
 
-    const assets = [
-      { ...fixtureAssets[0], mimeType: "image/bmp" },
-    ]
+    const assets = [{ ...fixtureAssets[0], mimeType: "image/bmp" }]
 
     expect(() => renderImage(node, assets)).toThrow(EpubError)
     expect(() => renderImage(node, assets)).toThrow(
@@ -156,9 +151,7 @@ describe("renderImage", () => {
       attrs: { assetId: "fixture-1" },
     } as any
 
-    const assets = [
-      { ...fixtureAssets[0], mimeType },
-    ]
+    const assets = [{ ...fixtureAssets[0], mimeType }]
 
     expect(renderImage(node, assets)).toBe(
       '<img src="../images/fixture-1.png" alt="" />',

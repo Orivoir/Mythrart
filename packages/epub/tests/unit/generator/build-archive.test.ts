@@ -1,4 +1,3 @@
-
 import { describe, expect, it } from "vitest"
 
 import { EpubError } from "../../../errors"
@@ -52,9 +51,7 @@ describe("buildEpubArchive", () => {
   describe("archive paths", () => {
     it("rejects the reserved mimetype path", async () => {
       await expect(
-        buildEpubArchive([
-          { path: MIMETYPE_FILE, data: EPUB_MIMETYPE },
-        ]),
+        buildEpubArchive([{ path: MIMETYPE_FILE, data: EPUB_MIMETYPE }]),
       ).rejects.toThrow(EpubError)
     })
 

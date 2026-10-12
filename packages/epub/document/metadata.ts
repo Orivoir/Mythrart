@@ -1,4 +1,3 @@
-
 import type { EpubBook } from "../types"
 import { EpubError } from "../errors"
 import { escapeXml } from "../utils/escape-xml"
@@ -11,7 +10,7 @@ import {
   DCTERMS_NAMESPACE,
   DC_IDENTIFIER,
   ISBN_ONIX_SCHEME,
-  ISBN_13_CODE
+  ISBN_13_CODE,
 } from "../constants"
 
 function requireText(value: string, field: string): string {

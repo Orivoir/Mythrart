@@ -21,7 +21,9 @@ describe("validateArchivePath", () => {
   it("throws when the path uses backslashes or control characters", () => {
     expect(() => validateArchivePath("OEBPS\\package.opf")).toThrow(EpubError)
     expect(() => validateArchivePath("OEBPS\npackage.opf")).toThrow(EpubError)
-    expect(() => validateArchivePath("OEBPS\u0000package.opf")).toThrow(EpubError)
+    expect(() => validateArchivePath("OEBPS\u0000package.opf")).toThrow(
+      EpubError,
+    )
   })
 
   it("throws when a segment is empty, dot or parent directory", () => {

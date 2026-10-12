@@ -4,7 +4,6 @@ import { createCoverXhtml } from "../../../document/cover"
 import { EpubError } from "../../../errors"
 import type { EpubBook } from "../../../types"
 
-
 const svg = `<?xml version="1.0" encoding="UTF-8"?>
   <svg xmlns="http://www.w3.org/2000/svg" width="1" height="1" viewBox="0 0 1 1">
     <rect width="1" height="1" fill="white"/>
@@ -12,7 +11,6 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
 const svgBytes = new TextEncoder().encode(svg)
 
 function makeBook(overrides: Partial<EpubBook> = {}): EpubBook {
-
   const baseBook: EpubBook = {
     id: "book-123",
     isbn: "9780306406157",

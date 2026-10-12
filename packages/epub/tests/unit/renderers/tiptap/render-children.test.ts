@@ -34,7 +34,7 @@ describe("renderChildren", () => {
     } as any
 
     expect(renderChildren(node, assets)).toBe(
-      "Hello Alice<img src=\"../images/fixture-1.png\" alt=\"\" />",
+      'Hello Alice<img src="../images/fixture-1.png" alt="" />',
     )
   })
 
@@ -82,9 +82,6 @@ describe("renderChildren", () => {
       ],
     } as any
 
-    expect(renderChildren(node, assets)).toBe(
-      "<p>Nested content</p>",
-    )
+    expect(renderChildren(node, assets)).toBe("<p>Nested content</p>")
   })
-
 })

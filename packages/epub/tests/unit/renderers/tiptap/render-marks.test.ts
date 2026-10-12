@@ -54,17 +54,19 @@ describe("renderMarks", () => {
     ).toThrow(EpubError)
 
     expect(() =>
-      renderMarks("Broken", [{ type: "link", attrs: { href: "ftp://example.com" } } as any]),
+      renderMarks("Broken", [
+        { type: "link", attrs: { href: "ftp://example.com" } } as any,
+      ]),
     ).toThrow(EpubError)
   })
 
   it("throws for unsupported mark types", () => {
-    expect(() =>
-      renderMarks("x", [{ type: "highlight" } as any]),
-    ).toThrow(EpubError)
+    expect(() => renderMarks("x", [{ type: "highlight" } as any])).toThrow(
+      EpubError,
+    )
 
-    expect(() =>
-      renderMarks("x", [{ type: "highlight" } as any]),
-    ).toThrow("Unsupported TipTap mark: highlight")
+    expect(() => renderMarks("x", [{ type: "highlight" } as any])).toThrow(
+      "Unsupported TipTap mark: highlight",
+    )
   })
 })

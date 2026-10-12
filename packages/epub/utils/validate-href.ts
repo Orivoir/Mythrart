@@ -12,10 +12,7 @@ export function validateHref(value: unknown): string {
 
   // Refuse les caractères de contrôle, les espaces et les antislashs.
   if (/[\u0000-\u0020\u007f\\]/.test(href)) {
-    throw new EpubError(
-      "Invalid href on EPUB link",
-      "UNSUPPORTED_CONTENT",
-    )
+    throw new EpubError("Invalid href on EPUB link", "UNSUPPORTED_CONTENT")
   }
 
   const schemeMatch = href.match(/^([a-z][a-z\d+.-]*):/i)

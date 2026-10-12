@@ -1,4 +1,4 @@
-import type {JSONContent} from "@tiptap/core"
+import type { JSONContent } from "@tiptap/core"
 
 export interface EpubAsset {
   id: string
@@ -71,7 +71,7 @@ export interface EpubBook {
   chapters: EpubChapter[]
 }
 
-export type CreateEpubOptions = {book: EpubBook} & {theme: EpubTheme}
+export type CreateEpubOptions = { book: EpubBook } & { theme: EpubTheme }
 
 export interface EpubGenerationResult {
   data: Uint8Array

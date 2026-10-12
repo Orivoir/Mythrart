@@ -17,10 +17,7 @@ export function createCoverXhtml(book: EpubBook): string {
   const coverImage = book.coverImage
 
   if (!title) {
-    throw new EpubError(
-      "Missing required EPUB cover title",
-      "INVALID_METADATA",
-    )
+    throw new EpubError("Missing required EPUB cover title", "INVALID_METADATA")
   }
 
   if (!language) {
@@ -40,10 +37,7 @@ export function createCoverXhtml(book: EpubBook): string {
   const fileName = normalizeText(coverImage.fileName)
 
   if (!fileName) {
-    throw new EpubError(
-      "Invalid EPUB cover image filename",
-      "INVALID_ASSET",
-    )
+    throw new EpubError("Invalid EPUB cover image filename", "INVALID_ASSET")
   }
 
   const imageHref = createCoverImageHref(fileName)

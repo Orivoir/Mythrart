@@ -3,9 +3,7 @@ import { EpubError } from "../../../errors"
 import { createEpubResources } from "../../../resources/assets"
 import type { EpubAsset, EpubBook } from "../../../types"
 
-const makeAsset = (
-  overrides: Partial<EpubAsset> = {},
-): EpubAsset => ({
+const makeAsset = (overrides: Partial<EpubAsset> = {}): EpubAsset => ({
   id: "img-1",
   fileName: "cover.png",
   mimeType: "image/png",
@@ -75,7 +73,9 @@ describe("createEpubResources", () => {
     }
 
     expect(() => createEpubResources(book)).toThrow(EpubError)
-    expect(() => createEpubResources(book)).toThrow("Duplicate EPUB asset ID: dup")
+    expect(() => createEpubResources(book)).toThrow(
+      "Duplicate EPUB asset ID: dup",
+    )
   })
 
   it("throws when two distinct assets resolve to the same EPUB path", () => {
@@ -96,9 +96,7 @@ describe("createEpubResources", () => {
   it("throws when a contained asset is invalid", () => {
     const book: Pick<EpubBook, "coverImage" | "assets"> = {
       coverImage: null,
-      assets: [
-        makeAsset({ id: "img-1", fileName: "../bad.png" }),
-      ],
+      assets: [makeAsset({ id: "img-1", fileName: "../bad.png" })],
     }
 
     expect(() => createEpubResources(book)).toThrow(EpubError)

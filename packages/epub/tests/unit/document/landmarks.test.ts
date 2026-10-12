@@ -61,13 +61,27 @@ describe("createLandmarks", () => {
 
     const links = Array.from(doc.getElementsByTagName("a"))
 
-    expect(links.some((link) => link.getAttribute("epub:type") === "cover")).toBe(true)
-    expect(links.some((link) => link.getAttribute("href") === "cover.xhtml")).toBe(true)
-    expect(links.some((link) => link.textContent?.trim() === "Couverture")).toBe(true)
+    expect(
+      links.some((link) => link.getAttribute("epub:type") === "cover"),
+    ).toBe(true)
+    expect(
+      links.some((link) => link.getAttribute("href") === "cover.xhtml"),
+    ).toBe(true)
+    expect(
+      links.some((link) => link.textContent?.trim() === "Couverture"),
+    ).toBe(true)
 
-    expect(links.some((link) => link.getAttribute("epub:type") === "bodymatter")).toBe(true)
-    expect(links.some((link) => link.getAttribute("href") === "chapters/chapter-1.xhtml")).toBe(true)
-    expect(links.some((link) => link.textContent?.trim() === "Début du contenu")).toBe(true)
+    expect(
+      links.some((link) => link.getAttribute("epub:type") === "bodymatter"),
+    ).toBe(true)
+    expect(
+      links.some(
+        (link) => link.getAttribute("href") === "chapters/chapter-1.xhtml",
+      ),
+    ).toBe(true)
+    expect(
+      links.some((link) => link.textContent?.trim() === "Début du contenu"),
+    ).toBe(true)
   })
 
   it("returns an empty string when there are no landmark entries", () => {

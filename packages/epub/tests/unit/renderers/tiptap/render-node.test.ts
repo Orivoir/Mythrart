@@ -27,15 +27,28 @@ describe("renderNode", () => {
 
   it("renders paragraph, heading, blockquote, list and break nodes", () => {
     expect(
-      renderNode({ type: "paragraph", content: [{ type: "text", text: "Hello" }] }, assets),
+      renderNode(
+        { type: "paragraph", content: [{ type: "text", text: "Hello" }] },
+        assets,
+      ),
     ).toBe("<p>Hello</p>")
 
     expect(
-      renderNode({ type: "heading", attrs: { level: 2 }, content: [{ type: "text", text: "Title" }] }, assets),
+      renderNode(
+        {
+          type: "heading",
+          attrs: { level: 2 },
+          content: [{ type: "text", text: "Title" }],
+        },
+        assets,
+      ),
     ).toBe("<h2>Title</h2>")
 
     expect(
-      renderNode({ type: "blockquote", content: [{ type: "text", text: "Quote" }] }, assets),
+      renderNode(
+        { type: "blockquote", content: [{ type: "text", text: "Quote" }] },
+        assets,
+      ),
     ).toBe("<blockquote>Quote</blockquote>")
 
     expect(
@@ -79,7 +92,6 @@ describe("renderNode", () => {
       ),
     ).toBe('<ol start="3"><li><p>One</p></li></ol>')
 
-
     expect(renderNode({ type: "hardBreak" } as any, assets)).toBe("<br />")
     expect(renderNode({ type: "horizontalRule" } as any, assets)).toBe("<hr />")
   })
@@ -113,23 +125,20 @@ describe("renderNode", () => {
       "Invalid TipTap node: missing node type",
     )
 
-    expect(() => renderNode({ type: "heading", attrs: { level: 9 } } as any, assets)).toThrow(
-      EpubError,
-    )
+    expect(() =>
+      renderNode({ type: "heading", attrs: { level: 9 } } as any, assets),
+    ).toThrow(EpubError)
 
-    expect(() => renderNode({ type: "orderedList", attrs: { start: 0 } } as any, assets)).toThrow(
-      EpubError,
-    )
+    expect(() =>
+      renderNode({ type: "orderedList", attrs: { start: 0 } } as any, assets),
+    ).toThrow(EpubError)
 
-    expect(() => renderNode({ type: "text" } as any, assets)).toThrow(
-      EpubError,
-    )
+    expect(() => renderNode({ type: "text" } as any, assets)).toThrow(EpubError)
 
     expect(() => renderNode({ type: "unsupported" } as any, assets)).toThrow(
       EpubError,
     )
   })
-
 
   it.each([0, 1.5, 7, "2", null])(
     "throws when the heading level is invalid: %s",
@@ -245,5 +254,4 @@ describe("renderNode", () => {
       ),
     ).toThrow("Unsupported TipTap mark: highlight")
   })
-
 })

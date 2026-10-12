@@ -1,4 +1,3 @@
-
 import { faker } from "@faker-js/faker"
 import type { JSONContent } from "@tiptap/core"
 
@@ -6,10 +5,7 @@ import type { EpubChapter } from "../../types"
 
 const IMAGE_ASSET_ID = "img-1"
 
-function createChapter(
-  position: number,
-  content: JSONContent[],
-): EpubChapter {
+function createChapter(position: number, content: JSONContent[]): EpubChapter {
   return {
     id: faker.string.uuid(),
     title: faker.lorem.sentence(),
@@ -72,9 +68,7 @@ function createChapterBank(): EpubChapter[] {
         content: [
           {
             type: "paragraph",
-            content: [
-              { type: "text", text: faker.lorem.sentence() },
-            ],
+            content: [{ type: "text", text: faker.lorem.sentence() }],
           },
         ],
       },
@@ -88,9 +82,7 @@ function createChapterBank(): EpubChapter[] {
     createChapter(4, [
       {
         type: "paragraph",
-        content: [
-          { type: "text", text: faker.lorem.sentence() },
-        ],
+        content: [{ type: "text", text: faker.lorem.sentence() }],
       },
       {
         type: "bulletList",
@@ -99,9 +91,7 @@ function createChapterBank(): EpubChapter[] {
           content: [
             {
               type: "paragraph",
-              content: [
-                { type: "text", text: faker.lorem.sentence() },
-              ],
+              content: [{ type: "text", text: faker.lorem.sentence() }],
             },
           ],
         })),

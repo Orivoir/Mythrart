@@ -28,19 +28,16 @@ import { createChapterHref } from "../utils/chapter-href"
 /**
  * Generates a complete EPUB 3 archive from a book.
  */
-export async function createEpub(
-  {book, theme}: CreateEpubOptions
-): Promise<EpubGenerationResult> {
-
+export async function createEpub({
+  book,
+  theme,
+}: CreateEpubOptions): Promise<EpubGenerationResult> {
   if (!book || typeof book !== "object") {
     throw new EpubError("Invalid EPUB book", "INVALID_BOOK")
   }
 
   if (!book.coverImage) {
-    throw new EpubError(
-      "An EPUB cover image is required",
-      "INVALID_BOOK",
-    )
+    throw new EpubError("An EPUB cover image is required", "INVALID_BOOK")
   }
 
   if (!Array.isArray(book.chapters) || book.chapters.length === 0) {
@@ -76,9 +73,7 @@ export async function createEpub(
   })
 
   // 4. Chapters
-  const chapters = [...book.chapters].sort(
-    (a, b) => a.position - b.position,
-  )
+  const chapters = [...book.chapters].sort((a, b) => a.position - b.position)
 
   for (const chapter of chapters) {
     files.push({

@@ -13,24 +13,15 @@ export function validateArchivePath(path: string): void {
     path.includes("\\") ||
     /[\u0000-\u001f\u007f]/.test(path)
   ) {
-    throw new EpubError(
-      `Invalid EPUB archive path: ${path}`,
-      "INVALID_BOOK",
-    )
+    throw new EpubError(`Invalid EPUB archive path: ${path}`, "INVALID_BOOK")
   }
 
   const segments = path.split("/")
 
   if (
-    segments.some(
-      (segment) =>
-        !segment || segment === "." || segment === "..",
-    )
+    segments.some((segment) => !segment || segment === "." || segment === "..")
   ) {
-    throw new EpubError(
-      `Invalid EPUB archive path: ${path}`,
-      "INVALID_BOOK",
-    )
+    throw new EpubError(`Invalid EPUB archive path: ${path}`, "INVALID_BOOK")
   }
 
   if (path === MIMETYPE_FILE) {

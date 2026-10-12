@@ -20,27 +20,27 @@ createEpub({ book, theme }): Promise<EpubGenerationResult>
 
 ```ts
 export type CreateEpubOptions = {
-  book: EpubBook;
-  theme: EpubTheme;
-};
+  book: EpubBook
+  theme: EpubTheme
+}
 
 export interface EpubTheme {
-  backgroundColor: string;
-  textColor: string;
-  textFont: string;
-  titleFont: string;
-  subtitleFont: string;
-  headingColor: string;
-  fontSize: string;
-  lineHeight: string;
-  paragraphSpacing: string;
-  headingSpacing: string;
+  backgroundColor: string
+  textColor: string
+  textFont: string
+  titleFont: string
+  subtitleFont: string
+  headingColor: string
+  fontSize: string
+  lineHeight: string
+  paragraphSpacing: string
+  headingSpacing: string
 }
 
 export interface EpubGenerationResult {
-  data: Uint8Array;
-  fileName: string;
-  mimeType: "application/epub+zip";
+  data: Uint8Array
+  fileName: string
+  mimeType: "application/epub+zip"
 }
 ```
 

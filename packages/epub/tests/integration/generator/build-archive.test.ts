@@ -1,4 +1,3 @@
-
 import JSZip from "jszip"
 import { describe, expect, it } from "vitest"
 
@@ -20,11 +19,7 @@ function readLocalFileHeaders(data: Uint8Array): Array<{
   name: string
   compressionMethod: number
 }> {
-  const view = new DataView(
-    data.buffer,
-    data.byteOffset,
-    data.byteLength,
-  )
+  const view = new DataView(data.buffer, data.byteOffset, data.byteLength)
   const decoder = new TextDecoder()
   const entries: Array<{
     name: string
@@ -113,9 +108,7 @@ describe("buildEpubArchive integration", () => {
     const archive = await buildEpubArchive(createArchiveFixture())
     const zip = await JSZip.loadAsync(archive)
 
-    expect(await zip.file(MIMETYPE_FILE)?.async("text")).toBe(
-      EPUB_MIMETYPE,
-    )
+    expect(await zip.file(MIMETYPE_FILE)?.async("text")).toBe(EPUB_MIMETYPE)
   })
 
   it("preserves all text file contents", async () => {
@@ -151,9 +144,7 @@ describe("buildEpubArchive integration", () => {
     const zip = await JSZip.loadAsync(archive)
 
     expect(Object.keys(zip.files)).toEqual([MIMETYPE_FILE])
-    expect(await zip.file(MIMETYPE_FILE)?.async("text")).toBe(
-      EPUB_MIMETYPE,
-    )
+    expect(await zip.file(MIMETYPE_FILE)?.async("text")).toBe(EPUB_MIMETYPE)
   })
 
   it("preserves Unicode filenames and content", async () => {

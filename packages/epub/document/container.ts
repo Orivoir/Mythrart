@@ -1,7 +1,7 @@
 import {
   OCF_CONTAINER_NAMESPACE,
   PACKAGE_DOCUMENT_PATH,
-  PACKAGE_MEDIA_TYPE
+  PACKAGE_MEDIA_TYPE,
 } from "./../constants"
 
 export function createContainerXml(): string {

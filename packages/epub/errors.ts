@@ -9,11 +9,7 @@ export type EpubErrorCode =
 export class EpubError extends Error {
   readonly code: EpubErrorCode
 
-  constructor(
-    message: string,
-    code: EpubErrorCode,
-    options?: ErrorOptions,
-  ) {
+  constructor(message: string, code: EpubErrorCode, options?: ErrorOptions) {
     super(message, options)
 
     this.name = "EpubError"

@@ -1,4 +1,7 @@
-import { IMAGE_MEDIA_TYPES_BY_EXTENSION, SUPPORTED_IMAGE_MEDIA_TYPES } from "../constants"
+import {
+  IMAGE_MEDIA_TYPES_BY_EXTENSION,
+  SUPPORTED_IMAGE_MEDIA_TYPES,
+} from "../constants"
 
 export type EpubImageMediaType =
   (typeof IMAGE_MEDIA_TYPES_BY_EXTENSION)[keyof typeof IMAGE_MEDIA_TYPES_BY_EXTENSION]
@@ -12,9 +15,7 @@ export function isSupportedImageMediaType(
 export function getImageMediaTypeFromFileName(
   fileName: string,
 ): EpubImageMediaType | undefined {
-  const extension = fileName
-    .slice(fileName.lastIndexOf("."))
-    .toLowerCase()
+  const extension = fileName.slice(fileName.lastIndexOf(".")).toLowerCase()
 
   return IMAGE_MEDIA_TYPES_BY_EXTENSION[
     extension as keyof typeof IMAGE_MEDIA_TYPES_BY_EXTENSION

@@ -1,4 +1,3 @@
-
 import type { JSONContent } from "@tiptap/core"
 import type { EpubAsset } from "../../types"
 import { EpubError } from "../../errors"
@@ -38,10 +37,7 @@ export function renderImage(
   const attrs = node.attrs
 
   if (node.type !== "image" || !attrs) {
-    throw new EpubError(
-      "Invalid TipTap image node",
-      "INVALID_ASSET",
-    )
+    throw new EpubError("Invalid TipTap image node", "INVALID_ASSET")
   }
 
   if (typeof attrs.assetId !== "string") {
@@ -63,10 +59,7 @@ export function renderImage(
   const asset = assets.find((candidate) => candidate.id === assetId)
 
   if (!asset) {
-    throw new EpubError(
-      `EPUB asset not found: ${assetId}`,
-      "ASSET_NOT_FOUND",
-    )
+    throw new EpubError(`EPUB asset not found: ${assetId}`, "ASSET_NOT_FOUND")
   }
 
   const fileName = normalizeText(asset.fileName)

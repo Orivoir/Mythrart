@@ -24,10 +24,8 @@ describe("renderChapter", () => {
     const result = renderChapter(chapter, "en", [])
 
     expect(result).toContain('<?xml version="1.0" encoding="UTF-8"?>')
-    expect(result).toContain('<!DOCTYPE html>')
-    expect(result).toContain(
-      'xmlns="http://www.w3.org/1999/xhtml"',
-    )
+    expect(result).toContain("<!DOCTYPE html>")
+    expect(result).toContain('xmlns="http://www.w3.org/1999/xhtml"')
     expect(result).toContain('lang="en" xml:lang="en"')
     expect(result).toContain("<title>My chapter</title>")
     expect(result).toContain("<h1>My chapter</h1>")
@@ -39,11 +37,7 @@ describe("renderChapter", () => {
   })
 
   it("escapes the chapter title", () => {
-    const result = renderChapter(
-      { ...chapter, title: "A & B <C>" },
-      "en",
-      [],
-    )
+    const result = renderChapter({ ...chapter, title: "A & B <C>" }, "en", [])
 
     expect(result).toContain("<title>A &amp; B &lt;C&gt;</title>")
     expect(result).toContain("<h1>A &amp; B &lt;C&gt;</h1>")
@@ -57,13 +51,13 @@ describe("renderChapter", () => {
   })
 
   it("throws when the chapter title is empty", () => {
-    expect(() =>
-      renderChapter({ ...chapter, title: "   " }, "en", []),
-    ).toThrow(EpubError)
+    expect(() => renderChapter({ ...chapter, title: "   " }, "en", [])).toThrow(
+      EpubError,
+    )
 
-    expect(() =>
-      renderChapter({ ...chapter, title: "   " }, "en", []),
-    ).toThrow(`Invalid title for EPUB chapter: ${chapter.id}`)
+    expect(() => renderChapter({ ...chapter, title: "   " }, "en", [])).toThrow(
+      `Invalid title for EPUB chapter: ${chapter.id}`,
+    )
   })
 
   it("throws when the language is empty", () => {
@@ -80,12 +74,10 @@ describe("renderChapter", () => {
       content: { type: "unsupported" },
     } as EpubChapter
 
-    expect(() =>
-      renderChapter(invalidChapter, "en", []),
-    ).toThrow(EpubError)
+    expect(() => renderChapter(invalidChapter, "en", [])).toThrow(EpubError)
 
-    expect(() =>
-      renderChapter(invalidChapter, "en", []),
-    ).toThrow("Unsupported TipTap node: unsupported")
+    expect(() => renderChapter(invalidChapter, "en", [])).toThrow(
+      "Unsupported TipTap node: unsupported",
+    )
   })
 })

@@ -1,4 +1,3 @@
-
 import type { JSONContent } from "@tiptap/core"
 import type { EpubAsset } from "../../types"
 
@@ -109,7 +108,7 @@ export function renderNode(
 
     case "image":
       return renderImage(node, assets)
-    
+
     case "mention":
       return renderMention(node)
     default:
@@ -119,4 +118,3 @@ export function renderNode(
       )
   }
 }
-

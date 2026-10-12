@@ -60,7 +60,10 @@ describe("createMetadataXml", () => {
     const creator = doc.getElementsByTagNameNS(DC_NAMESPACE, "creator")[0]
     const language = doc.getElementsByTagNameNS(DC_NAMESPACE, "language")[0]
     const subtitle = doc.getElementsByTagNameNS(DC_NAMESPACE, "title")[1]
-    const description = doc.getElementsByTagNameNS(DC_NAMESPACE, "description")[0]
+    const description = doc.getElementsByTagNameNS(
+      DC_NAMESPACE,
+      "description",
+    )[0]
 
     expect(identifier.textContent).toBe("book-123")
     expect(identifier.getAttribute("id")).toBe("pub-id")
@@ -105,18 +108,18 @@ describe("createMetadataXml", () => {
 
     const doc = parseXml(xml)
 
-    expect(doc.getElementsByTagNameNS(DC_NAMESPACE, "title")[0].textContent).toBe(
-      "A & B < C",
-    )
-    expect(doc.getElementsByTagNameNS(DC_NAMESPACE, "title")[1].textContent).toBe(
-      "D & E > F",
-    )
-    expect(doc.getElementsByTagNameNS(DC_NAMESPACE, "description")[0].textContent).toBe(
-      'Use <tag> & "quotes"',
-    )
-    expect(doc.getElementsByTagNameNS(DC_NAMESPACE, "creator")[0].textContent).toBe(
-      "Jane & John",
-    )
+    expect(
+      doc.getElementsByTagNameNS(DC_NAMESPACE, "title")[0].textContent,
+    ).toBe("A & B < C")
+    expect(
+      doc.getElementsByTagNameNS(DC_NAMESPACE, "title")[1].textContent,
+    ).toBe("D & E > F")
+    expect(
+      doc.getElementsByTagNameNS(DC_NAMESPACE, "description")[0].textContent,
+    ).toBe('Use <tag> & "quotes"')
+    expect(
+      doc.getElementsByTagNameNS(DC_NAMESPACE, "creator")[0].textContent,
+    ).toBe("Jane & John")
   })
 
   it("omits optional fields when they are empty or null", () => {
@@ -132,12 +135,18 @@ describe("createMetadataXml", () => {
 
     expect(doc.getElementById("isbn-id")).toBeNull()
     expect(doc.getElementById("subtitle")).toBeNull()
-    expect(doc.getElementsByTagNameNS(DC_NAMESPACE, "description").length).toBe(0)
-    expect(doc.getElementsByTagNameNS(DC_NAMESPACE, "contributor").length).toBe(0)
+    expect(doc.getElementsByTagNameNS(DC_NAMESPACE, "description").length).toBe(
+      0,
+    )
+    expect(doc.getElementsByTagNameNS(DC_NAMESPACE, "contributor").length).toBe(
+      0,
+    )
   })
 
   it("throws for missing required metadata values", () => {
-    expect(() => createMetadataXml(makeBook({ title: "   " }))).toThrow(EpubError)
+    expect(() => createMetadataXml(makeBook({ title: "   " }))).toThrow(
+      EpubError,
+    )
     expect(() => createMetadataXml(makeBook({ creator: "" }))).toThrow(
       "Missing required EPUB metadata: creator",
     )
@@ -150,17 +159,21 @@ describe("createMetadataXml", () => {
     expect(() =>
       createMetadataXml(makeBook({ createdAt: new Date("invalid") })),
     ).toThrow(EpubError)
-    expect(() =>
-      createMetadataXml(makeBook(), new Date("invalid")),
-    ).toThrow(EpubError)
+    expect(() => createMetadataXml(makeBook(), new Date("invalid"))).toThrow(
+      EpubError,
+    )
   })
 
   it("throws when a contributor is missing a name or role", () => {
     expect(() =>
-      createMetadataXml(makeBook({ contributors: [{ name: "Valid Name", role: "" as any }] })),
+      createMetadataXml(
+        makeBook({ contributors: [{ name: "Valid Name", role: "" as any }] }),
+      ),
     ).toThrow(EpubError)
     expect(() =>
-      createMetadataXml(makeBook({ contributors: [{ name: "", role: "aut" }] })),
+      createMetadataXml(
+        makeBook({ contributors: [{ name: "", role: "aut" }] }),
+      ),
     ).toThrow(EpubError)
   })
 })

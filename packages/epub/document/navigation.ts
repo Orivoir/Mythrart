@@ -28,9 +28,7 @@ export function createNavigationXhtml(book: EpubBook): string {
     )
   }
 
-  const chapters = [...book.chapters].sort(
-    (a, b) => a.position - b.position,
-  )
+  const chapters = [...book.chapters].sort((a, b) => a.position - b.position)
 
   const seenIds = new Set<string>()
 

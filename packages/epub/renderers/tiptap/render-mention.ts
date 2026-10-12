@@ -9,12 +9,8 @@ import { escapeXml } from "../../utils/escape-xml"
  * @returns The XHTML fragment generated for the mention node.
  */
 export function renderMention(node: JSONContent): string {
-
   if (node.type !== "mention") {
-    throw new EpubError(
-      "Invalid TipTap mention node",
-      "UNSUPPORTED_CONTENT",
-    )
+    throw new EpubError("Invalid TipTap mention node", "UNSUPPORTED_CONTENT")
   }
 
   const label = node.attrs?.label

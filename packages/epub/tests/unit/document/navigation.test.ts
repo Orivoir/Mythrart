@@ -91,13 +91,19 @@ describe("createNavigationXhtml", () => {
 
     expect(hrefs).toContain("chapters/chapter-a.xhtml")
     expect(hrefs).toContain("chapters/chapter-b.xhtml")
-    expect(links.some((link) => link.textContent?.trim() === "First Chapter")).toBe(true)
-    expect(links.some((link) => link.textContent?.trim() === "Second Chapter")).toBe(true)
+    expect(
+      links.some((link) => link.textContent?.trim() === "First Chapter"),
+    ).toBe(true)
+    expect(
+      links.some((link) => link.textContent?.trim() === "Second Chapter"),
+    ).toBe(true)
     expect(landmarkNav.getAttribute("epub:type")).toBe("landmarks")
   })
 
   it("throws when the book title or language is missing", () => {
-    expect(() => createNavigationXhtml(makeBook({ title: "   " }))).toThrow(EpubError)
+    expect(() => createNavigationXhtml(makeBook({ title: "   " }))).toThrow(
+      EpubError,
+    )
     expect(() => createNavigationXhtml(makeBook({ language: "   " }))).toThrow(
       "Missing required EPUB navigation language",
     )
