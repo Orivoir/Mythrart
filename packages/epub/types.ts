@@ -7,6 +7,23 @@ export interface EpubAsset {
   data: Uint8Array
 }
 
+export interface EpubTheme {
+  backgroundColor: string
+  textColor: string
+
+  textFont: string
+  titleFont: string
+  subtitleFont: string
+
+  headingColor: string
+
+  fontSize: string
+  lineHeight: string
+
+  paragraphSpacing: string
+  headingSpacing: string
+}
+
 export interface EpubChapter {
   id: string
   title: string
@@ -54,7 +71,7 @@ export interface EpubBook {
   chapters: EpubChapter[]
 }
 
-export type CreateEpubOptions = EpubBook & {}
+export type CreateEpubOptions = {book: EpubBook} & {theme: EpubTheme}
 
 export interface EpubGenerationResult {
   data: Uint8Array

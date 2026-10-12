@@ -17,6 +17,9 @@ import { createPackageDocument } from "../document/package-document"
 import { createEpubResources } from "../resources/assets"
 import { renderChapter } from "../renderers/chapter"
 
+import { getAbsoluteStylePath } from "../resources/style-path"
+import { createThemeStylesheet } from "../resources/theme"
+
 import { buildEpubArchive } from "./build-archive"
 
 import { createOutputFileName } from "../utils/create-output-filename"
@@ -26,8 +29,9 @@ import { createChapterHref } from "../utils/chapter-href"
  * Generates a complete EPUB 3 archive from a book.
  */
 export async function createEpub(
-  book: CreateEpubOptions,
+  {book, theme}: CreateEpubOptions
 ): Promise<EpubGenerationResult> {
+
   if (!book || typeof book !== "object") {
     throw new EpubError("Invalid EPUB book", "INVALID_BOOK")
   }
@@ -94,10 +98,10 @@ export async function createEpub(
   }
 
   // 6. Stylesheet
-  const styles = await readFile(
-    new URL("../resources/styles.css", import.meta.url),
-    "utf8",
-  )
+  const stylesheetPath = getAbsoluteStylePath()
+  const baseStyles = await readFile(stylesheetPath, "utf8")
+  const themeStyles = createThemeStylesheet(theme)
+  const styles = `${baseStyles}\n\n${themeStyles}`
 
   files.push({
     path: "OEBPS/styles.css",

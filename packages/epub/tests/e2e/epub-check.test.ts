@@ -8,6 +8,7 @@ import { describe, expect, it } from "vitest"
 
 import { createEpub } from "../../generator/create-epub"
 import type { CreateEpubOptions } from "../../types"
+import aliceInWonderlandFixture from "../../tests/fixtures/alice-in-wonderland"
 
 const PACKAGE_ROOT = resolve(
   dirname(fileURLToPath(import.meta.url)),
@@ -29,62 +30,7 @@ const PNG_DATA = Uint8Array.from(
 )
 
 function createTestBook(): CreateEpubOptions {
-  return {
-    id: "urn:uuid:12345678-1234-1234-1234-123456789abc",
-    title: "Mythrart EPUBCheck",
-    subtitle: "Test de conformité",
-    description: "Livre généré pour tester la conformité EPUB 3.",
-    language: "fr",
-    createdAt: new Date("2026-01-15T10:30:00.000Z"),
-    creator: "Mythrart",
-
-    coverImage: {
-      id: "cover-asset",
-      fileName: "cover.png",
-      mimeType: "image/png",
-      data: PNG_DATA,
-    },
-
-    assets: [
-      {
-        id: "illustration",
-        fileName: "illustration.png",
-        mimeType: "image/png",
-        data: PNG_DATA,
-      },
-    ],
-
-    contributors: [],
-
-    chapters: [
-      {
-        id: "introduction",
-        title: "Introduction",
-        position: 1,
-        content: {
-          type: "doc",
-          content: [
-            {
-              type: "paragraph",
-              content: [
-                {
-                  type: "text",
-                  text: "Ce livre sert à vérifier la conformité EPUB.",
-                },
-              ],
-            },
-            {
-              type: "image",
-              attrs: {
-                assetId: "illustration",
-                alt: "Illustration de test",
-              },
-            },
-          ],
-        },
-      },
-    ],
-  }
+  return aliceInWonderlandFixture
 }
 
 describe("EPUBCheck — conform to W3C EPUB 3.x standard", () => {

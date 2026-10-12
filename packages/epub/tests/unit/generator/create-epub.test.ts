@@ -1,4 +1,5 @@
-
+import type { EpubTheme } from "./../../../types"
+import { epubThemeFixture } from "../../fixtures/epub-theme"
 import { describe, expect, it } from "vitest"
 import JSZip from "jszip"
 import { DOMParser, type Document, type Element } from "@xmldom/xmldom"
@@ -37,80 +38,83 @@ const PNG_DATA = Uint8Array.from(
 
 function createBook(): CreateEpubOptions {
   return {
-    id: "urn:uuid:12345678-1234-1234-1234-123456789abc",
-    title: "Mon livre de test",
-    subtitle: "Une intégration complète",
-    description: "Un livre utilisé pour tester le générateur EPUB.",
-    language: "fr",
-    createdAt: new Date("2026-01-15T10:30:00.000Z"),
-    creator: "Auteur de test",
-
-    coverImage: {
-      id: "cover-asset",
-      fileName: "cover.png",
-      mimeType: "image/png",
-      data: PNG_DATA,
-    },
-
-    assets: [
-      {
-        id: "illustration",
-        fileName: "illustration.png",
+    book: {
+      id: "urn:uuid:12345678-1234-1234-1234-123456789abc",
+      title: "Mon livre de test",
+      subtitle: "Une intégration complète",
+      description: "Un livre utilisé pour tester le générateur EPUB.",
+      language: "fr",
+      createdAt: new Date("2026-01-15T10:30:00.000Z"),
+      creator: "Auteur de test",
+  
+      coverImage: {
+        id: "cover-asset",
+        fileName: "cover.png",
         mimeType: "image/png",
         data: PNG_DATA,
       },
-    ],
-
-    contributors: [],
-
-    // L'ordre d'entrée est volontairement différent de l'ordre attendu.
-    chapters: [
-      {
-        id: "chapter-deux",
-        title: "Deuxième chapitre",
-        position: 2,
-        content: {
-          type: "doc",
-          content: [
-            {
-              type: "paragraph",
-              content: [
-                {
-                  type: "text",
-                  text: "Le second chapitre.",
-                },
-              ],
-            },
-          ],
+  
+      assets: [
+        {
+          id: "illustration",
+          fileName: "illustration.png",
+          mimeType: "image/png",
+          data: PNG_DATA,
         },
-      },
-      {
-        id: "chapter-ete",
-        title: "Premier chapitre",
-        position: 1,
-        content: {
-          type: "doc",
-          content: [
-            {
-              type: "paragraph",
-              content: [
-                {
-                  type: "text",
-                  text: "Le premier chapitre.",
-                },
-              ],
-            },
-            {
-              type: "image",
-              attrs: {
-                assetId: "illustration",
-                alt: "Illustration du premier chapitre",
+      ],
+  
+      contributors: [],
+  
+      // L'ordre d'entrée est volontairement différent de l'ordre attendu.
+      chapters: [
+        {
+          id: "chapter-deux",
+          title: "Deuxième chapitre",
+          position: 2,
+          content: {
+            type: "doc",
+            content: [
+              {
+                type: "paragraph",
+                content: [
+                  {
+                    type: "text",
+                    text: "Le second chapitre.",
+                  },
+                ],
               },
-            },
-          ],
+            ],
+          },
         },
-      },
-    ],
+        {
+          id: "chapter-ete",
+          title: "Premier chapitre",
+          position: 1,
+          content: {
+            type: "doc",
+            content: [
+              {
+                type: "paragraph",
+                content: [
+                  {
+                    type: "text",
+                    text: "Le premier chapitre.",
+                  },
+                ],
+              },
+              {
+                type: "image",
+                attrs: {
+                  assetId: "illustration",
+                  alt: "Illustration du premier chapitre",
+                },
+              },
+            ],
+          },
+        },
+      ]
+    },
+    theme: epubThemeFixture,
   }
 }
 
@@ -211,8 +215,9 @@ function getLocalZipEntries(data: Uint8Array) {
 
 describe("createEpub — intégration complète", () => {
   it("Generates a EPUB, with valid paths and references", async () => {
-    const book = createBook()
-    const result = await createEpub(book)
+    const epub = createBook()
+    const {book} = epub
+    const result = await createEpub(epub)
 
     // ---------------------------------------------------------
     // 1. Résultat public

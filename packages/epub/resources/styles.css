@@ -1,4 +1,177 @@
+
 /**
-* Feuille CSS intégrée à l'EPUB.
-* Styles de lecture par défaut, simples et compatibles.
-*/
+ * Feuille CSS intégrée à l'EPUB.
+ * Styles de lecture par défaut, sobres et compatibles.
+ */
+
+html {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 5%;
+  padding: 0;
+  text-align: start;
+  overflow-wrap: break-word;
+}
+
+/* Paragraphes */
+
+p {
+  margin: 0 0 1em;
+  text-indent: 0;
+}
+
+/* Titres */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 1.5em 0 0.75em;
+  font-weight: bold;
+  text-align: start;
+  page-break-after: avoid;
+  break-after: avoid;
+}
+
+h1 {
+  page-break-before: always;
+  break-before: page;
+}
+
+/* Images et illustrations */
+
+img,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+img {
+  display: block;
+  margin: 1em auto;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+/* Citations */
+
+blockquote {
+  margin: 1.25em 0.5em;
+  padding: 0.25em 0 0.25em 1em;
+  border-left: 0.2em solid currentColor;
+  font-style: italic;
+}
+
+blockquote p {
+  margin-bottom: 0.75em;
+}
+
+blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* Liens */
+
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+
+/* Listes */
+
+ul,
+ol {
+  margin: 1em 0;
+  padding-left: 1.5em;
+}
+
+li {
+  margin-bottom: 0.35em;
+}
+
+li:last-child {
+  margin-bottom: 0;
+}
+
+/* Code */
+
+pre,
+code {
+  font-family: monospace;
+  overflow-wrap: break-word;
+}
+
+pre {
+  margin: 1em 0;
+  padding: 0.75em;
+  border: 1px solid currentColor;
+  white-space: pre-wrap;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+pre code {
+  padding: 0;
+  border: 0;
+}
+
+p code,
+li code {
+  padding: 0.1em 0.2em;
+  border: 1px solid currentColor;
+}
+
+/* Séparateurs */
+
+hr {
+  margin: 1.5em 0;
+  border: 0;
+  border-top: 1px solid currentColor;
+}
+
+/* Tableaux */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+  font-size: 0.9em;
+}
+
+th,
+td {
+  padding: 0.4em;
+  border: 1px solid currentColor;
+  text-align: start;
+  vertical-align: top;
+}
+
+th {
+  font-weight: bold;
+}
+
+/* Notes de bas de page */
+
+sup,
+sub {
+  font-size: 0.75em;
+  line-height: 0;
+}
+
+/* Emphase */
+
+strong,
+b {
+  font-weight: bold;
+}
+
+em,
+i {
+  font-style: italic;
+}
