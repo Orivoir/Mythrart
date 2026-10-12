@@ -1,13 +1,21 @@
+import { createEpub as generateEpub } from "./generator/create-epub"
+
 import type { CreateEpubOptions, EpubGenerationResult } from "./types"
 
+/**
+ * Generates an EPUB 3 archive from a book and its theme.
+ */
 export default async function createEpub(
   options: CreateEpubOptions,
 ): Promise<EpubGenerationResult> {
-  void options
-
-  return {
-    data: new Uint8Array(),
-    fileName: "book.epub",
-    mimeType: "application/epub+zip",
-  }
+  return generateEpub(options)
 }
+
+export type {
+  CreateEpubOptions,
+  EpubGenerationResult,
+  EpubBook,
+  EpubChapter,
+  EpubAsset,
+  EpubTheme,
+} from "./types"

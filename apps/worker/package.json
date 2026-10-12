@@ -16,6 +16,7 @@
     "@mythrart/database": "workspace:*",
     "@mythrart/editor-extensions": "workspace:*",
     "@mythrart/env": "workspace:*",
+    "@mythrart/epub": "workspace:*",
     "@mythrart/redis": "workspace:*",
     "@mythrart/s3": "workspace:*",
     "@tiptap/html": "3.31.3",
