@@ -12,6 +12,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@mythrart/assets": "workspace:*",
     "@mythrart/constants": "workspace:*",
     "@mythrart/database": "workspace:*",
     "@mythrart/editor-extensions": "workspace:*",

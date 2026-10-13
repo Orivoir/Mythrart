@@ -1,5 +1,6 @@
 import { GetObjectCommand, s3 } from "@mythrart/s3"
 import type { EpubAsset } from "@mythrart/epub"
+  import { loadDefaultCover } from "@mythrart/assets/node";
 
 import type { NormalizedEbook } from "./normalize.js"
 
@@ -31,9 +32,16 @@ export async function loadEbookAssets(
           key: ebook.coverImage.key,
           bucket: ebook.coverImage.bucket,
         })
-      : Promise.resolve(null), // @TODO should apply default cover image if not provided by ebook
+      : loadDefaultCover().then(
+          (data): EpubAsset => ({
+            id: "mythrart-default-cover",
+            fileName: "default_cover_image.png",
+            mimeType: "image/png",
+            data,
+          }),
+        ),
     Promise.all([...assetsById.values()].map(loadAsset)),
-  ])
+  ]);
 
   return {
     coverImage,
