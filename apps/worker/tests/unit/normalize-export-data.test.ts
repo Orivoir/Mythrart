@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import normalizeExportData, { type ExportSource } from "./../../src/services/export/normalize.js"
+import normalizeExportData, { type ExportSource } from "../../src/services/export/utils/normalize.js"
 
 type SourceChapter = ExportSource["chapters"][number]
 

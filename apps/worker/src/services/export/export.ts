@@ -1,6 +1,6 @@
 import type { ExportJobData, ExportJobResult } from "../../validations/export.job.js"
 import { loadRequirements } from "../utils.js"
-import normalizeExportData, { type ExportSource } from "./normalize.js"
+import normalizeExportData, { type ExportSource } from "./utils/normalize.js"
 import { loadSnapshotSource } from "./snapshot-source.js"
 
 export async function exportEbook({ ebookId, format, locale, snapshotId }: ExportJobData): Promise<ExportJobResult> {

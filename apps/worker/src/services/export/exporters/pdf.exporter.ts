@@ -1,9 +1,9 @@
 // Converts the normalized ebook content into a PDF file,
 // rendering chapters and supported document structure into a printable layout.
 import slugify from "slugify"
-import { createImageDataUrlResolver } from "../image-url-resolver.js"
+import { createImageDataUrlResolver } from "../utils/image-url-resolver.js"
 import { renderEbookAsHTML } from "../render-ebook-as-html.js"
-import type { NormalizedEbook } from "../normalize.js"
+import type { NormalizedEbook } from "../utils/normalize.js"
 import type { EbookExporter, ExportedFile } from "./types.js"
 import type { Extensions } from "@tiptap/core"
 

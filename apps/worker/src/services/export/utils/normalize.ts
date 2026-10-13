@@ -16,6 +16,7 @@ export interface NormalizedEbook {
   subtitle: string | null
   shortDescription: string | null
   createdAt: Date
+  locale: string
   coverImage: {
     assetId: string
     key: string
@@ -65,6 +66,7 @@ export default function normalizeExportData(ebook: ExportSource, locale: string)
     id,
     title,
     subtitle,
+    locale,
     shortDescription,
     createdAt,
     coverImage: ebook.coverAsset ? {

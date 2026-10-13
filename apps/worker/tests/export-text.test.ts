@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { TxtExporter } from "../src/services/export/exporters/txt.exporter.js"
-import type { NormalizedEbook } from "../src/services/export/normalize.js"
+import type { NormalizedEbook } from "../src/services/export/utils/normalize.js"
 import { testExtensions, tipTapEbookFixture } from "./fixtures/index.js"
 
 const fixtureDate = new Date("2026-08-31T00:00:00.000Z")

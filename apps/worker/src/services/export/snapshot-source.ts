@@ -2,7 +2,7 @@ import { prisma } from "@mythrart/database"
 import type { Prisma } from "@mythrart/database"
 import { GetObjectCommand, s3 } from "@mythrart/s3"
 import { z } from "zod"
-import type { ExportSource } from "./normalize.js"
+import type { ExportSource } from "./utils/normalize.js"
 
 const assetSchema = z.object({
   assetId: z.string().min(1),

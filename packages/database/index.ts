@@ -63,6 +63,7 @@ export {
   WritingReportAnalysis,
   WritingReportStatus,
   ExportFormat,
+  User,
   ExportJobStatus,
   ExplorerPublicationReason,
   ExplorerPublicationStatus,

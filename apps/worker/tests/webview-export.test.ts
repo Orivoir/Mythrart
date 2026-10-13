@@ -10,7 +10,7 @@ import type { JSONContent } from "@mythrart/editor-extensions"
 import escapeHTML from "escape-html"
 import { afterAll, beforeEach, describe, expect, it } from "vitest"
 import { WebviewExporter } from "../src/services/export/exporters/webview.exporter.js"
-import normalizeExportData from "../src/services/export/normalize.js"
+import normalizeExportData from "../src/services/export/utils/normalize.js"
 import { loadRequirements } from "../src/services/utils.js"
 import {
   testExtensions,

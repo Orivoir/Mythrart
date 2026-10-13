@@ -1,6 +1,6 @@
 import { generateHTML } from "@tiptap/html"
 import { extensions } from "@mythrart/editor-extensions"
-import type { NormalizedEbook } from "./normalize.js"
+import type { NormalizedEbook } from "./utils/normalize.js"
 import type { JSONContent } from "@mythrart/editor-extensions"
 import type { Extensions } from "@tiptap/core"
 import escapeHTML from "escape-html"

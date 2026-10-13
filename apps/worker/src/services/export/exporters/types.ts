@@ -1,5 +1,5 @@
 // types.ts
-import type { NormalizedEbook } from "../normalize.js"
+import type { NormalizedEbook } from "../utils/normalize.js"
 
 export interface ExportedFile {
   fileName: string

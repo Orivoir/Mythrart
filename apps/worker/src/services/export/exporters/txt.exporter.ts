@@ -1,6 +1,6 @@
 import { renderEbookAsHTML } from "../render-ebook-as-html.js"
 import type { EbookExporter, ExportedFile } from "../exporters/types.js"
-import type { NormalizedEbook } from "../normalize.js"
+import type { NormalizedEbook } from "../utils/normalize.js"
 import slugify from "slugify"
 import { htmlToText } from "html-to-text"
 import type { Extensions } from "@tiptap/core"

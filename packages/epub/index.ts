@@ -18,4 +18,6 @@ export type {
   EpubChapter,
   EpubAsset,
   EpubTheme,
+  EpubContributorRole,
+  EpubContributor
 } from "./types"

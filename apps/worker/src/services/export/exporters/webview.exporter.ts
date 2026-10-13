@@ -6,8 +6,8 @@ import escapeHTML from "escape-html"
 import slugify from "slugify"
 import { renderEbookAsHTML } from "../render-ebook-as-html.js"
 import type { EbookExporter, ExportedFile } from "./types.js"
-import type { NormalizedEbook } from "../normalize.js"
-import { createImageUrlResolver } from "../image-url-resolver.js"
+import type { NormalizedEbook } from "../utils/normalize.js"
+import { createImageUrlResolver } from "../utils/image-url-resolver.js"
 
 export class WebviewExporter implements EbookExporter {
 	constructor(private readonly htmlExtensions?: Extensions) {}
