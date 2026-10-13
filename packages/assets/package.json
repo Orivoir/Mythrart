@@ -1,0 +1,31 @@
+{
+  "name": "@mythrart/assets",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./node": {
+      "types": "./dist/node.d.ts",
+      "import": "./dist/node.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node scripts/copy-assets.mjs",
+    "clean": "rm -rf dist",
+    "loadcheck": "node check-load.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@types/chalk": "^2.2.4",
+    "@types/node": "^20.19.43",
+    "chalk": "^6.0.1",
+    "typescript": "^7.0.2"
+  }
+}
