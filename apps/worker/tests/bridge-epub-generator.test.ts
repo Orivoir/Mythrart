@@ -433,7 +433,11 @@ describe("generateEpubBridge integration", { timeout: 30000 }, () => {
 
     const result = await generateEpubBridge(normalizedEbook)
 
-    expect(result.book.coverImage).toBeNull()
+    expect(result.book.coverImage).toMatchObject({
+      id: "mythrart-default-cover",
+      fileName: "default_cover_image.png",
+      mimeType: "image/png",
+    })
     expect(result.book.assets).toHaveLength(1)
     expect(result.book.assets[0]?.id).toBe(contentAsset.id)
     expect(Buffer.from(result.book.assets[0]!.data)).toEqual(contentFixture.data)

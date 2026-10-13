@@ -44,6 +44,7 @@ export async function ensureIntegrationBucket(
 export async function createPersistedExportFixture(
   emailPrefix: string,
   coverAssetMatchesChapterImage = true,
+  withCover = true,
 ) {
   const bucket = getIntegrationBucketName()
   const uniqueId = randomUUID()
@@ -93,16 +94,18 @@ export async function createPersistedExportFixture(
     throw new Error("At least one asset fixture is required")
   }
 
-  const coverAsset = coverAssetMatchesChapterImage
-    ? assets.get(firstFixtureAsset.id)
-    : await createAsset(
-        owner.id,
-        "standalone-cover.png",
-        "image/png",
-        tipTapAssetFixtures.length + 1,
-      )
+  const coverAsset = !withCover
+    ? null
+    : coverAssetMatchesChapterImage
+      ? assets.get(firstFixtureAsset.id)
+      : await createAsset(
+          owner.id,
+          "standalone-cover.png",
+          "image/png",
+          tipTapAssetFixtures.length + 1,
+        )
 
-  if (!coverAsset) {
+  if (withCover && !coverAsset) {
     throw new Error("Cover asset was not created")
   }
 
@@ -111,7 +114,7 @@ export async function createPersistedExportFixture(
       ownerId: owner.id,
       title: tipTapEbookFixture.title,
       subtitle: tipTapEbookFixture.subtitle,
-      coverAssetId: coverAsset.id,
+      coverAssetId: coverAsset?.id ?? null,
       ebookTypeId: ebookType.id,
       ebookThemeId: ebookTheme.id,
     },
@@ -155,7 +158,7 @@ export async function createPersistedExportFixture(
 
   return {
     ebookId: ebook.id,
-    coverAssetId: coverAsset.id,
+    coverAssetId: coverAsset?.id ?? null,
   }
 }
 
