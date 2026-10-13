@@ -77,6 +77,8 @@ async function convertHtmlToPdf(html: string, quality: PdfQuality): Promise<Buff
     throw new Error(`Gotenberg PDF conversion failed with status ${response.status}: ${body}`)
   }
 
+  // @TODO should see about stream response from response.body
+  // currently PDF data is fully loaded into memory as a Buffer
   return Buffer.from(await response.arrayBuffer())
 }
 
