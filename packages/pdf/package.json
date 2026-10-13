@@ -1,0 +1,35 @@
+{
+  "name": "@mythrart/pdf",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "vitest run tests/integration",
+    "test:performance": "vitest run tests/performance"
+  },
+  "devDependencies": {
+    "@mythrart/s3": "workspace:*",
+    "@types/jsdom": "^30.0.0",
+    "@types/node": "^24.0.0",
+    "jsdom": "^30.1.1",
+    "pdf-parse": "^2.4.5",
+    "sharp": "^0.35.5",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.11"
+  }
+}

@@ -86,6 +86,9 @@ export function renderNode(
     case "listItem":
       return `<li>${renderChildren(node, assets)}</li>`
 
+    case "codeBlock":
+      return `<pre><code>${renderChildren(node, assets)}</code></pre>`
+
     case "horizontalRule":
       return "<hr />"
 
