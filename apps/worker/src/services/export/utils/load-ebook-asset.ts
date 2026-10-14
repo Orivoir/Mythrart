@@ -1,6 +1,6 @@
 import { GetObjectCommand, s3 } from "@mythrart/s3"
 import type { EpubAsset } from "@mythrart/epub"
-  import { loadDefaultCover } from "@mythrart/assets/node";
+import { loadDefaultCover } from "@mythrart/assets/node";
 
 import type { NormalizedEbook } from "./normalize.js"
 

@@ -3,7 +3,7 @@
 import type { Extensions } from "@tiptap/core"
 import htmlToDocx from "html-to-docx"
 import slugify from "slugify"
-import { createImageDataUrlResolver } from "../utils/image-url-resolver.js"
+import { createImageDataUrlResolver } from "../utils/image-data-url-resolver.js"
 import { renderEbookAsHTML } from "../render-ebook-as-html.js"
 import type { NormalizedEbook } from "../utils/normalize.js"
 import type { EbookExporter, ExportedFile } from "./types.js"
