@@ -7,3 +7,8 @@ export async function loadDefaultCover(): Promise<Uint8Array> {
 
   return new Uint8Array(data);
 }
+
+export async function loadDefaultCoverAsBase64(): Promise<string> {
+  const data = await loadDefaultCover()
+  return Buffer.from(data).toString("base64")
+}
