@@ -1,9 +1,17 @@
-import type { ExportJobData, ExportJobResult } from "../../validations/export.job.js"
-import { loadRequirements } from "../utils.js"
-import normalizeExportData, { type ExportSource } from "./utils/normalize.js"
-import { loadSnapshotSource } from "./snapshot-source.js"
+import type {
+  ExportJobData,
+  ExportJobResult,
+} from "../../validations/export.job.js";
+import { loadRequirements } from "../utils.js";
+import normalizeExportData, { type ExportSource } from "./utils/normalize.js";
+import { loadSnapshotSource } from "./snapshot-source.js";
 
-export async function exportEbook({ ebookId, format, locale, snapshotId }: ExportJobData): Promise<ExportJobResult> {
+export async function exportEbook({
+  ebookId,
+  format,
+  locale,
+  snapshotId,
+}: ExportJobData): Promise<ExportJobResult> {
   /**
    * TODO: implement actual export logic.
    *
@@ -28,12 +36,12 @@ export async function exportEbook({ ebookId, format, locale, snapshotId }: Expor
 
   const source: ExportSource = snapshotId
     ? await loadSnapshotSource(ebookId, snapshotId)
-    : await loadRequirements(ebookId, "with-content-assets", locale)
+    : await loadRequirements(ebookId, "with-content-assets", locale);
 
-  const normalized = normalizeExportData(source, locale)
+  const normalized = normalizeExportData(source, locale);
 
-  void normalized
-  void format
+  void normalized;
+  void format;
 
-  throw new Error("Export service is not implemented yet")
+  throw new Error("Export service is not implemented yet");
 }

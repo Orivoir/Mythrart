@@ -1,17 +1,15 @@
+import type { JSONContent } from "@tiptap/core";
+import type { CreateEpubOptions, EpubContributor } from "@mythrart/epub";
 
-import type { JSONContent } from "@tiptap/core"
-import type { CreateEpubOptions, EpubContributor } from "@mythrart/epub"
-
-import type { NormalizedEbook } from "./normalize.js"
-import { loadEbookAssets } from "./load-ebook-asset.js"
-import { loadEbookAdditionalData } from "./additionals-data.js"
-import { mapEbookTheme } from "./map-ebook-theme.js"
-import { mapRoleContributor } from "./map-roles-contributor.js"
+import type { NormalizedEbook } from "./normalize.js";
+import { loadEbookAssets } from "./load-ebook-asset.js";
+import { loadEbookAdditionalData } from "./additionals-data.js";
+import { mapEbookTheme } from "./map-ebook-theme.js";
+import { mapRoleContributor } from "./map-roles-contributor.js";
 
 export async function generateEpubBridge(
   ebook: NormalizedEbook,
 ): Promise<CreateEpubOptions> {
-  
   const [{ assets, coverImage }, bridgeData] = await Promise.all([
     loadEbookAssets(ebook),
     loadEbookAdditionalData(ebook.id, {
@@ -21,10 +19,10 @@ export async function generateEpubBridge(
       withEbookType: false,
       withOwner: true,
     }),
-  ])
+  ]);
 
   if (!bridgeData) {
-    throw new Error(`Ebook ${ebook.id} not found`)
+    throw new Error(`Ebook ${ebook.id} not found`);
   }
 
   const contributors: EpubContributor[] = bridgeData.collaborators.flatMap(
@@ -32,11 +30,11 @@ export async function generateEpubBridge(
       const name = getDisplayName(
         collaborator.user.firstName,
         collaborator.user.lastName,
-        collaborator.user.username
-      )
+        collaborator.user.username,
+      );
 
       if (!name) {
-        return []
+        return [];
       }
 
       return [
@@ -44,16 +42,16 @@ export async function generateEpubBridge(
           name,
           role: mapRoleContributor(collaborator.role),
         },
-      ]
+      ];
     },
-  )
+  );
 
   const creator =
     getDisplayName(
       bridgeData.owner.firstName,
       bridgeData.owner.lastName,
       bridgeData.owner.username,
-    ) ?? "Unknown author"
+    ) ?? "Unknown author";
 
   return {
     book: {
@@ -75,7 +73,7 @@ export async function generateEpubBridge(
       })),
     },
     theme: mapEbookTheme(bridgeData.ebookTheme),
-  }
+  };
 }
 
 function getDisplayName(
@@ -86,7 +84,7 @@ function getDisplayName(
   const fullName = [firstName, lastName]
     .filter((part): part is string => Boolean(part?.trim()))
     .join(" ")
-    .trim()
+    .trim();
 
-  return fullName || username?.trim() || "Anon."
+  return fullName || username?.trim() || "Anon.";
 }

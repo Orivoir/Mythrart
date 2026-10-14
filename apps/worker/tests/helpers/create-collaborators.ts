@@ -1,29 +1,48 @@
-import { type CollaborationRole, prisma, type User } from "@mythrart/database"
+import { type CollaborationRole, prisma, type User } from "@mythrart/database";
 
 export interface CreateCollaboratorOptions {
   id: string;
   ebookId: string;
-  beforeCreate?: (user: User) => void
+  beforeCreate?: (user: User) => void;
 }
 
 export default async function createCollaborators({
   id,
   ebookId,
-  beforeCreate
+  beforeCreate,
 }: CreateCollaboratorOptions) {
-
   const collaboratorConfigs: Array<{
-    firstName: string
-    lastName: string
-    username: string
-    role: CollaborationRole
+    firstName: string;
+    lastName: string;
+    username: string;
+    role: CollaborationRole;
   }> = [
-    { firstName: "Jane", lastName: "Austen", username: `editor_${id}`, role: "EDITOR" },
-    { firstName: "Jorge", lastName: "Borges", username: `translator_${id}`, role: "TRANSLATOR" },
-    { firstName: "Mary", lastName: "Shelley", username: `proofreader_${id}`, role: "PROOFREADER" },
-    { firstName: "Edgar", lastName: "Poe", username: `author_${id}`, role: "AUTHOR" },
-  ]
-  
+    {
+      firstName: "Jane",
+      lastName: "Austen",
+      username: `editor_${id}`,
+      role: "EDITOR",
+    },
+    {
+      firstName: "Jorge",
+      lastName: "Borges",
+      username: `translator_${id}`,
+      role: "TRANSLATOR",
+    },
+    {
+      firstName: "Mary",
+      lastName: "Shelley",
+      username: `proofreader_${id}`,
+      role: "PROOFREADER",
+    },
+    {
+      firstName: "Edgar",
+      lastName: "Poe",
+      username: `author_${id}`,
+      role: "AUTHOR",
+    },
+  ];
+
   for (const config of collaboratorConfigs) {
     const user = await prisma.user.create({
       data: {
@@ -34,9 +53,9 @@ export default async function createCollaborators({
         emailVerified: new Date(),
         termsAcceptedAt: new Date(),
       },
-    })
+    });
     // createdUserIds.add(user.id)
-    beforeCreate?.(user)
+    beforeCreate?.(user);
 
     await prisma.ebookCollaborator.create({
       data: {
@@ -44,6 +63,6 @@ export default async function createCollaborators({
         userId: user.id,
         role: config.role,
       },
-    })
+    });
   }
 }

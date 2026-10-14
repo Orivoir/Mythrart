@@ -1,5 +1,5 @@
-import {loadEnv} from "@mythrart/env"
+import { loadEnv } from "@mythrart/env";
 
-loadEnv()
+loadEnv();
 
-export {s3} from "@mythrart/s3"
+export { s3 } from "@mythrart/s3";

@@ -1,1 +1,1 @@
-export * from "./shutdown.js"
+export * from "./shutdown.js";

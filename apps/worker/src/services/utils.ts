@@ -1,9 +1,9 @@
-import { prisma } from "@mythrart/database"
+import { prisma } from "@mythrart/database";
 
-export type Requirements = Awaited<ReturnType<typeof loadRequirements>>
-export type RequirementsStrategy = "low-cost" | "with-content-assets"
+export type Requirements = Awaited<ReturnType<typeof loadRequirements>>;
+export type RequirementsStrategy = "low-cost" | "with-content-assets";
 
-type RequirementsLocale = string | "all"
+type RequirementsLocale = string | "all";
 
 async function loadChapterLocales(
   chapterId: string,
@@ -17,7 +17,7 @@ async function loadChapterLocales(
     orderBy: {
       locale: "asc",
     },
-  })
+  });
 }
 
 async function loadChapterAssetReferences(chapterId: string) {
@@ -29,7 +29,7 @@ async function loadChapterAssetReferences(chapterId: string) {
     include: {
       asset: true,
     },
-  })
+  });
 }
 
 async function loadChapters(
@@ -44,7 +44,7 @@ async function loadChapters(
     orderBy: {
       position: "asc",
     },
-  })
+  });
 
   return Promise.all(
     chapters.map(async (chapter) => {
@@ -53,15 +53,15 @@ async function loadChapters(
         strategy === "with-content-assets"
           ? loadChapterAssetReferences(chapter.id)
           : Promise.resolve([]),
-      ])
+      ]);
 
       return {
         ...chapter,
         locales,
         assetReferences,
-      }
+      };
     }),
-  )
+  );
 }
 
 export async function loadRequirements(
@@ -70,25 +70,21 @@ export async function loadRequirements(
   locale: RequirementsLocale = "en",
 ) {
   const ebook = await prisma.ebook.findUnique({
-    where: {id: ebookId},
+    where: { id: ebookId },
     include: {
       currentSnapshot: true,
       coverAsset: true,
     },
-  })
+  });
 
-  if(!ebook) {
-    throw new Error(`Ebook with id ${ebookId} not found`)
+  if (!ebook) {
+    throw new Error(`Ebook with id ${ebookId} not found`);
   }
 
-  const chapters = await loadChapters(
-    ebookId,
-    strategy,
-    locale,
-  )
+  const chapters = await loadChapters(ebookId, strategy, locale);
 
   return {
     ...ebook,
     chapters,
-  }
+  };
 }

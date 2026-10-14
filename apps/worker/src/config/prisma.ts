@@ -1,20 +1,20 @@
 // proxy of archived: (https://github.com/Orivoir/mythart/blob/main/worker/src/config/prisma.ts)
 
-import {prisma, PrismaClient} from "@mythrart/database"
+import { prisma, PrismaClient } from "@mythrart/database";
 
 export function createPrismaClient(): PrismaClient {
-  return prisma
+  return prisma;
 }
 
 export function getPrisma() {
-  return prisma
+  return prisma;
 }
 
-export async function connectPrisma()  {
-  const client = getPrisma()
-  await client.$connect()
+export async function connectPrisma() {
+  const client = getPrisma();
+  await client.$connect();
 
-  return client
+  return client;
 }
 
 export function hasAuthModels(client: PrismaClient): boolean {
@@ -22,15 +22,17 @@ export function hasAuthModels(client: PrismaClient): boolean {
     user?: unknown;
     account?: unknown;
     verificationToken?: unknown;
-  }
+  };
 
-  return Boolean(candidate.user && candidate.account && candidate.verificationToken)
+  return Boolean(
+    candidate.user && candidate.account && candidate.verificationToken,
+  );
 }
 
 export async function closePrisma(): Promise<void> {
   if (!prisma) {
-    return
+    return;
   }
 
-  await prisma.$disconnect()
+  await prisma.$disconnect();
 }

@@ -1,29 +1,26 @@
-import { z } from "zod"
+import { z } from "zod";
 
-import {
-  EbookEntityRelationType,
-  EbookEntityType,
-} from "@mythrart/database"
+import { EbookEntityRelationType, EbookEntityType } from "@mythrart/database";
 
-export const ANALYSIS_SYNOPSIS_JOB_NAME = "analysis.synopsis"
+export const ANALYSIS_SYNOPSIS_JOB_NAME = "analysis.synopsis";
 
 export const analysisSynopsisJobDataSchema = z.object({
   assetId: z.string().min(1, "assetId is required"),
-})
+});
 
 export type AnalysisSynopsisJobData = z.infer<
   typeof analysisSynopsisJobDataSchema
->
+>;
 
 const entityTypes = Object.values(EbookEntityType) as [
   EbookEntityType,
   ...EbookEntityType[],
-]
+];
 
 const relationTypes = Object.values(EbookEntityRelationType) as [
   EbookEntityRelationType,
   ...EbookEntityRelationType[],
-]
+];
 
 export const synopsisAnalysisSchema = z.object({
   entities: z.array(
@@ -51,14 +48,12 @@ export const synopsisAnalysisSchema = z.object({
       temporalExpression: z.string().nullable(),
     }),
   ),
-})
+});
 
-export type SynopsisAnalysis = z.infer<
-  typeof synopsisAnalysisSchema
->
+export type SynopsisAnalysis = z.infer<typeof synopsisAnalysisSchema>;
 
 export interface AnalysisSynopsisJobResult {
   analysis: SynopsisAnalysis & {
-    assetId: string
-  }
+    assetId: string;
+  };
 }

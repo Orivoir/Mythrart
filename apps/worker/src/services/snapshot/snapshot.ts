@@ -1,14 +1,18 @@
-import type {SnapshotJobData, SnapshotJobResult} from "./../../validations/snapshot.job.js"
-import { prisma } from "@mythrart/database"
-import { s3, PutObjectCommand } from "@mythrart/s3"
-import { loadRequirements, type Requirements } from "../utils.js"
+import type {
+  SnapshotJobData,
+  SnapshotJobResult,
+} from "./../../validations/snapshot.job.js";
+import { prisma } from "@mythrart/database";
+import { s3, PutObjectCommand } from "@mythrart/s3";
+import { loadRequirements, type Requirements } from "../utils.js";
 
-export async function generate({ebookId}: SnapshotJobData): Promise<SnapshotJobResult
-> {
+export async function generate({
+  ebookId,
+}: SnapshotJobData): Promise<SnapshotJobResult> {
   /**
    * Should create un snapshot-v{version}.json at s3 Bucket
    * and upgrade database models:
-   * 
+   *
    * 1 - Database (read): Get the ebook with all required metadata
    * 2 - Database (read): Get all chapters of the ebook from the database
    * 3 - Database (read): Get the latest snapshot version of this ebook from the database
@@ -17,14 +21,14 @@ export async function generate({ebookId}: SnapshotJobData): Promise<SnapshotJobR
    * 6 - Database (write): Add SnapshotFile record to the database with the s3 path
    * 7 - Database (write): Add Snapshot record to the database with the version, ebook, SnapshotFileId and version
    * 8 - Database (write): Update the ebook record (currentSnapshot property)
-   * 
+   *
    * During transaction database failures should delete
-   * file snapshot-v{version}.json from s3 bucket. 
+   * file snapshot-v{version}.json from s3 bucket.
    */
 
-  const ebook = await loadRequirements(ebookId, "with-content-assets", "all")
+  const ebook = await loadRequirements(ebookId, "with-content-assets", "all");
 
-  const nextVersion = (ebook.currentSnapshot?.version ?? 0) + 1
+  const nextVersion = (ebook.currentSnapshot?.version ?? 0) + 1;
 
   // Chapter content now lives in ChapterLocale rows.
 
@@ -32,35 +36,36 @@ export async function generate({ebookId}: SnapshotJobData): Promise<SnapshotJobR
     // the format version should be NEVER upgraded
     // this data is used for backward compatibility between format snapshot used
     formatVersion: 1,
-    
+
     metadata: getSnapshotMetadata(nextVersion),
 
     ebook: getSnapshotEbookData(ebook),
 
-    chapters: ebook.chapters.map(getChapterData)
-  }
+    chapters: ebook.chapters.map(getChapterData),
+  };
 
-  const snapshotJsonString = JSON.stringify(snapshotJson)
+  const snapshotJsonString = JSON.stringify(snapshotJson);
 
-  const snapshotFileName = `snapshot-v${nextVersion}.json`
+  const snapshotFileName = `snapshot-v${nextVersion}.json`;
 
-  const key = `users/${ebook.ownerId}/snapshots/${snapshotFileName}`
-  
+  const key = `users/${ebook.ownerId}/snapshots/${snapshotFileName}`;
+
   const command = new PutObjectCommand({
     Bucket: process.env.S3_BUCKET,
     Key: key,
     ContentType: "application/json",
-    Body: snapshotJsonString
-  })
+    Body: snapshotJsonString,
+  });
 
-  const {$metadata} = await s3.send(command)
+  const { $metadata } = await s3.send(command);
 
-  if($metadata.httpStatusCode !== 200 && $metadata.httpStatusCode !== 201) {
-    throw new Error(`Failed to upload snapshot to S3. HTTP status code: ${$metadata.httpStatusCode}`)
+  if ($metadata.httpStatusCode !== 200 && $metadata.httpStatusCode !== 201) {
+    throw new Error(
+      `Failed to upload snapshot to S3. HTTP status code: ${$metadata.httpStatusCode}`,
+    );
   }
 
   const snapshot = await prisma.$transaction(async (tx) => {
-
     const snapshot = await tx.snapshot.create({
       data: {
         version: nextVersion,
@@ -71,31 +76,31 @@ export async function generate({ebookId}: SnapshotJobData): Promise<SnapshotJobR
             key,
             bucket: process.env.S3_BUCKET!,
             sizeBytes: Buffer.byteLength(snapshotJsonString, "utf-8"),
-            mimeType: "application/json" 
-          }
-        }
+            mimeType: "application/json",
+          },
+        },
       },
       include: {
         file: true,
       },
-    })
+    });
 
     await tx.ebook.update({
-      where: {id: ebook.id},
+      where: { id: ebook.id },
       data: {
         currentSnapshot: {
           connect: {
-            id: snapshot.id
-          }
-        }
-      }
-    })
+            id: snapshot.id,
+          },
+        },
+      },
+    });
 
-    return snapshot
-  })
+    return snapshot;
+  });
 
   if (!snapshot.file) {
-    throw new Error("Snapshot file was not created")
+    throw new Error("Snapshot file was not created");
   }
 
   return {
@@ -114,7 +119,7 @@ export async function generate({ebookId}: SnapshotJobData): Promise<SnapshotJobR
         createdAt: snapshot.file.createdAt.getTime(),
       },
     },
-  }
+  };
   // later should be handler case of:
   // 1 . uploading to S3 success
   // 2 . database transaction failed
@@ -143,11 +148,11 @@ function getChapterData(chapter: Requirements["chapters"][number]) {
       sizeBytes: reference.asset.sizeBytes,
     })),
     createdAt: chapter.createdAt,
-  }
+  };
 }
 
 function getSnapshotEbookData(ebook: Requirements) {
-  const { id, title, subtitle, shortDescription, createdAt } = ebook
+  const { id, title, subtitle, shortDescription, createdAt } = ebook;
 
   return {
     id,
@@ -165,11 +170,11 @@ function getSnapshotEbookData(ebook: Requirements) {
           sizeBytes: ebook.coverAsset.sizeBytes,
         }
       : null,
-  }
+  };
 }
 function getSnapshotMetadata(version: number) {
   return {
     generatedAt: new Date().getTime(),
-    version
-  }
+    version,
+  };
 }

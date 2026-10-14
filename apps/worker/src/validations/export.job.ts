@@ -1,7 +1,14 @@
-import { z } from "zod"
+import { z } from "zod";
 
-export const EXPORT_JOB_NAME = "export.process"
-export const exportFormats = ["txt", "pdf", "epub", "docx", "markdown", "webview"] as const
+export const EXPORT_JOB_NAME = "export.process";
+export const exportFormats = [
+  "txt",
+  "pdf",
+  "epub",
+  "docx",
+  "markdown",
+  "webview",
+] as const;
 
 export const exportJobDataSchema = z.object({
   ebookId: z.string().trim().min(1, "ebookId is required"),
@@ -9,25 +16,29 @@ export const exportJobDataSchema = z.object({
     message: "format must be one of: txt, pdf, epub, docx, markdown, webview",
   }),
   locale: z.string().trim().min(1, "locale is required"),
-  snapshotId: z.string().trim().min(1, "snapshotId must not be empty").optional(),
-})
+  snapshotId: z
+    .string()
+    .trim()
+    .min(1, "snapshotId must not be empty")
+    .optional(),
+});
 
-export type ExportJobData = z.infer<typeof exportJobDataSchema>
+export type ExportJobData = z.infer<typeof exportJobDataSchema>;
 
 export interface ExportJobResult {
   export: {
-    id: string
-    ebookId: string
-    format: ExportJobData["format"]
-    status: string
-    createdAt: number
+    id: string;
+    ebookId: string;
+    format: ExportJobData["format"];
+    status: string;
+    createdAt: number;
     file?: {
-      id: string
-      key: string
-      bucket: string
-      sizeBytes: number
-      mimeType: string
-      createdAt: number
-    }
-  }
+      id: string;
+      key: string;
+      bucket: string;
+      sizeBytes: number;
+      mimeType: string;
+      createdAt: number;
+    };
+  };
 }

@@ -1,13 +1,13 @@
-import slugify from "slugify"
-import { createImageUrlResolver } from "../utils/image-url-resolver.js"
-import { renderEbookAsHTML } from "../render-ebook-as-html.js"
-import type { NormalizedEbook } from "../utils/normalize.js"
-import type { EbookExporter, ExportedFile } from "./types.js"
-import type { Extensions } from "@tiptap/core"
-import { createPdf } from "@mythrart/pdf"
-import { loadDefaultCoverAsBase64 } from "@mythrart/assets/node"
+import slugify from "slugify";
+import { createImageUrlResolver } from "../utils/image-url-resolver.js";
+import { renderEbookAsHTML } from "../render-ebook-as-html.js";
+import type { NormalizedEbook } from "../utils/normalize.js";
+import type { EbookExporter, ExportedFile } from "./types.js";
+import type { Extensions } from "@tiptap/core";
+import { createPdf } from "@mythrart/pdf";
+import { loadDefaultCoverAsBase64 } from "@mythrart/assets/node";
 
-export type PdfQuality = "readable" | "ready-to-print"
+export type PdfQuality = "readable" | "ready-to-print";
 
 export class PdfExporter implements EbookExporter {
   constructor(
@@ -23,26 +23,26 @@ export class PdfExporter implements EbookExporter {
      * `withInternalPoint` flag is used to generate internal S3 URLs based
      * on container docker name (http://minio:9000 instead of http://127.0.0.1:9000).
      */
-    const withInternalPoint = process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test"
+    const withInternalPoint =
+      process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test";
 
-    const resolveImageUrl = createImageUrlResolver(ebook, withInternalPoint)
-
+    const resolveImageUrl = createImageUrlResolver(ebook, withInternalPoint);
 
     const coverImageUrl = ebook.coverImage
       ? await resolveImageUrl(ebook.coverImage.assetId)
-      : await loadDefaultCoverAsBase64()
+      : await loadDefaultCoverAsBase64();
 
     if (ebook.coverImage && !coverImageUrl) {
       throw new Error(
         `Unable to resolve cover image asset ${ebook.coverImage.assetId}`,
-      )
+      );
     }
 
     const html = await renderEbookAsHTML(ebook, {
       extensions: this.htmlExtensions,
       resolveImageUrl,
       coverImageUrl,
-    })
+    });
 
     const result = await createPdf({
       gotenberg: {
@@ -50,12 +50,12 @@ export class PdfExporter implements EbookExporter {
         quality: this.quality,
       },
       html,
-    })
+    });
 
     return {
       fileName: `${slugify(ebook.title)}.pdf`,
       mimeType: result.mimeType,
       data: result.data,
-    }
+    };
   }
 }

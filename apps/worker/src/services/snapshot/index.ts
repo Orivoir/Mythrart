@@ -1,1 +1,1 @@
-export {generate} from "./snapshot.js"
+export { generate } from "./snapshot.js";

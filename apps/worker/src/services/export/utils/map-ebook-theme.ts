@@ -1,5 +1,5 @@
-import type { EbookTheme } from "@mythrart/database"
-import type { EpubTheme } from "@mythrart/epub"
+import type { EbookTheme } from "@mythrart/database";
+import type { EpubTheme } from "@mythrart/epub";
 
 export function mapEbookTheme(dbTheme: EbookTheme): EpubTheme {
   return {
@@ -13,5 +13,5 @@ export function mapEbookTheme(dbTheme: EbookTheme): EpubTheme {
     lineHeight: dbTheme.lineHeight ?? "inherit",
     paragraphSpacing: dbTheme.paragraphSpacing ?? "0",
     headingSpacing: dbTheme.headingSpacing ?? "0",
-  }
+  };
 }

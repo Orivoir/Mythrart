@@ -1,11 +1,10 @@
-import pino, { type Logger } from "pino"
+import pino, { type Logger } from "pino";
 
-import type { WorkerEnv } from "../validations/env.schema.js"
+import type { WorkerEnv } from "../validations/env.schema.js";
 
-let logger: Logger | null = null
+let logger: Logger | null = null;
 
 export function getLogger(env: WorkerEnv): Logger {
-
   const devOptions = {
     transport: {
       target: "pino-pretty",
@@ -13,9 +12,10 @@ export function getLogger(env: WorkerEnv): Logger {
         colorize: true,
       },
     },
-  }
+  };
 
-  const loggerDevOptions = process.env.NODE_ENV !== "production" ? devOptions : {}
+  const loggerDevOptions =
+    process.env.NODE_ENV !== "production" ? devOptions : {};
 
   if (!logger) {
     logger = pino({
@@ -24,9 +24,9 @@ export function getLogger(env: WorkerEnv): Logger {
       base: {
         pid: process.pid,
       },
-      ...(loggerDevOptions),
-    })
+      ...loggerDevOptions,
+    });
   }
 
-  return logger
+  return logger;
 }

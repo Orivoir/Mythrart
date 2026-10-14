@@ -1,6 +1,6 @@
-import type { Logger } from "pino"
+import type { Logger } from "pino";
 
-let shuttingDown = false
+let shuttingDown = false;
 
 export function registerShutdownHandlers(
   shutdown: (signal: NodeJS.Signals) => Promise<void>,
@@ -8,21 +8,21 @@ export function registerShutdownHandlers(
 ): void {
   const handleSignal = (signal: NodeJS.Signals) => {
     if (shuttingDown) {
-      return
+      return;
     }
 
-    shuttingDown = true
+    shuttingDown = true;
 
     void shutdown(signal)
       .catch((error) => {
-        logger.error({ err: error, signal }, "Worker shutdown failed")
-        process.exitCode = 1
+        logger.error({ err: error, signal }, "Worker shutdown failed");
+        process.exitCode = 1;
       })
       .finally(() => {
-        process.exit()
-      })
-  }
+        process.exit();
+      });
+  };
 
-  process.once("SIGINT", handleSignal)
-  process.once("SIGTERM", handleSignal)
+  process.once("SIGINT", handleSignal);
+  process.once("SIGTERM", handleSignal);
 }

@@ -1,38 +1,38 @@
-import { Faker, en } from "@faker-js/faker"
-import type { JSONContent } from "@mythrart/editor-extensions"
+import { Faker, en } from "@faker-js/faker";
+import type { JSONContent } from "@mythrart/editor-extensions";
 
-const fixtureFaker = new Faker({ locale: [en] })
-fixtureFaker.seed(20_260_831)
+const fixtureFaker = new Faker({ locale: [en] });
+fixtureFaker.seed(20_260_831);
 
 export type TipTapChapterFixture = {
-  id: string
-  title: string
-  position: number
-  content: JSONContent
-}
+  id: string;
+  title: string;
+  position: number;
+  content: JSONContent;
+};
 
 export type TipTapAssetFixture = {
-  id: string
-  fileName: string
-  mimeType: "image/jpeg" | "image/png"
-  alt: string
-  title: string
-}
+  id: string;
+  fileName: string;
+  mimeType: "image/jpeg" | "image/png";
+  alt: string;
+  title: string;
+};
 
 export type TipTapMentionEntityFixture = {
-  id: string
-  label: string
-  role: string
-}
+  id: string;
+  label: string;
+  role: string;
+};
 
 export type TipTapEbookFixture = {
-  id: string
-  title: string
-  subtitle: string
-  chapters: readonly TipTapChapterFixture[]
-  assets: readonly TipTapAssetFixture[]
-  mentionEntities: readonly TipTapMentionEntityFixture[]
-}
+  id: string;
+  title: string;
+  subtitle: string;
+  chapters: readonly TipTapChapterFixture[];
+  assets: readonly TipTapAssetFixture[];
+  mentionEntities: readonly TipTapMentionEntityFixture[];
+};
 
 export const tipTapAssetFixtures: readonly TipTapAssetFixture[] = [
   {
@@ -56,24 +56,25 @@ export const tipTapAssetFixtures: readonly TipTapAssetFixture[] = [
     alt: "A route map with handwritten waypoints",
     title: "Waypoints",
   },
-]
+];
 
-export const tipTapMentionEntityFixtures: readonly TipTapMentionEntityFixture[] = [
-  { id: "person-ada-rowan", label: "Ada Rowan", role: "Research editor" },
-  { id: "person-milo-chen", label: "Milo Chen", role: "Field photographer" },
-  { id: "person-noor-hassan", label: "Noor Hassan", role: "Cartographer" },
-]
+export const tipTapMentionEntityFixtures: readonly TipTapMentionEntityFixture[] =
+  [
+    { id: "person-ada-rowan", label: "Ada Rowan", role: "Research editor" },
+    { id: "person-milo-chen", label: "Milo Chen", role: "Field photographer" },
+    { id: "person-noor-hassan", label: "Noor Hassan", role: "Cartographer" },
+  ];
 
 function text(value: string, marks?: JSONContent["marks"]): JSONContent {
-  return { type: "text", text: value, marks }
+  return { type: "text", text: value, marks };
 }
 
 function paragraph(...content: JSONContent[]): JSONContent {
-  return { type: "paragraph", content }
+  return { type: "paragraph", content };
 }
 
 function hardBreak(): JSONContent {
-  return { type: "hardBreak" }
+  return { type: "hardBreak" };
 }
 
 function heading(level: 1 | 2 | 3, value: string): JSONContent {
@@ -81,7 +82,7 @@ function heading(level: 1 | 2 | 3, value: string): JSONContent {
     type: "heading",
     attrs: { level },
     content: [text(value)],
-  }
+  };
 }
 
 function mention(entity: TipTapMentionEntityFixture): JSONContent {
@@ -91,7 +92,7 @@ function mention(entity: TipTapMentionEntityFixture): JSONContent {
       id: entity.id,
       label: entity.label,
     },
-  }
+  };
 }
 
 function image(asset: TipTapAssetFixture): JSONContent {
@@ -102,12 +103,12 @@ function image(asset: TipTapAssetFixture): JSONContent {
       alt: asset.alt,
       title: asset.title,
     },
-  }
+  };
 }
 
-const openingTitle = fixtureFaker.lorem.words({ min: 3, max: 5 })
-const [sunriseAsset, workshopAsset, routeMapAsset] = tipTapAssetFixtures
-const [ada, milo, noor] = tipTapMentionEntityFixtures
+const openingTitle = fixtureFaker.lorem.words({ min: 3, max: 5 });
+const [sunriseAsset, workshopAsset, routeMapAsset] = tipTapAssetFixtures;
+const [ada, milo, noor] = tipTapMentionEntityFixtures;
 const openingContent: JSONContent = {
   type: "doc",
   content: [
@@ -146,9 +147,18 @@ const openingContent: JSONContent = {
     {
       type: "bulletList",
       content: [
-        { type: "listItem", content: [paragraph(text(fixtureFaker.lorem.sentence()))] },
-        { type: "listItem", content: [paragraph(text(fixtureFaker.lorem.sentence()))] },
-        { type: "listItem", content: [paragraph(text(fixtureFaker.lorem.sentence()))] },
+        {
+          type: "listItem",
+          content: [paragraph(text(fixtureFaker.lorem.sentence()))],
+        },
+        {
+          type: "listItem",
+          content: [paragraph(text(fixtureFaker.lorem.sentence()))],
+        },
+        {
+          type: "listItem",
+          content: [paragraph(text(fixtureFaker.lorem.sentence()))],
+        },
       ],
     },
     paragraph(
@@ -157,9 +167,9 @@ const openingContent: JSONContent = {
       text(" during a rain-darkened afternoon."),
     ),
   ],
-}
+};
 
-const craftTitle = fixtureFaker.lorem.words({ min: 3, max: 5 })
+const craftTitle = fixtureFaker.lorem.words({ min: 3, max: 5 });
 const craftContent: JSONContent = {
   type: "doc",
   content: [
@@ -185,14 +195,32 @@ const craftContent: JSONContent = {
             {
               type: "bulletList",
               content: [
-                { type: "listItem", content: [paragraph(text("A pencil, a ruler, and room to revise."))] },
-                { type: "listItem", content: [paragraph(text("A question worth carrying forward."))] },
+                {
+                  type: "listItem",
+                  content: [
+                    paragraph(text("A pencil, a ruler, and room to revise.")),
+                  ],
+                },
+                {
+                  type: "listItem",
+                  content: [
+                    paragraph(text("A question worth carrying forward.")),
+                  ],
+                },
               ],
             },
           ],
         },
-        { type: "listItem", content: [paragraph(text("Record the detail that surprises you."))] },
-        { type: "listItem", content: [paragraph(text("Return after the first draft has cooled."))] },
+        {
+          type: "listItem",
+          content: [paragraph(text("Record the detail that surprises you."))],
+        },
+        {
+          type: "listItem",
+          content: [
+            paragraph(text("Return after the first draft has cooled.")),
+          ],
+        },
       ],
     },
     { type: "horizontalRule" },
@@ -214,9 +242,9 @@ const craftContent: JSONContent = {
     ),
     image(workshopAsset),
   ],
-}
+};
 
-const journeyTitle = fixtureFaker.lorem.words({ min: 3, max: 5 })
+const journeyTitle = fixtureFaker.lorem.words({ min: 3, max: 5 });
 const journeyContent: JSONContent = {
   type: "doc",
   content: [
@@ -231,7 +259,10 @@ const journeyContent: JSONContent = {
     {
       type: "bulletList",
       content: [
-        { type: "listItem", content: [paragraph(text(fixtureFaker.location.streetAddress()))] },
+        {
+          type: "listItem",
+          content: [paragraph(text(fixtureFaker.location.streetAddress()))],
+        },
         {
           type: "listItem",
           content: [
@@ -239,8 +270,14 @@ const journeyContent: JSONContent = {
             {
               type: "bulletList",
               content: [
-                { type: "listItem", content: [paragraph(text("A doorway painted ochre."))] },
-                { type: "listItem", content: [paragraph(text("A map marked in pencil."))] },
+                {
+                  type: "listItem",
+                  content: [paragraph(text("A doorway painted ochre."))],
+                },
+                {
+                  type: "listItem",
+                  content: [paragraph(text("A map marked in pencil."))],
+                },
               ],
             },
           ],
@@ -267,13 +304,28 @@ const journeyContent: JSONContent = {
       text(" before publication."),
     ),
   ],
-}
+};
 
 export const tipTapChapterFixtures: readonly TipTapChapterFixture[] = [
-  { id: "chapter-opening", title: openingTitle, position: 0, content: openingContent },
-  { id: "chapter-craft", title: craftTitle, position: 1, content: craftContent },
-  { id: "chapter-journey", title: journeyTitle, position: 2, content: journeyContent },
-]
+  {
+    id: "chapter-opening",
+    title: openingTitle,
+    position: 0,
+    content: openingContent,
+  },
+  {
+    id: "chapter-craft",
+    title: craftTitle,
+    position: 1,
+    content: craftContent,
+  },
+  {
+    id: "chapter-journey",
+    title: journeyTitle,
+    position: 2,
+    content: journeyContent,
+  },
+];
 
 export const tipTapEbookFixture: TipTapEbookFixture = {
   id: "ebook-exporter-fixture",
@@ -282,4 +334,4 @@ export const tipTapEbookFixture: TipTapEbookFixture = {
   chapters: tipTapChapterFixtures,
   assets: tipTapAssetFixtures,
   mentionEntities: tipTapMentionEntityFixtures,
-}
+};

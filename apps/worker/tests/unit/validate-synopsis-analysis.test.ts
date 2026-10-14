@@ -1,7 +1,7 @@
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "vitest";
 
-import { validateSynopsisAnalysis } from "./../../src/utils/validate-synopsis-analysis.js"
-import type { SynopsisAnalysis } from "./../../src/validations/analysis-synopsis.job.js"
+import { validateSynopsisAnalysis } from "./../../src/utils/validate-synopsis-analysis.js";
+import type { SynopsisAnalysis } from "./../../src/validations/analysis-synopsis.job.js";
 
 const validAnalysis: SynopsisAnalysis = {
   entities: [
@@ -33,14 +33,14 @@ const validAnalysis: SynopsisAnalysis = {
       temporalExpression: "Le lendemain",
     },
   ],
-}
+};
 
 describe("validateSynopsisAnalysis", () => {
   it("returns the analysis when it is valid", () => {
-    const result = validateSynopsisAnalysis(validAnalysis)
+    const result = validateSynopsisAnalysis(validAnalysis);
 
-    expect(result).toBe(validAnalysis)
-  })
+    expect(result).toBe(validAnalysis);
+  });
 
   it("throws when an entity has an empty ID", () => {
     const analysis: SynopsisAnalysis = {
@@ -54,12 +54,12 @@ describe("validateSynopsisAnalysis", () => {
           description: null,
         },
       ],
-    }
+    };
 
     expect(() => validateSynopsisAnalysis(analysis)).toThrow(
       "Synopsis analysis contains an entity with an empty ID",
-    )
-  })
+    );
+  });
 
   it("throws when entity IDs are duplicated", () => {
     const analysis: SynopsisAnalysis = {
@@ -73,12 +73,12 @@ describe("validateSynopsisAnalysis", () => {
           description: null,
         },
       ],
-    }
+    };
 
     expect(() => validateSynopsisAnalysis(analysis)).toThrow(
       "Synopsis analysis contains duplicate entity ID: e1",
-    )
-  })
+    );
+  });
 
   it("throws when an event has an empty ID", () => {
     const analysis: SynopsisAnalysis = {
@@ -92,12 +92,12 @@ describe("validateSynopsisAnalysis", () => {
           temporalExpression: null,
         },
       ],
-    }
+    };
 
     expect(() => validateSynopsisAnalysis(analysis)).toThrow(
       "Synopsis analysis contains an event with an empty ID",
-    )
-  })
+    );
+  });
 
   it("throws when event IDs are duplicated", () => {
     const analysis: SynopsisAnalysis = {
@@ -111,12 +111,12 @@ describe("validateSynopsisAnalysis", () => {
           temporalExpression: null,
         },
       ],
-    }
+    };
 
     expect(() => validateSynopsisAnalysis(analysis)).toThrow(
       "Synopsis analysis contains duplicate event ID: event-1",
-    )
-  })
+    );
+  });
 
   it("throws when a relation references an unknown source entity", () => {
     const analysis: SynopsisAnalysis = {
@@ -128,12 +128,12 @@ describe("validateSynopsisAnalysis", () => {
           type: "LOCATION",
         },
       ],
-    }
+    };
 
     expect(() => validateSynopsisAnalysis(analysis)).toThrow(
       "Synopsis analysis relation references unknown entity: unknown",
-    )
-  })
+    );
+  });
 
   it("throws when a relation references an unknown target entity", () => {
     const analysis: SynopsisAnalysis = {
@@ -145,12 +145,12 @@ describe("validateSynopsisAnalysis", () => {
           type: "LOCATION",
         },
       ],
-    }
+    };
 
     expect(() => validateSynopsisAnalysis(analysis)).toThrow(
       "Synopsis analysis relation references unknown entity: unknown",
-    )
-  })
+    );
+  });
 
   it("throws when a relation references the same entity", () => {
     const analysis: SynopsisAnalysis = {
@@ -162,12 +162,12 @@ describe("validateSynopsisAnalysis", () => {
           type: "LOCATION",
         },
       ],
-    }
+    };
 
     expect(() => validateSynopsisAnalysis(analysis)).toThrow(
       "Synopsis analysis relation cannot reference the same entity: e1",
-    )
-  })
+    );
+  });
 
   it("throws when an event references an unknown participant", () => {
     const analysis: SynopsisAnalysis = {
@@ -180,10 +180,10 @@ describe("validateSynopsisAnalysis", () => {
           temporalExpression: null,
         },
       ],
-    }
+    };
 
     expect(() => validateSynopsisAnalysis(analysis)).toThrow(
       "Synopsis analysis event event-1 references unknown entity: unknown",
-    )
-  })
-})
+    );
+  });
+});

@@ -1,4 +1,4 @@
-import { prisma } from "@mythrart/database"
+import { prisma } from "@mythrart/database";
 
 export default async function createUser(id: string) {
   return prisma.user.create({
@@ -10,5 +10,5 @@ export default async function createUser(id: string) {
       emailVerified: new Date(),
       termsAcceptedAt: new Date(),
     },
-  })
+  });
 }

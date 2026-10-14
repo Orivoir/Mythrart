@@ -3,5 +3,5 @@ export const llmConfig = {
     model: "gpt-5.6-luna",
     reasoningEffort: "none",
     verbosity: "low",
-  }
-} as const
+  },
+} as const;

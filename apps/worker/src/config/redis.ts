@@ -1,34 +1,32 @@
-import type { WorkerEnv } from "./../validations/env.schema.js"
-import {Redis, getRedisConnection} from "@mythrart/redis"
-
+import type { WorkerEnv } from "./../validations/env.schema.js";
+import { Redis, getRedisConnection } from "@mythrart/redis";
 
 export function getRedis(): Redis {
-  return getRedisConnection() // already cached connection
+  return getRedisConnection(); // already cached connection
 }
 
 export async function connectRedis(
-  _?: WorkerEnv // dead code for backward compatibility
+  _?: WorkerEnv, // dead code for backward compatibility
 ): Promise<Redis> {
-  const connection = getRedis()
+  const connection = getRedis();
 
   if (connection.status === "wait") {
-    await connection.connect()
+    await connection.connect();
   }
 
-  return connection
+  return connection;
 }
 
 export async function closeRedisConnection(): Promise<void> {
-
-  const redis = getRedis()
+  const redis = getRedis();
 
   if (!redis) {
-    return
+    return;
   }
 
   if (redis.status === "ready" || redis.status === "connect") {
-    await redis.quit()
+    await redis.quit();
   } else {
-    redis.disconnect()
+    redis.disconnect();
   }
 }

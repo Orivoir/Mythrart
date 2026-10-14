@@ -1,10 +1,7 @@
-import {
-  EbookEntityRelationType,
-  EbookEntityType,
-} from "@mythrart/database"
+import { EbookEntityRelationType, EbookEntityType } from "@mythrart/database";
 
-const entityTypes = Object.values(EbookEntityType)
-const relationTypes = Object.values(EbookEntityRelationType)
+const entityTypes = Object.values(EbookEntityType);
+const relationTypes = Object.values(EbookEntityRelationType);
 
 const schema = {
   type: "object",
@@ -36,12 +33,7 @@ const schema = {
           },
         },
 
-        required: [
-          "id",
-          "name",
-          "type",
-          "description",
-        ],
+        required: ["id", "name", "type", "description"],
       },
     },
 
@@ -66,11 +58,7 @@ const schema = {
           },
         },
 
-        required: [
-          "from",
-          "to",
-          "type",
-        ],
+        required: ["from", "to", "type"],
       },
     },
 
@@ -101,21 +89,12 @@ const schema = {
           },
         },
 
-        required: [
-          "id",
-          "description",
-          "participants",
-          "temporalExpression",
-        ],
+        required: ["id", "description", "participants", "temporalExpression"],
       },
     },
   },
 
-  required: [
-    "entities",
-    "relations",
-    "events",
-  ],
-}
+  required: ["entities", "relations", "events"],
+};
 
-export default schema
+export default schema;

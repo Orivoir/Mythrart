@@ -1,1 +1,1 @@
-export const SNAPSHOT_QUEUE_NAME = "snapshot"
+export const SNAPSHOT_QUEUE_NAME = "snapshot";

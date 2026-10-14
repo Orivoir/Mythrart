@@ -1,88 +1,88 @@
-import { faker } from "@faker-js/faker"
+import { faker } from "@faker-js/faker";
 import {
   CreateBucketCommand,
   DeleteObjectCommand,
   GetObjectCommand,
   HeadBucketCommand,
-} from "@mythrart/s3"
-import { afterAll, beforeEach, describe, expect, it } from "vitest"
-import { Prisma, prisma } from "@mythrart/database"
-import { s3 } from "@mythrart/s3"
-import { generate } from "../../src/services/snapshot/index.js"
+} from "@mythrart/s3";
+import { afterAll, beforeEach, describe, expect, it } from "vitest";
+import { Prisma, prisma } from "@mythrart/database";
+import { s3 } from "@mythrart/s3";
+import { generate } from "../../src/services/snapshot/index.js";
 
 import {
   createEbookTypeFixture,
   createEbookThemeFixture,
-} from "../helpers/persisted-export-fixture.js"
+} from "../helpers/persisted-export-fixture.js";
 
 type SnapshotAsset = {
-  assetId: string
-  key: string
-  bucket: string
-  fileName: string
-  mimeType: string
-  sizeBytes: number
-}
+  assetId: string;
+  key: string;
+  bucket: string;
+  fileName: string;
+  mimeType: string;
+  sizeBytes: number;
+};
 
 type SnapshotPayload = {
-  formatVersion: number
+  formatVersion: number;
   metadata: {
-    generatedAt: number
-    version: number
-  }
+    generatedAt: number;
+    version: number;
+  };
   ebook: {
-    id: string
-    title: string
-    subtitle: string | null
-    shortDescription: string | null
-    createdAt: string
-    coverImage: SnapshotAsset | null
-  }
+    id: string;
+    title: string;
+    subtitle: string | null;
+    shortDescription: string | null;
+    createdAt: string;
+    coverImage: SnapshotAsset | null;
+  };
   chapters: Array<{
-    id: string
-    title: string
-    position: number
-    createdAt: string
+    id: string;
+    title: string;
+    position: number;
+    createdAt: string;
     locales: Array<{
-      locale: string
-      title: string | null
-      content: Prisma.JsonValue
-      wordsCount: number
-      charactersCount: number
-    }>
-    assets: SnapshotAsset[]
-  }>
-}
+      locale: string;
+      title: string | null;
+      content: Prisma.JsonValue;
+      wordsCount: number;
+      charactersCount: number;
+    }>;
+    assets: SnapshotAsset[];
+  }>;
+};
 
 type EbookFixture = {
-  ownerId: string
-  ebookId: string
-  coverAsset: SnapshotAsset
-  chapters: SnapshotPayload["chapters"]
-  ebookCreatedAt: Date
-  title: string
-  subtitle: string | null
-  shortDescription: string | null
-}
+  ownerId: string;
+  ebookId: string;
+  coverAsset: SnapshotAsset;
+  chapters: SnapshotPayload["chapters"];
+  ebookCreatedAt: Date;
+  title: string;
+  subtitle: string | null;
+  shortDescription: string | null;
+};
 
-const createdObjectKeys = new Set<string>()
-const TEST_EMAIL_PREFIX = "snapshot-itg-"
+const createdObjectKeys = new Set<string>();
+const TEST_EMAIL_PREFIX = "snapshot-itg-";
 
 function getBucketName(): string {
-  const bucket = process.env.S3_BUCKET
+  const bucket = process.env.S3_BUCKET;
 
   if (!bucket) {
-    throw new Error("S3_BUCKET must be configured for integration tests")
+    throw new Error("S3_BUCKET must be configured for integration tests");
   }
 
-  return bucket
+  return bucket;
 }
 
 async function ensureBucketExists(bucket: string): Promise<void> {
   try {
-    await s3.send(new HeadBucketCommand({ Bucket: bucket }))
+    await s3.send(new HeadBucketCommand({ Bucket: bucket }));
   } catch {
-    await s3.send(new CreateBucketCommand({ Bucket: bucket }))
+    await s3.send(new CreateBucketCommand({ Bucket: bucket }));
   }
 }
 
@@ -96,9 +96,9 @@ async function createEbookFixture(): Promise<EbookFixture> {
       emailVerified: new Date(),
       termsAcceptedAt: new Date(),
     },
-  })
+  });
 
-  const bucket = getBucketName()
+  const bucket = getBucketName();
 
   const coverAssetData = {
     key: `covers/${faker.string.alphanumeric(20)}.webp`,
@@ -106,14 +106,14 @@ async function createEbookFixture(): Promise<EbookFixture> {
     fileName: `${faker.system.fileName()}.webp`,
     mimeType: "image/webp",
     sizeBytes: faker.number.int({ min: 1_000, max: 500_000 }),
-  }
+  };
 
   const coverAsset = await prisma.asset.create({
     data: {
       ownerId: owner.id,
       ...coverAssetData,
     },
-  })
+  });
 
   const contentAssetData = {
     key: `content/${faker.string.alphanumeric(20)}.jpg`,
@@ -121,21 +121,21 @@ async function createEbookFixture(): Promise<EbookFixture> {
     fileName: `${faker.system.fileName()}.jpg`,
     mimeType: "image/jpeg",
     sizeBytes: faker.number.int({ min: 1_000, max: 500_000 }),
-  }
+  };
 
   const contentAsset = await prisma.asset.create({
     data: {
       ownerId: owner.id,
       ...contentAssetData,
     },
-  })
+  });
 
-  const title = faker.lorem.sentence({ min: 3, max: 6 })
-  const subtitle = faker.lorem.sentence({ min: 4, max: 8 })
-  const shortDescription = faker.lorem.sentence({ min: 8, max: 16 })
+  const title = faker.lorem.sentence({ min: 3, max: 6 });
+  const subtitle = faker.lorem.sentence({ min: 4, max: 8 });
+  const shortDescription = faker.lorem.sentence({ min: 8, max: 16 });
 
-  const ebookType = await createEbookTypeFixture()
-  const ebookTheme = await createEbookThemeFixture()
+  const ebookType = await createEbookTypeFixture();
+  const ebookTheme = await createEbookThemeFixture();
 
   const data: Prisma.EbookUncheckedCreateInput = {
     ownerId: owner.id,
@@ -145,12 +145,12 @@ async function createEbookFixture(): Promise<EbookFixture> {
     coverAssetId: coverAsset.id,
     ebookTypeId: ebookType.id,
     ebookThemeId: ebookTheme.id,
-  }
+  };
 
-  const ebook = await prisma.ebook.create({ data })
+  const ebook = await prisma.ebook.create({ data });
 
-  const chapterOneTitle = faker.lorem.sentence({ min: 2, max: 5 })
-  const chapterTwoTitle = faker.lorem.sentence({ min: 2, max: 5 })
+  const chapterOneTitle = faker.lorem.sentence({ min: 2, max: 5 });
+  const chapterTwoTitle = faker.lorem.sentence({ min: 2, max: 5 });
 
   const chapterOneEnglishContent: Prisma.JsonValue = {
     type: "doc",
@@ -173,7 +173,7 @@ async function createEbookFixture(): Promise<EbookFixture> {
         },
       },
     ],
-  }
+  };
 
   const chapterOneFrenchContent: Prisma.JsonValue = {
     type: "doc",
@@ -188,7 +188,7 @@ async function createEbookFixture(): Promise<EbookFixture> {
         ],
       },
     ],
-  }
+  };
 
   const chapterTwoEnglishContent: Prisma.JsonValue = {
     type: "doc",
@@ -203,7 +203,7 @@ async function createEbookFixture(): Promise<EbookFixture> {
         ],
       },
     ],
-  }
+  };
 
   const chapterOne = await prisma.chapter.create({
     data: {
@@ -229,7 +229,7 @@ async function createEbookFixture(): Promise<EbookFixture> {
         ],
       },
     },
-  })
+  });
 
   const chapterTwo = await prisma.chapter.create({
     data: {
@@ -246,7 +246,7 @@ async function createEbookFixture(): Promise<EbookFixture> {
         },
       },
     },
-  })
+  });
 
   await prisma.chapterAssetReference.create({
     data: {
@@ -254,25 +254,23 @@ async function createEbookFixture(): Promise<EbookFixture> {
       chapterId: chapterOne.id,
       type: "CONTENT_IMAGE",
     },
-  })
+  });
 
-  const snapshotAsset = (
-    asset: {
-      id: string
-      key: string
-      bucket: string
-      fileName: string
-      mimeType: string
-      sizeBytes: number
-    },
-  ): SnapshotAsset => ({
+  const snapshotAsset = (asset: {
+    id: string;
+    key: string;
+    bucket: string;
+    fileName: string;
+    mimeType: string;
+    sizeBytes: number;
+  }): SnapshotAsset => ({
     assetId: asset.id,
     key: asset.key,
     bucket: asset.bucket,
     fileName: asset.fileName,
     mimeType: asset.mimeType,
     sizeBytes: asset.sizeBytes,
-  })
+  });
 
   return {
     ownerId: owner.id,
@@ -333,7 +331,7 @@ async function createEbookFixture(): Promise<EbookFixture> {
     title,
     subtitle,
     shortDescription,
-  }
+  };
 }
 
 async function deleteUploadedObjects(bucket: string): Promise<void> {
@@ -343,10 +341,10 @@ async function deleteUploadedObjects(bucket: string): Promise<void> {
         Bucket: bucket,
         Key: key,
       }),
-    )
+    );
   }
 
-  createdObjectKeys.clear()
+  createdObjectKeys.clear();
 }
 
 async function deleteFixtureData(bucket: string): Promise<void> {
@@ -359,13 +357,13 @@ async function deleteFixtureData(bucket: string): Promise<void> {
     select: {
       id: true,
     },
-  })
+  });
 
-  const ownerIds = owners.map((owner) => owner.id)
+  const ownerIds = owners.map((owner) => owner.id);
 
   if (ownerIds.length === 0) {
-    await deleteUploadedObjects(bucket)
-    return
+    await deleteUploadedObjects(bucket);
+    return;
   }
 
   const ebooks = await prisma.ebook.findMany({
@@ -377,9 +375,9 @@ async function deleteFixtureData(bucket: string): Promise<void> {
     select: {
       id: true,
     },
-  })
+  });
 
-  const ebookIds = ebooks.map((ebook) => ebook.id)
+  const ebookIds = ebooks.map((ebook) => ebook.id);
 
   if (ebookIds.length > 0) {
     const snapshots = await prisma.snapshot.findMany({
@@ -395,15 +393,15 @@ async function deleteFixtureData(bucket: string): Promise<void> {
           },
         },
       },
-    })
+    });
 
     for (const snapshot of snapshots) {
       if (snapshot.file?.key) {
-        createdObjectKeys.add(snapshot.file.key)
+        createdObjectKeys.add(snapshot.file.key);
       }
     }
 
-    await deleteUploadedObjects(bucket)
+    await deleteUploadedObjects(bucket);
 
     await prisma.snapshotFile.deleteMany({
       where: {
@@ -411,7 +409,7 @@ async function deleteFixtureData(bucket: string): Promise<void> {
           in: snapshots.map((snapshot) => snapshot.id),
         },
       },
-    })
+    });
 
     await prisma.snapshot.deleteMany({
       where: {
@@ -419,7 +417,7 @@ async function deleteFixtureData(bucket: string): Promise<void> {
           in: snapshots.map((snapshot) => snapshot.id),
         },
       },
-    })
+    });
 
     await prisma.chapter.deleteMany({
       where: {
@@ -427,7 +425,7 @@ async function deleteFixtureData(bucket: string): Promise<void> {
           in: ebookIds,
         },
       },
-    })
+    });
 
     await prisma.ebook.deleteMany({
       where: {
@@ -435,10 +433,10 @@ async function deleteFixtureData(bucket: string): Promise<void> {
           in: ebookIds,
         },
       },
-    })
+    });
   }
 
-  await deleteUploadedObjects(bucket)
+  await deleteUploadedObjects(bucket);
 
   await prisma.asset.deleteMany({
     where: {
@@ -446,7 +444,7 @@ async function deleteFixtureData(bucket: string): Promise<void> {
         in: ownerIds,
       },
     },
-  })
+  });
 
   await prisma.user.deleteMany({
     where: {
@@ -454,7 +452,7 @@ async function deleteFixtureData(bucket: string): Promise<void> {
         in: ownerIds,
       },
     },
-  })
+  });
 }
 
 async function loadSnapshotFromS3(
@@ -466,37 +464,37 @@ async function loadSnapshotFromS3(
       Bucket: bucket,
       Key: key,
     }),
-  )
+  );
 
-  const bodyText = await response.Body?.transformToString()
+  const bodyText = await response.Body?.transformToString();
 
   if (!bodyText) {
-    throw new Error("Snapshot body is empty")
+    throw new Error("Snapshot body is empty");
   }
 
-  return JSON.parse(bodyText) as SnapshotPayload
+  return JSON.parse(bodyText) as SnapshotPayload;
 }
 
 describe("snapshot generate service integration", () => {
   beforeEach(async () => {
-    const bucket = getBucketName()
+    const bucket = getBucketName();
 
-    await ensureBucketExists(bucket)
-    await deleteFixtureData(bucket)
-  })
+    await ensureBucketExists(bucket);
+    await deleteFixtureData(bucket);
+  });
 
   afterAll(async () => {
-    const bucket = getBucketName()
+    const bucket = getBucketName();
 
-    await deleteFixtureData(bucket)
-    await prisma.$disconnect()
-  })
+    await deleteFixtureData(bucket);
+    await prisma.$disconnect();
+  });
 
   it("creates snapshot records, links ebook.currentSnapshot and uploads valid json", async () => {
-    const fixture = await createEbookFixture()
-    const bucket = getBucketName()
+    const fixture = await createEbookFixture();
+    const bucket = getBucketName();
 
-    await generate({ ebookId: fixture.ebookId })
+    await generate({ ebookId: fixture.ebookId });
 
     const createdSnapshot = await prisma.snapshot.findFirst({
       where: { ebookId: fixture.ebookId },
@@ -506,32 +504,32 @@ describe("snapshot generate service integration", () => {
       orderBy: {
         createdAt: "desc",
       },
-    })
+    });
 
-    expect(createdSnapshot).not.toBeNull()
-    expect(createdSnapshot?.file).not.toBeNull()
+    expect(createdSnapshot).not.toBeNull();
+    expect(createdSnapshot?.file).not.toBeNull();
 
     const persistedEbook = await prisma.ebook.findUnique({
       where: { id: fixture.ebookId },
       select: {
         currentSnapshotId: true,
       },
-    })
+    });
 
-    expect(persistedEbook?.currentSnapshotId).toBe(createdSnapshot?.id)
+    expect(persistedEbook?.currentSnapshotId).toBe(createdSnapshot?.id);
 
-    const snapshotFile = createdSnapshot?.file
+    const snapshotFile = createdSnapshot?.file;
 
     if (!snapshotFile || !createdSnapshot) {
-      throw new Error("Expected snapshot and snapshot file to exist")
+      throw new Error("Expected snapshot and snapshot file to exist");
     }
 
-    createdObjectKeys.add(snapshotFile.key)
+    createdObjectKeys.add(snapshotFile.key);
 
-    const s3Json = await loadSnapshotFromS3(bucket, snapshotFile.key)
+    const s3Json = await loadSnapshotFromS3(bucket, snapshotFile.key);
 
-    expect(s3Json.formatVersion).toBe(1)
-    expect(s3Json.metadata.version).toBe(createdSnapshot.version)
+    expect(s3Json.formatVersion).toBe(1);
+    expect(s3Json.metadata.version).toBe(createdSnapshot.version);
 
     expect(s3Json.ebook).toEqual({
       id: fixture.ebookId,
@@ -540,8 +538,8 @@ describe("snapshot generate service integration", () => {
       shortDescription: fixture.shortDescription,
       createdAt: fixture.ebookCreatedAt.toISOString(),
       coverImage: fixture.coverAsset,
-    })
+    });
 
-    expect(s3Json.chapters).toEqual(fixture.chapters)
-  })
-})
+    expect(s3Json.chapters).toEqual(fixture.chapters);
+  });
+});

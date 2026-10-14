@@ -1,44 +1,45 @@
 // Converts the normalized ebook content into HTML content,
 // preserving document structure and supported formatting for web-based viewing.
-import type { Extensions } from "@tiptap/core"
-import { GetObjectCommand, getSignedUrl, s3 } from "@mythrart/s3"
-import escapeHTML from "escape-html"
-import slugify from "slugify"
-import { renderEbookAsHTML } from "../render-ebook-as-html.js"
-import type { EbookExporter, ExportedFile } from "./types.js"
-import type { NormalizedEbook } from "../utils/normalize.js"
-import { createImageUrlResolver } from "../utils/image-url-resolver.js"
+import type { Extensions } from "@tiptap/core";
+import { GetObjectCommand, getSignedUrl, s3 } from "@mythrart/s3";
+import escapeHTML from "escape-html";
+import slugify from "slugify";
+import { renderEbookAsHTML } from "../render-ebook-as-html.js";
+import type { EbookExporter, ExportedFile } from "./types.js";
+import type { NormalizedEbook } from "../utils/normalize.js";
+import { createImageUrlResolver } from "../utils/image-url-resolver.js";
 
 export class WebviewExporter implements EbookExporter {
-	constructor(private readonly htmlExtensions?: Extensions) {}
+  constructor(private readonly htmlExtensions?: Extensions) {}
 
-	async export(ebook: NormalizedEbook): Promise<ExportedFile> {
-		const resolveImageUrl = createImageUrlResolver(ebook)
-		const coverImageUrl = ebook.coverImage
-			? await resolveImageUrl(ebook.coverImage.assetId)
-			: undefined
+  async export(ebook: NormalizedEbook): Promise<ExportedFile> {
+    const resolveImageUrl = createImageUrlResolver(ebook);
+    const coverImageUrl = ebook.coverImage
+      ? await resolveImageUrl(ebook.coverImage.assetId)
+      : undefined;
 
-		if (ebook.coverImage && !coverImageUrl) {
-			throw new Error(`Unable to resolve cover image asset ${ebook.coverImage.assetId}`)
-		}
+    if (ebook.coverImage && !coverImageUrl) {
+      throw new Error(
+        `Unable to resolve cover image asset ${ebook.coverImage.assetId}`,
+      );
+    }
 
-		const html = await renderEbookAsHTML(ebook, {
-			extensions: this.htmlExtensions,
-			resolveImageUrl,
-			coverImageUrl,
-		})
+    const html = await renderEbookAsHTML(ebook, {
+      extensions: this.htmlExtensions,
+      resolveImageUrl,
+      coverImageUrl,
+    });
 
-		return {
-			fileName: `${slugify(ebook.title)}.html`,
-			mimeType: "text/html; charset=utf-8",
-			data: Buffer.from(createHtmlDocument(ebook.title, html), "utf8"),
-		}
-	}
+    return {
+      fileName: `${slugify(ebook.title)}.html`,
+      mimeType: "text/html; charset=utf-8",
+      data: Buffer.from(createHtmlDocument(ebook.title, html), "utf8"),
+    };
+  }
 }
 
-
 function createHtmlDocument(title: string, content: string): string {
-	return `<!DOCTYPE html>
+  return `<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
@@ -52,7 +53,5 @@ function createHtmlDocument(title: string, content: string): string {
 <body>
 ${content}
 </body>
-</html>`
+</html>`;
 }
-
-

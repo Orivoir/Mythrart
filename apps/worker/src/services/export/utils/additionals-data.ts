@@ -1,18 +1,17 @@
-
-import { prisma, type Prisma } from "@mythrart/database"
+import { prisma, type Prisma } from "@mythrart/database";
 
 export interface EbookAdditionalDataOptions {
-  withTheme?: boolean
-  withCollaborators?: boolean
-  withGenres?: boolean
-  withEbookType?: boolean
-  withOwner?: boolean
+  withTheme?: boolean;
+  withCollaborators?: boolean;
+  withGenres?: boolean;
+  withEbookType?: boolean;
+  withOwner?: boolean;
 }
 
 export function withTheme() {
   return {
     ebookTheme: true,
-  } as const
+  } as const;
 }
 
 export function withCollaborators() {
@@ -23,13 +22,13 @@ export function withCollaborators() {
         customRole: true,
       },
     },
-  } as const
+  } as const;
 }
 
 export function withOwner() {
   return {
     owner: true,
-  } as const
+  } as const;
 }
 
 export function withGenres() {
@@ -39,33 +38,30 @@ export function withGenres() {
         genre: true,
       },
     },
-  } as const
+  } as const;
 }
 
 export function withEbookType() {
   return {
     ebookType: true,
-  } as const
+  } as const;
 }
 
-type EbookAdditionalDataInclude<
-  Options extends EbookAdditionalDataOptions,
-> =
+type EbookAdditionalDataInclude<Options extends EbookAdditionalDataOptions> =
   (Options["withTheme"] extends true ? ReturnType<typeof withTheme> : {}) &
-  (Options["withCollaborators"] extends true
-    ? ReturnType<typeof withCollaborators>
-    : {}) &
-  (Options["withGenres"] extends true ? ReturnType<typeof withGenres> : {}) &
-  (Options["withEbookType"] extends true
-    ? ReturnType<typeof withEbookType>
-    : {}) &
-  (Options["withOwner"] extends true ? ReturnType<typeof withOwner> : {})
+    (Options["withCollaborators"] extends true
+      ? ReturnType<typeof withCollaborators>
+      : {}) &
+    (Options["withGenres"] extends true ? ReturnType<typeof withGenres> : {}) &
+    (Options["withEbookType"] extends true
+      ? ReturnType<typeof withEbookType>
+      : {}) &
+    (Options["withOwner"] extends true ? ReturnType<typeof withOwner> : {});
 
-export type EbookAdditionalData<
-  Options extends EbookAdditionalDataOptions,
-> = Prisma.EbookGetPayload<{
-  include: EbookAdditionalDataInclude<Options>
-}>
+export type EbookAdditionalData<Options extends EbookAdditionalDataOptions> =
+  Prisma.EbookGetPayload<{
+    include: EbookAdditionalDataInclude<Options>;
+  }>;
 
 export async function loadEbookAdditionalData<
   const Options extends EbookAdditionalDataOptions = {},
@@ -79,7 +75,7 @@ export async function loadEbookAdditionalData<
     withGenres: includeGenres = false,
     withEbookType: includeEbookType = false,
     withOwner: includeOwner = false,
-  } = options
+  } = options;
 
   const include = {
     ...(includeTheme ? withTheme() : {}),
@@ -87,12 +83,12 @@ export async function loadEbookAdditionalData<
     ...(includeGenres ? withGenres() : {}),
     ...(includeEbookType ? withEbookType() : {}),
     ...(includeOwner ? withOwner() : {}),
-  }
+  };
 
   return prisma.ebook.findUnique({
     where: {
       id: ebookId,
     },
     include,
-  }) as Promise<EbookAdditionalData<Options> | null>
+  }) as Promise<EbookAdditionalData<Options> | null>;
 }

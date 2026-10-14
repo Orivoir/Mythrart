@@ -1,15 +1,15 @@
-import { prisma } from "@mythrart/database"
-import { GetObjectCommand, s3 } from "@mythrart/s3"
+import { prisma } from "@mythrart/database";
+import { GetObjectCommand, s3 } from "@mythrart/s3";
 
-import { extractSynopsisText } from "./../utils/extract-text.js"
-import { normalizeSynopsisText } from "./../utils/normalize-text.js"
-import { analyzeSynopsisWithAI } from "./../utils/analyze-synopsis-ai.js"
-import { validateSynopsisAnalysis } from "./../utils/validate-synopsis-analysis.js"
+import { extractSynopsisText } from "./../utils/extract-text.js";
+import { normalizeSynopsisText } from "./../utils/normalize-text.js";
+import { analyzeSynopsisWithAI } from "./../utils/analyze-synopsis-ai.js";
+import { validateSynopsisAnalysis } from "./../utils/validate-synopsis-analysis.js";
 
 import type {
   AnalysisSynopsisJobData,
   AnalysisSynopsisJobResult,
-} from "./../validations/analysis-synopsis.job.js"
+} from "./../validations/analysis-synopsis.job.js";
 
 export async function analyzeSynopsis({
   assetId,
@@ -35,46 +35,44 @@ export async function analyzeSynopsis({
     where: {
       id: assetId,
     },
-  })
+  });
 
   if (!asset) {
-    throw new Error(`Asset not found: ${assetId}`)
+    throw new Error(`Asset not found: ${assetId}`);
   }
 
   // 2 - S3 (read): Download the synopsis file
   const command = new GetObjectCommand({
     Bucket: asset.bucket,
     Key: asset.key,
-  })
+  });
 
-  const response = await s3.send(command)
+  const response = await s3.send(command);
 
   if (!response.Body) {
-    throw new Error(`Unable to download asset from S3: ${assetId}`)
+    throw new Error(`Unable to download asset from S3: ${assetId}`);
   }
 
-  const fileBuffer = Buffer.from(
-    await response.Body.transformToByteArray(),
-  )
+  const fileBuffer = Buffer.from(await response.Body.transformToByteArray());
 
   // 3 - local: Extract text from the file
   const extractedText = await extractSynopsisText({
     buffer: fileBuffer,
     mimeType: asset.mimeType,
-  })
+  });
 
   // 4 - local: Normalize / clean the extracted text
-  const normalizedText = normalizeSynopsisText(extractedText)
+  const normalizedText = normalizeSynopsisText(extractedText);
 
   if (!normalizedText.trim()) {
-    throw new Error(`Synopsis asset contains no readable text: ${assetId}`)
+    throw new Error(`Synopsis asset contains no readable text: ${assetId}`);
   }
 
   // 5 - AI: Analyze the normalized synopsis
-  const analysis = await analyzeSynopsisWithAI(normalizedText)
+  const analysis = await analyzeSynopsisWithAI(normalizedText);
 
   // 6 - local: Validate the AI result
-  const validatedAnalysis = validateSynopsisAnalysis(analysis)
+  const validatedAnalysis = validateSynopsisAnalysis(analysis);
 
   // 7 - Return the analysis result
   return {
@@ -84,5 +82,5 @@ export async function analyzeSynopsis({
       relations: validatedAnalysis.relations,
       events: validatedAnalysis.events,
     },
-  }
+  };
 }

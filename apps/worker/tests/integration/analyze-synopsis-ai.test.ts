@@ -1,8 +1,8 @@
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "vitest";
 
-import { analyzeSynopsisWithAI } from "../../src/utils/analyze-synopsis-ai.js"
-import { synopsisAnalysisSchema } from "../../src/validations/analysis-synopsis.job.js"
-import { llmConfig } from "../../src/config/llm.js"
+import { analyzeSynopsisWithAI } from "../../src/utils/analyze-synopsis-ai.js";
+import { synopsisAnalysisSchema } from "../../src/validations/analysis-synopsis.job.js";
+import { llmConfig } from "../../src/config/llm.js";
 
 const synopsisFixtures = [
   {
@@ -37,28 +37,28 @@ const synopsisFixtures = [
       commencent à lui demander de cesser ses recherches.
     `,
   },
-]
+];
 
 describe.skip("Synopsis analysis integration", () => {
   it.each(synopsisFixtures)(
     "analyses $name with the configured LLM",
     async ({ text }) => {
-      const result = await analyzeSynopsisWithAI(text)
+      const result = await analyzeSynopsisWithAI(text);
 
       // Vérifie que le résultat respecte réellement le contrat Zod.
-      const parsed = synopsisAnalysisSchema.parse(result)
+      const parsed = synopsisAnalysisSchema.parse(result);
 
-      expect(parsed).toEqual(result)
+      expect(parsed).toEqual(result);
 
-      console.log("\n--- Synopsis analysis ---")
-      console.log("Model:", llmConfig.analysisSynopsis.model)
+      console.log("\n--- Synopsis analysis ---");
+      console.log("Model:", llmConfig.analysisSynopsis.model);
       console.log(
         "Reasoning effort:",
         llmConfig.analysisSynopsis.reasoningEffort,
-      )
+      );
 
-      expect(parsed).toBeDefined()
+      expect(parsed).toBeDefined();
     },
     60_000,
-  )
-})
+  );
+});

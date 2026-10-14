@@ -12,15 +12,6 @@
     "forceConsistentCasingInFileNames": true,
     "types": ["node"]
   },
-  "include": [
-    "src/**/*.ts",
-    "tests/**/*.ts",
-    "../shared/**/*.ts"
-  ],
-  "exclude": [
-    "dist",
-    "node_modules",
-    "prisma/app",
-    "tests"
-  ]
+  "include": ["src/**/*.ts", "tests/**/*.ts", "../shared/**/*.ts"],
+  "exclude": ["dist", "node_modules", "prisma/app", "tests"]
 }

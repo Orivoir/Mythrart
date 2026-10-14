@@ -1,1 +1,1 @@
-export const EXPORT_QUEUE_NAME = "export"
+export const EXPORT_QUEUE_NAME = "export";

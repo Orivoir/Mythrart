@@ -1,12 +1,12 @@
-import {prisma} from "@mythrart/database"
+import { prisma } from "@mythrart/database";
 
 export interface CreateAssetParams {
-  ownerId: string
-  key: string
-  bucket: string
-  fileName: string
-  mimeType: string
-  sizeBytes: number
+  ownerId: string;
+  key: string;
+  bucket: string;
+  fileName: string;
+  mimeType: string;
+  sizeBytes: number;
 }
 
 export default async function createAsset(params: CreateAssetParams) {
@@ -19,5 +19,5 @@ export default async function createAsset(params: CreateAssetParams) {
       mimeType: params.mimeType,
       sizeBytes: params.sizeBytes,
     },
-  })
+  });
 }

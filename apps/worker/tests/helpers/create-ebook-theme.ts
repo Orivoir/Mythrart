@@ -1,7 +1,6 @@
-import {prisma} from "@mythrart/database"
+import { prisma } from "@mythrart/database";
 
 export default async function createEbookTheme(id: string) {
-
   return prisma.ebookTheme.create({
     data: {
       name: `Vintage Parchment ${id}`,
@@ -18,5 +17,5 @@ export default async function createEbookTheme(id: string) {
       paragraphSpacing: "1.2rem",
       headingSpacing: "2.2rem",
     },
-  })
+  });
 }

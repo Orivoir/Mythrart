@@ -20,6 +20,6 @@ Do not duplicate entities. If the same entity appears multiple times, represent 
 Do not duplicate events that describe the same occurrence.
 
 Return only the requested structured data.
-            `.trim()
+            `.trim();
 
-export default promptAnalysisSynopsis
+export default promptAnalysisSynopsis;

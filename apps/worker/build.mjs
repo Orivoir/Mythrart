@@ -1,4 +1,4 @@
-import { build } from "esbuild"
+import { build } from "esbuild";
 
 await build({
   entryPoints: ["src/index.ts"],
@@ -10,4 +10,4 @@ await build({
   packages: "external",
   sourcemap: true,
   tsconfig: "tsconfig.json",
-})
+});
