@@ -5,6 +5,7 @@ import { useCurrentEditor, useEditorState } from "@tiptap/react"
 import { useTranslations } from "next-intl"
 
 import { ButtonWithIcon } from "@/components/ui/button-with-icon"
+import "@tiptap/starter-kit";
 
 export default function ListIndentAction() {
   const t = useTranslations("Editor.Toolbar.ListIndent")

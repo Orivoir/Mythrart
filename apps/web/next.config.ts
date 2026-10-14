@@ -1,19 +1,9 @@
 import type { NextConfig } from "next";
-import createNextIntlPlugin from "next-intl/plugin"
+import createNextIntlPlugin from "next-intl/plugin";
 
-const withNextIntl = createNextIntlPlugin("./i18n/request.ts")
+const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
 const nextConfig: NextConfig = {
-  transpilePackages: [
-    "@mythrart/constants",
-    "@mythrart/database",
-    "@mythrart/editor-extensions",
-    "@mythrart/env",
-    "@mythrart/redis",
-    "@mythrart/s3",
-    "@mythrart/validations",
-  ],
-
   images: {
     remotePatterns: [
       {
@@ -24,4 +14,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withNextIntl(nextConfig)
+export default withNextIntl(nextConfig);

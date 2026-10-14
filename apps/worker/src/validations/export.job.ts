@@ -1,6 +1,8 @@
+
 import { z } from "zod";
 
 export const EXPORT_JOB_NAME = "export.process";
+
 export const exportFormats = [
   "txt",
   "pdf",
@@ -12,6 +14,7 @@ export const exportFormats = [
 
 export const exportJobDataSchema = z.object({
   ebookId: z.string().trim().min(1, "ebookId is required"),
+  userId: z.string().trim().min(1, "userId is required"),
   format: z.enum(exportFormats, {
     message: "format must be one of: txt, pdf, epub, docx, markdown, webview",
   }),

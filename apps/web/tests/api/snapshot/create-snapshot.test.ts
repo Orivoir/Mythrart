@@ -1,6 +1,6 @@
 import { afterAll, beforeEach, expect, test, vi } from "vitest"
 
-import { POST } from "@/app/api/snapshot/routes"
+import { POST } from "@/app/api/snapshot/route"
 import type { JobCreatedResponse } from "@/app/types/api/job"
 import type { ResponseErrorAPI } from "@/app/types/api/ebook"
 import * as snapshotQueue from "@/lib/queues/snapshot-queue"

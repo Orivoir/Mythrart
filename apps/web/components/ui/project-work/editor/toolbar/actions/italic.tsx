@@ -3,6 +3,7 @@ import {ButtonWithIcon} from "@/components/ui/button-with-icon"
 import {useCurrentEditor} from "@tiptap/react"
 import {Italic} from "lucide-react"
 import {useState} from "react"
+import "@tiptap/starter-kit";
 
 export default function ItalicAction() {
 

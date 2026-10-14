@@ -3,16 +3,16 @@
   "version": "1.0.0",
   "description": "Shared database dependencies between Mythrart apps",
   "type": "module",
-  "main": "./index.ts",
-  "types": "./index.ts",
   "exports": {
     ".": {
-      "types": "./index.ts",
-      "import": "./index.ts",
-      "default": "./index.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     }
   },
   "scripts": {
+    "build": "prisma generate && tsc -p tsconfig.json && rm -rf dist/app && mkdir -p dist/app && cp -r app/generated dist/app/generated",
+    "clean": "rm -rf dist",
     "prisma:generate": "pnpm exec prisma generate",
     "prisma:migrate": "pnpm exec prisma migrate deploy",
     "prisma:migrate:test": "DATABASE_URL=\"postgresql://mythrart:mythrart@localhost:5432/e2e_test\" pnpm exec prisma migrate deploy",
@@ -29,6 +29,11 @@
     "pg": "^8.23.0"
   },
   "devDependencies": {
-    "prisma": "7.8.0"
-  }
+    "@types/node": "^20.19.43",
+    "prisma": "7.8.0",
+    "typescript": "^5.9.3"
+  },
+  "files": [
+    "dist"
+  ]
 }

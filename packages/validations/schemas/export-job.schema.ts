@@ -1,6 +1,13 @@
-import { z } from "zod"
+import { z } from "zod";
 
-export const exportFormats = ["txt", "pdf", "epub", "docx", "markdown", "webview"] as const
+export const exportFormats = [
+  "txt",
+  "pdf",
+  "epub",
+  "docx",
+  "markdown",
+  "webview",
+] as const;
 
 export const createExportJobRequestSchema = z.object({
   ebookId: z.string().trim().min(1, "ebookId is required"),
@@ -8,7 +15,19 @@ export const createExportJobRequestSchema = z.object({
     message: "format must be one of: txt, pdf, epub, docx, markdown, webview",
   }),
   locale: z.string().trim().min(1, "locale is required"),
-  snapshotId: z.string().trim().min(1, "snapshotId must not be empty").optional(),
-})
+  snapshotId: z
+    .string()
+    .trim()
+    .min(1, "snapshotId must not be empty")
+    .optional(),
+});
 
-export type ExportJobData = z.infer<typeof createExportJobRequestSchema>
+export const exportJobDataSchema = createExportJobRequestSchema.extend({
+  userId: z.string().trim().min(1, "userId is required"),
+});
+
+export type CreateExportJobRequest = z.infer<
+  typeof createExportJobRequestSchema
+>;
+
+export type ExportJobData = z.infer<typeof exportJobDataSchema>;

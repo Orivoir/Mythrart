@@ -1,47 +1,106 @@
+import {
+  prisma,
+  type ExportFormat,
+} from "@mythrart/database";
 import type {
   ExportJobData,
   ExportJobResult,
 } from "../../validations/export.job.js";
-import { loadRequirements } from "../utils.js";
-import normalizeExportData, { type ExportSource } from "./utils/normalize.js";
-import { loadSnapshotSource } from "./snapshot-source.js";
+
+import { toPrismaExportFormat } from "./utils/to-prisma-export-format.js";
+
+import failExport from "./fail.js";
+import createExportedFile from "./exporters/index.js";
+import uploadExportFile from "./upload.js";
+import recordsExportInDatabase from "./records.js";
 
 export async function exportEbook({
   ebookId,
   format,
   locale,
   snapshotId,
+  userId,
 }: ExportJobData): Promise<ExportJobResult> {
-  /**
-   * TODO: implement actual export logic.
-   *
-   * Expected work:
-   * 1. Validate that the ebook exists and is readable.
-   *    - Database (read): fetch the ebook by ebookId (Prisma `ebook.findUnique`).
-   *    - Throw if no ebook is found for that id (same guard as `loadRequirements` in
-   *      services/utils.ts), so the job fails fast instead of exporting partial/undefined data.
-   * 2. Load the ebook content/chapters/locales needed for the requested format.
-   *    - Database (read): fetch chapters ordered by position, including each chapter's
-   *      `ChapterLocale` row for the target locale (mirrors the `chapters.locales`
-   *      include used in `loadRequirements`).
-   *    - Database (read): fetch ebook metadata needed for the export (title, subtitle,
-   *      shortDescription, coverAsset) so it can be embedded in the generated file.
-   * 3. Convert the content to the selected export format: txt, pdf, epub, docx, markdown, or webview.
-   * 4. Generate or persist the exported file in storage.
-   * 5. Save export metadata to the database if needed.
-   * 6. Return the export result payload matching ExportJobResult.
-   *
-   * This placeholder intentionally does not perform the real workflow.
-   */
+  const prismaFormat: ExportFormat = toPrismaExportFormat(format);
 
-  const source: ExportSource = snapshotId
-    ? await loadSnapshotSource(ebookId, snapshotId)
-    : await loadRequirements(ebookId, "with-content-assets", locale);
+  const ebook = await prisma.ebook.findUnique({
+    where: { id: ebookId },
+    select: {
+      id: true,
+      ownerId: true,
+    },
+  });
 
-  const normalized = normalizeExportData(source, locale);
+  if (!ebook) {
+    throw new Error(`Ebook not found: ${ebookId}`);
+  }
 
-  void normalized;
-  void format;
+  const exportRecord = await prisma.exportEbook.create({
+    data: {
+      ebookId,
+      userId,
+      format: prismaFormat,
+      status: "PROCESSING",
+      startedAt: new Date(),
+    },
+  });
 
-  throw new Error("Export service is not implemented yet");
+  let uploadedKey: string | undefined;
+  let uploadedBucket: string | undefined;
+
+  try {
+    const exportedFile = await createExportedFile({
+      ebookId,
+      format,
+      locale,
+      snapshotId,
+      userId
+    });
+
+    const {bucket, key, sizeBytes} = await uploadExportFile({
+      exportedFile,
+      userId,
+    });
+
+    // used for delete at fail if the export process fails
+    uploadedKey = key;
+    uploadedBucket = bucket;
+  
+    const result = await recordsExportInDatabase({
+      key,
+      bucket,
+      exportedFile,
+      sizeBytes,
+      userId,
+      exportRecordId: exportRecord.id,
+      ownerId: ebook.ownerId,
+    });
+
+    // Send export job result
+    return {
+      export: {
+        id: result.export.id,
+        ebookId: result.export.ebookId,
+        format,
+        status: result.export.status,
+        createdAt: result.export.createdAt.getTime(),
+        file: {
+          id: result.asset.id,
+          key: result.asset.key,
+          bucket: result.asset.bucket,
+          sizeBytes: result.asset.sizeBytes,
+          mimeType: result.asset.mimeType,
+          createdAt: result.asset.createdAt.getTime(),
+        },
+      },
+    };
+  } catch (error) {
+    await failExport({
+      uploadedKey,
+      uploadedBucket,
+      exportRecordId: exportRecord.id,
+      error,
+    });
+    throw error
+  }
 }

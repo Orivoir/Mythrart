@@ -3,6 +3,7 @@ import {useCurrentEditor} from "@tiptap/react"
 import {useTranslations} from "next-intl"
 import {ButtonWithIcon} from "@/components/ui/button-with-icon"
 import { useUndoRedo } from "@/components/tiptap-ui/undo-redo-button"
+import "@tiptap/starter-kit";
 
 export default function RedoAction() {
 

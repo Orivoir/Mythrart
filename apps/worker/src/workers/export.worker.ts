@@ -1,3 +1,4 @@
+
 import { type Job, Worker } from "@mythrart/redis";
 
 import {
@@ -7,7 +8,10 @@ import {
   exportJobDataSchema,
 } from "../validations/export.job.js";
 import { EXPORT_QUEUE_NAME } from "../queues/export.js";
-import type { RegisteredWorker, WorkerDependencies } from "../types/index.js";
+import type {
+  RegisteredWorker,
+  WorkerDependencies,
+} from "../types/index.js";
 import { exportEbook } from "../services/index.js";
 
 type ExportJob = Job<ExportJobData, ExportJobResult, string>;
@@ -21,8 +25,11 @@ export function createExportWorker({
     EXPORT_QUEUE_NAME,
     async function (job: ExportJob): Promise<ExportJobResult> {
       switch (job.name) {
-        case EXPORT_JOB_NAME:
-          return await exportEbook(exportJobDataSchema.parse(job.data));
+        case EXPORT_JOB_NAME: {
+          const data = exportJobDataSchema.parse(job.data);
+          return await exportEbook(data);
+        }
+
         default:
           throw new Error(`Unknown job name: ${job.name}`);
       }
@@ -40,6 +47,7 @@ export function createExportWorker({
         jobName: job.name,
         queue: EXPORT_QUEUE_NAME,
         ebookId: job.data?.ebookId,
+        userId: job.data?.userId,
         format: job.data?.format,
       },
       "Export job completed",
@@ -54,6 +62,7 @@ export function createExportWorker({
         jobName: job?.name,
         queue: EXPORT_QUEUE_NAME,
         ebookId: job?.data?.ebookId,
+        userId: job?.data?.userId,
         format: job?.data?.format,
       },
       "Export job failed",

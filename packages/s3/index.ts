@@ -5,6 +5,8 @@ import path from "path"
 import { randomUUID } from "crypto"
 import type { AssetReferenceType } from "@mythrart/database"
 import { loadEnv } from "@mythrart/env"
+import { Upload } from "@aws-sdk/lib-storage"
+import { Readable } from "stream"
 
 loadEnv()
 
@@ -155,6 +157,38 @@ export async function isValidPermanentObject({ key }: { key: string}): Promise<{
     mimeType: tempFileMetadata.ContentType,
     sizeBytes: tempFileMetadata.ContentLength
   }
+}
+
+export async function uploadExport({
+  key,
+  fileName,
+  mimeType,
+  data,
+}: {
+  key: string;
+  fileName: string;
+  mimeType: string;
+  data: Buffer | Readable;
+}) {
+  const upload = new Upload({
+    client: s3,
+    params: {
+      Bucket: process.env.S3_BUCKET!,
+      Key: key,
+      Body: data,
+      ContentType: mimeType,
+      Metadata: {
+        filename: encodeURIComponent(fileName),
+      },
+    },
+  });
+
+  await upload.done();
+
+  return {
+    key,
+    bucket: process.env.S3_BUCKET!,
+  };
 }
 
 export {getSignedUrl} from "@aws-sdk/s3-request-presigner"

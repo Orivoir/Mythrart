@@ -1,7 +1,6 @@
 // Converts the normalized ebook content into HTML content,
 // preserving document structure and supported formatting for web-based viewing.
 import type { Extensions } from "@tiptap/core";
-import { GetObjectCommand, getSignedUrl, s3 } from "@mythrart/s3";
 import escapeHTML from "escape-html";
 import slugify from "slugify";
 import { renderEbookAsHTML } from "../render-ebook-as-html.js";

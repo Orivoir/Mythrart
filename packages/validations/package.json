@@ -3,21 +3,30 @@
   "version": "1.0.0",
   "description": "Shared validations zod schemas between Mythrart apps",
   "type": "module",
-  "main": "./index.ts",
-  "types": "./index.ts",
   "exports": {
     ".": {
-      "types": "./index.ts",
-      "import": "./index.ts",
-      "default": "./index.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     }
   },
   "dependencies": {
     "@mythrart/constants": "workspace:*",
     "zod": "^4.5.2"
   },
-  "scripts": {},
+  "scripts": {
+    "build": "tsup index.ts --format esm --dts --clean --shims",
+    "clean": "rm -rf dist"
+  },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "@types/node": "^20.19.43",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3"
+  }
 }

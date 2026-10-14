@@ -67,7 +67,7 @@ export function ProjectTopHeader({
           email: user.email || "sample@gmail.com",
           id: user.id,
           username: user.username || "John doe",
-          image: user.image,
+          image: (user.image as string) ?? null,
           plan: user.plan ?? "free",
           subscriptionStatus: user.subscriptionStatus ?? "none"
         }} subscription={{

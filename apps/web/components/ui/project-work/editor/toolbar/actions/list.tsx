@@ -5,6 +5,7 @@ import { List, ListOrdered } from "lucide-react"
 import { useCurrentEditor, useEditorState } from "@tiptap/react"
 
 import { ButtonWithIcon } from "@/components/ui/button-with-icon"
+import "@tiptap/starter-kit";
 
 export interface ListActionProps {
   type: "ordered" | "unordered"

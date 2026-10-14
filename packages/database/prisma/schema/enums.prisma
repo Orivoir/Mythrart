@@ -123,6 +123,8 @@ enum NotificationIntent {
   PROJECT_FIRED
   PROJECT_UPDATED
 
+  JOB_FINISH
+
   BILLING
   NEWS
 }

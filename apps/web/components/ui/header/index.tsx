@@ -15,7 +15,7 @@ export default async function Header() {
           id: session.user?.id ?? "<no-defined>",
           username: session.user?.username ?? "<no-defined>",
           email: session.user?.email ?? "<no-defined>",
-          image: session.user?.image,
+          image: (session.user?.image as string) ?? null,
           plan: session.user?.plan ?? "free",
           subscriptionStatus: session.user?.subscriptionStatus ?? "none",
         }}

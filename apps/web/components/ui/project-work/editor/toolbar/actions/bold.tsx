@@ -4,6 +4,7 @@ import {ButtonWithIcon} from "@/components/ui/button-with-icon"
 import {useCurrentEditor} from "@tiptap/react"
 import {Bold} from "lucide-react"
 import {useState} from "react"
+import "@tiptap/starter-kit";
 
 export default function BoldAction() {
 
