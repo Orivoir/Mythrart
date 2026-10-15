@@ -27,9 +27,9 @@ vi.mock("@mythrart/s3", async (importOriginal) => {
 let fixture: ExportFixture;
 
 beforeEach(async () => {
-  vi.restoreAllMocks();
-  fixture = await setupExportFixture();
-});
+  vi.clearAllMocks()
+  fixture = await setupExportFixture()
+})
 
 afterAll(async () => {
   await teardownExportFixture();

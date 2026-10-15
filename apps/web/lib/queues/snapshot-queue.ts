@@ -2,6 +2,7 @@ import { HTTP_ERRORS } from "@/lib/constants/http-code"
 import { ApiException } from "@/lib/errors"
 import type { SnapshotJobData } from "@mythrart/validations"
 import { getRedisConnection, Queue } from "@mythrart/redis"
+import { randomUUID } from "crypto"
 
 export const SNAPSHOT_QUEUE_NAME = "snapshot"
 export const SNAPSHOT_JOB_NAME = "snapshot.process"
@@ -28,7 +29,13 @@ export async function getSnapshotQueue(): Promise<Queue<SnapshotJobData>> {
 
 export async function enqueueSnapshotJob(data: SnapshotJobData): Promise<string> {
   const queue = await getSnapshotQueue()
-  const job = await queue.add(SNAPSHOT_JOB_NAME, data)
+  const job = await queue.add(
+    SNAPSHOT_JOB_NAME,
+    data,
+    {
+      jobId: `${SNAPSHOT_JOB_NAME}-${Date.now()}-${randomUUID()}`
+    }
+  )
 
   if (!job.id) {
     throw new ApiException(HTTP_ERRORS.INTERNAL_ERROR)

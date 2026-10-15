@@ -1,130 +1,203 @@
-import { afterAll, beforeEach, expect, test, vi } from "vitest"
+
+import { beforeEach, describe, expect, test, vi } from "vitest"
 
 import { GET } from "@/app/api/job/[id]/routes"
-import { JobStatus, type JobGenerateSnapshotResult, type JobResponse } from "@/app/types/api/job"
-import type { ResponseErrorAPI } from "@/app/types/api/ebook"
-import * as snapshotQueue from "@/lib/queues/snapshot-queue"
-
 import {
-    createJobRequest,
-    jobRouteContext,
-    setupSnapshotFixture,
-    teardownSnapshotFixture,
-    type SnapshotFixture,
-} from "../snapshot/shared"
+  JobStatus,
+  type JobGenerateSnapshotResult,
+  type JobResponse,
+} from "@/app/types/api/job"
+import type { ResponseErrorAPI } from "@/app/types/api/ebook"
+import * as jobLookup from "@/lib/queues/job-lookup"
 
-let fixture: SnapshotFixture
+import { createJobRequest, jobRouteContext } from "./shared"
 
-beforeEach(async () => {
-    vi.restoreAllMocks()
-    fixture = await setupSnapshotFixture()
+beforeEach(() => {
+  vi.restoreAllMocks()
 })
 
-afterAll(async () => {
-    await teardownSnapshotFixture()
-})
+describe("GET /api/job/:id", () => {
+  test("returns COMPLETED with snapshot result", async () => {
+    const result = {
+      snapshotId: "snapshot-1",
+    } satisfies JobGenerateSnapshotResult
 
-test("GET /api/job/:id returns COMPLETED with result payload", async () => {
-    const fakeJob = {
-        id: "job-completed-1",
+    const getJobSpy = vi
+      .spyOn(jobLookup, "getJobById")
+      .mockResolvedValue({
+        id: "snapshot-job-1",
         getState: vi.fn().mockResolvedValue("completed"),
-        returnvalue: {
-            snapshotId: "snapshot-1",
-        } satisfies JobGenerateSnapshotResult,
+        returnvalue: result,
         failedReason: null,
-    }
-
-    const getJobSpy = vi.fn().mockResolvedValue(fakeJob)
-
-    vi.spyOn(snapshotQueue, "getSnapshotQueue").mockResolvedValue({
-        getJob: getJobSpy,
-    } as never)
+      } as never)
 
     const response = await GET(
-        createJobRequest("job-completed-1", fixture.ownerId),
-        jobRouteContext("job-completed-1"),
+      createJobRequest("snapshot-job-1", "user-1"),
+      jobRouteContext("snapshot-job-1"),
     )
-    const body = await response.json() as JobResponse<JobGenerateSnapshotResult>
+
+    const body =
+      (await response.json()) as JobResponse<JobGenerateSnapshotResult>
 
     expect(response.status).toBe(200)
-    expect(body.id).toBe("job-completed-1")
+    expect(body.id).toBe("snapshot-job-1")
     expect(body.status).toBe(JobStatus.COMPLETED)
-    expect(body.result).toEqual({ snapshotId: "snapshot-1" })
+    expect(body.result).toEqual(result)
     expect(body.error).toBeNull()
-    expect(getJobSpy).toHaveBeenCalledWith("job-completed-1")
-})
+    expect(getJobSpy).toHaveBeenCalledWith("snapshot-job-1")
+  })
 
-test("GET /api/job/:id returns FAILED with failed reason", async () => {
-    const fakeJob = {
-        id: "job-failed-1",
-        getState: vi.fn().mockResolvedValue("failed"),
-        returnvalue: null,
-        failedReason: "worker crashed",
+  test("returns COMPLETED with export result", async () => {
+    const result = {
+      export: {
+        id: "export-1",
+        ebookId: "ebook-1",
+        format: "pdf",
+        status: "completed",
+        createdAt: 1792000000000,
+        file: {
+          id: "file-1",
+          key: "exports/ebook-1/document.pdf",
+          bucket: "mythrart",
+          sizeBytes: 245760,
+          mimeType: "application/pdf",
+          createdAt: 1792000000000,
+        },
+      },
     }
 
-    vi.spyOn(snapshotQueue, "getSnapshotQueue").mockResolvedValue({
-        getJob: vi.fn().mockResolvedValue(fakeJob),
+    const getJobSpy = vi
+      .spyOn(jobLookup, "getJobById")
+      .mockResolvedValue({
+        id: "export-job-1",
+        getState: vi.fn().mockResolvedValue("completed"),
+        returnvalue: result,
+        failedReason: null,
+      } as never)
+
+    const response = await GET(
+      createJobRequest("export-job-1", "user-1"),
+      jobRouteContext("export-job-1"),
+    )
+
+    const body = await response.json()
+
+    expect(response.status).toBe(200)
+    expect(body.id).toBe("export-job-1")
+    expect(body.status).toBe(JobStatus.COMPLETED)
+    expect(body.result).toEqual(result)
+    expect(body.result.export.file.key).toBe(
+      "exports/ebook-1/document.pdf",
+    )
+    expect(body.error).toBeNull()
+    expect(getJobSpy).toHaveBeenCalledWith("export-job-1")
+  })
+
+  test("returns COMPLETED with analysis synopsis result", async () => {
+    // Payload représentatif : remplacer par le type et la structure
+    // réels du résultat d'analyse synopsis lorsqu'ils sont définis.
+    const result = {
+      synopsis: "A test synopsis",
+    }
+
+    const getJobSpy = vi
+      .spyOn(jobLookup, "getJobById")
+      .mockResolvedValue({
+        id: "analysis-synopsis-job-1",
+        getState: vi.fn().mockResolvedValue("completed"),
+        returnvalue: result,
+        failedReason: null,
+      } as never)
+
+    const response = await GET(
+      createJobRequest("analysis-synopsis-job-1", "user-1"),
+      jobRouteContext("analysis-synopsis-job-1"),
+    )
+
+    const body = await response.json()
+
+    expect(response.status).toBe(200)
+    expect(body.id).toBe("analysis-synopsis-job-1")
+    expect(body.status).toBe(JobStatus.COMPLETED)
+    expect(body.result).toEqual(result)
+    expect(body.error).toBeNull()
+    expect(getJobSpy).toHaveBeenCalledWith("analysis-synopsis-job-1")
+  })
+
+  test("returns FAILED with failed reason", async () => {
+    vi.spyOn(jobLookup, "getJobById").mockResolvedValue({
+      id: "job-failed-1",
+      getState: vi.fn().mockResolvedValue("failed"),
+      returnvalue: null,
+      failedReason: "worker crashed",
     } as never)
 
     const response = await GET(
-        createJobRequest("job-failed-1", fixture.ownerId),
-        jobRouteContext("job-failed-1"),
+      createJobRequest("job-failed-1", "user-1"),
+      jobRouteContext("job-failed-1"),
     )
-    const body = await response.json() as JobResponse<JobGenerateSnapshotResult>
+
+    const body =
+      (await response.json()) as JobResponse<JobGenerateSnapshotResult>
 
     expect(response.status).toBe(200)
     expect(body.id).toBe("job-failed-1")
     expect(body.status).toBe(JobStatus.FAILED)
     expect(body.result).toBeNull()
     expect(body.error).toBe("worker crashed")
-})
+  })
 
-test("GET /api/job/:id returns PENDING for waiting state", async () => {
-    const fakeJob = {
-        id: "job-waiting-1",
-        getState: vi.fn().mockResolvedValue("waiting"),
-        returnvalue: null,
-        failedReason: null,
-    }
-
-    vi.spyOn(snapshotQueue, "getSnapshotQueue").mockResolvedValue({
-        getJob: vi.fn().mockResolvedValue(fakeJob),
+  test("returns PENDING for waiting state", async () => {
+    vi.spyOn(jobLookup, "getJobById").mockResolvedValue({
+      id: "job-waiting-1",
+      getState: vi.fn().mockResolvedValue("waiting"),
+      returnvalue: null,
+      failedReason: null,
     } as never)
 
     const response = await GET(
-        createJobRequest("job-waiting-1", fixture.ownerId),
-        jobRouteContext("job-waiting-1"),
+      createJobRequest("job-waiting-1", "user-1"),
+      jobRouteContext("job-waiting-1"),
     )
-    const body = await response.json() as JobResponse<JobGenerateSnapshotResult>
+
+    const body =
+      (await response.json()) as JobResponse<JobGenerateSnapshotResult>
 
     expect(response.status).toBe(200)
     expect(body.status).toBe(JobStatus.PENDING)
     expect(body.result).toBeNull()
     expect(body.error).toBeNull()
-})
+  })
 
-test("GET /api/job/:id returns NOT_FOUND when job does not exist", async () => {
-    vi.spyOn(snapshotQueue, "getSnapshotQueue").mockResolvedValue({
-        getJob: vi.fn().mockResolvedValue(null),
-    } as never)
+  test("returns NOT_FOUND when job does not exist", async () => {
+    const getJobSpy = vi
+      .spyOn(jobLookup, "getJobById")
+      .mockResolvedValue(null)
 
     const response = await GET(
-        createJobRequest("job-missing", fixture.ownerId),
-        jobRouteContext("job-missing"),
+      createJobRequest("job-missing", "user-1"),
+      jobRouteContext("job-missing"),
     )
-    const body = await response.json() as ResponseErrorAPI
+
+    const body = (await response.json()) as ResponseErrorAPI
 
     expect(response.status).toBe(404)
     expect(body.code).toBe("NOT_FOUND")
-})
+    expect(getJobSpy).toHaveBeenCalledWith("job-missing")
+  })
 
-test("GET /api/job/:id returns UNAUTHORIZED without authentication", async () => {
+  test("returns UNAUTHORIZED without authentication", async () => {
+    const getJobSpy = vi.spyOn(jobLookup, "getJobById")
+
     const response = await GET(
-        createJobRequest("job-any"),
-        jobRouteContext("job-any"),
+      createJobRequest("job-any"),
+      jobRouteContext("job-any"),
     )
-    const body = await response.json() as ResponseErrorAPI
+
+    const body = (await response.json()) as ResponseErrorAPI
 
     expect(response.status).toBe(401)
     expect(body.code).toBe("UNAUTHORIZED")
+    expect(getJobSpy).not.toHaveBeenCalled()
+  })
 })
